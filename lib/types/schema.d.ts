@@ -27,7 +27,17 @@ export type Like = InferModel<typeof likes>
 
 export type InsertLike = InferModel<typeof likes, 'insert'>
 
-export type Recipe = InferModel<typeof recipes>
+export type StoredFile = {
+  key: string
+  name: string
+  url: string
+  size: number
+  caption?: string
+}
+
+export type Recipe = InferModel<typeof recipes> & {
+  instructions: string[] | null
+}
 
 export type InsertRecipe = InferModel<typeof recipes, 'insert'>
 

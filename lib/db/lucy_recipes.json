@@ -1,0 +1,1229 @@
+[
+  {
+    "title": "Pesto Dip",
+    "description": "A creamy and herby pesto dip perfect for chips or vegetables.",
+    "preparationTime": "15-min",
+    "cookingTime": "0-min",
+    "servings": "4-6",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "In blender or food processor, blend all ingredients until almost smooth.",
+      "Cover and chill."
+    ],
+    "authorId": "user-defined",
+    "ingredients": [
+      { "amount": 2, "unit": "cup", "name": "Hellmann's Real Mayo" },
+      { "amount": 1, "unit": "cup", "name": "sour cream" },
+      {
+        "amount": 1,
+        "unit": "pkg",
+        "name": "frozen chopped spinach, thawed, drained"
+      },
+      { "amount": 1, "unit": "tbsp", "name": "dried basil" },
+      { "amount": 1, "unit": "cup", "name": "grated Parmesan cheese" },
+      { "amount": 1, "unit": "tbsp", "name": "salt" }
+    ]
+  },
+  {
+    "title": "Ginger Lime Dip",
+    "description": "A tangy and refreshing dip with a kick of ginger, perfect as a companion for fruit or crackers.",
+    "preparationTime": "10-min",
+    "cookingTime": "0-min",
+    "servings": "4-6",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Stir all ingredients until well mixed.",
+      "Cover, chill, and serve with fruit."
+    ],
+    "authorId": "user-defined",
+    "ingredients": [
+      { "amount": 1, "unit": "cup", "name": "Hellmann's Real Mayo" },
+      { "amount": 1, "unit": "cup", "name": "sour cream" },
+      { "amount": 2, "unit": "tbsp", "name": "honey" },
+      { "amount": 1, "unit": "tbsp", "name": "lime juice" },
+      { "amount": 0.5, "unit": "tsp", "name": "ground ginger" }
+    ]
+  },
+  {
+    "title": "Sweet Sour Chicken Wings",
+    "description": "A tangy and sweet chicken wing dish with a combination of vinegar, pineapple juice, soy sauce, and spices.",
+    "preparationTime": "15-min",
+    "cookingTime": "30-min",
+    "servings": "4 servings",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Brown chicken on all sides in hot fat in a large heavy skillet.",
+      "Combine remaining ingredients in saucepan; cook to boiling, then simmer 5 min.",
+      "Pour over chicken; cook, covered, on low heat 20 min.",
+      "Uncover & cook 15 min, or until chicken is tender."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 2,
+        "unit": "lb",
+        "name": "chicken wings"
+      },
+      {
+        "amount": 0.5,
+        "unit": "cup",
+        "name": "vinegar"
+      },
+      {
+        "amount": 0.25,
+        "unit": "cup",
+        "name": "shortening"
+      },
+      {
+        "amount": 0.5,
+        "unit": "cup",
+        "name": "brown sugar"
+      },
+      {
+        "amount": 1,
+        "unit": "can",
+        "name": "pineapple juice"
+      },
+      {
+        "amount": 0.75,
+        "unit": "cup",
+        "name": "catsup"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "soy sauce"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "prepared mustard"
+      },
+      {
+        "amount": 0.5,
+        "unit": "tsp",
+        "name": "salt"
+      }
+    ]
+  },
+  {
+    "title": "Shrimp Louis Dip",
+    "description": "A creamy and savory dip with a base of mayonnaise and sour cream, enhanced with fresh shrimp, green pepper, and a kick of horseradish.",
+    "preparationTime": "15-min",
+    "cookingTime": "0-min",
+    "servings": "Variable",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Stir all ingredients until well mixed.",
+      "Cover and chill."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "Hellmann's Real Mayo"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "sour cream"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "finely chopped cooked shrimp"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "chili sauce"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "finely chopped green pepper"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "prepared horseradish"
+      },
+      {
+        "amount": 0.125,
+        "unit": "tsp",
+        "name": "pepper, fresh ground"
+      }
+    ]
+  },
+  {
+    "title": "French Onion Dip",
+    "description": "A classic creamy dip flavored with French onion soup mix.",
+    "preparationTime": "10-min",
+    "cookingTime": "0-min",
+    "servings": "Variable",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Stir all ingredients until well mixed.",
+      "Cover and chill."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 2.5,
+        "unit": "cup",
+        "name": "Hellmann's Real Mayonnaise"
+      },
+      {
+        "amount": 2,
+        "unit": "cup",
+        "name": "sour cream"
+      },
+      {
+        "amount": 1,
+        "unit": "pkg",
+        "name": "Knorr French onion soup & recipe mix"
+      }
+    ]
+  },
+  {
+    "title": "Bacon Horseradish Dip",
+    "description": "A rich dip with bold flavors of bacon and horseradish.",
+    "preparationTime": "15-min",
+    "cookingTime": "0-min",
+    "servings": "Variable",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Stir bacon bits into mayonnaise and sour cream.",
+      "Add prepared horseradish.",
+      "Stir all ingredients until well mixed.",
+      "Cover and chill."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "Hellmann's Real Mayo"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "sour cream"
+      },
+      {
+        "amount": 0.25,
+        "unit": "cup",
+        "name": "prepared horseradish"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "real bacon bits"
+      }
+    ]
+  },
+  {
+    "title": "Green Onion Dip",
+    "description": "A fresh and zesty dip with green onions and Dijon mustard.",
+    "preparationTime": "10-min",
+    "cookingTime": "0-min",
+    "servings": "Variable",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Stir sliced green onions and parsley into mayonnaise and sour cream.",
+      "Add Dijon mustard and minced garlic.",
+      "Blend or process until almost smooth.",
+      "Cover and chill."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "Hellmann's Real Mayo"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "sour cream"
+      },
+      {
+        "amount": 0.5,
+        "unit": "cup",
+        "name": "sliced green onions"
+      },
+      {
+        "amount": 0.5,
+        "unit": "cup",
+        "name": "parsley sprigs"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "Dijon mustard"
+      },
+      {
+        "amount": 1,
+        "unit": "clove",
+        "name": "garlic, minced"
+      }
+    ]
+  },
+  {
+    "title": "Canning Carrots, Corn, Beans",
+    "description": "Home canning process for preserving carrots, corn, and beans.",
+    "preparationTime": "1-hr",
+    "cookingTime": "3-hr",
+    "servings": "Variable",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Wash and peel carrots.",
+      "Cut corn from cob.",
+      "Wash, snip green or yellow beans.",
+      "Cut into desired pieces.",
+      "Pack loosely into pint jars.",
+      "Add 1/2 tsp canning salt per pint jar.",
+      "Fill jar with boiling water.",
+      "Put on lid and band, screw on firmly.",
+      "Boil in hot water bath for 3 hours."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 1,
+        "unit": "Variable",
+        "name": "carrots"
+      },
+      {
+        "amount": 1,
+        "unit": "Variable",
+        "name": "corn"
+      },
+      {
+        "amount": 1,
+        "unit": "Variable",
+        "name": "green or yellow beans"
+      },
+      {
+        "amount": 0.5,
+        "unit": "tsp",
+        "name": "canning salt per pint jar"
+      }
+    ]
+  },
+  {
+    "title": "48-Hour Crock Pickles",
+    "description": "A traditional crock pickle recipe requiring 48 hours of brining.",
+    "preparationTime": "15-min",
+    "cookingTime": "48-hr",
+    "servings": "Varies",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Place pickles in pail along with some dill, onion, and garlic.",
+      "Mix together vinegar, water, sugar and salt.",
+      "Pour over sliced, speared, or whole cucumbers.",
+      "Let stand for 48 hours.",
+      "Can boil brine and pour over cucumbers in jars."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 2,
+        "unit": "cup",
+        "name": "vinegar"
+      },
+      {
+        "amount": 2,
+        "unit": "qt",
+        "name": "water"
+      },
+      {
+        "amount": 1.5,
+        "unit": "cup",
+        "name": "sugar"
+      },
+      {
+        "amount": 1.75,
+        "unit": "tbsp",
+        "name": "salt"
+      }
+    ]
+  },
+  {
+    "title": "Frozen Sweet Dill Pickles",
+    "description": "Sweet dill pickles recipe that is frozen for preservation and taste.",
+    "preparationTime": "15-min",
+    "cookingTime": "2-hr",
+    "servings": "Varies",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Mix together salt, sugar, and cider vinegar.",
+      "Let set for 2 hours.",
+      "Drain, but DO NOT rinse.",
+      "Add dillweed to taste.",
+      "Let set until sugar dissolves and liquid covers cucumbers.",
+      "Put in freezer containers with 1 inch space.",
+      "Freeze."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 4,
+        "unit": "cup",
+        "name": "sliced cucumber, peeled"
+      },
+      {
+        "amount": 2,
+        "unit": "cup",
+        "name": "sliced onion"
+      },
+      {
+        "amount": 2,
+        "unit": "tbsp",
+        "name": "water"
+      },
+      {
+        "amount": 4,
+        "unit": "tsp",
+        "name": "salt"
+      },
+      {
+        "amount": 3.75,
+        "unit": "cup",
+        "name": "sugar"
+      },
+      {
+        "amount": 0.5,
+        "unit": "cup",
+        "name": "cider vinegar"
+      },
+      {
+        "amount": 0,
+        "unit": "tbsp",
+        "name": "dillweed to taste"
+      }
+    ]
+  },
+  {
+    "title": "Hot Artichoke Dip",
+    "description": "A creamy, cheesy artichoke dip that's perfect for parties.",
+    "preparationTime": "10-min",
+    "cookingTime": "30-min",
+    "servings": "Multiple",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Stir all ingredients until well mixed.",
+      "Spoon into a small ovenproof dish.",
+      "Bake at 350 degrees for 30 minutes or until bubbly."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 2,
+        "unit": "cup",
+        "name": "Hellmann's Real Mayo"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "sour cream"
+      },
+      {
+        "amount": 1,
+        "unit": "can",
+        "name": "artichoke hearts, drained, chopped"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "Parmesan cheese"
+      },
+      {
+        "amount": 0.125,
+        "unit": "tsp",
+        "name": "black pepper sauce"
+      }
+    ]
+  },
+  {
+    "title": "Guacamole Dip",
+    "description": "A fresh, tangy guacamole dip perfect for dipping or as a spread.",
+    "preparationTime": "15-min",
+    "cookingTime": "0-min",
+    "servings": "Multiple",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Stir all ingredients until well mixed.",
+      "Cover.",
+      "Chill.",
+      "Serve."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 2,
+        "unit": "cup",
+        "name": "Hellmann's Real Mayo"
+      },
+      {
+        "amount": 1,
+        "unit": "sm",
+        "name": "tomato, chopped"
+      },
+      {
+        "amount": 1,
+        "unit": "large",
+        "name": "avocado, peeled, mashed"
+      },
+      {
+        "amount": 0.25,
+        "unit": "cup",
+        "name": "onion, minced"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "lemon juice"
+      },
+      {
+        "amount": 0.5,
+        "unit": "tsp",
+        "name": "salt"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "minced, chopped green chilies"
+      }
+    ]
+  },
+  {
+    "title": "Spinach Dip",
+    "description": "A savory spinach dip with a mix of spinach and herbs, great for entertaining.",
+    "preparationTime": "15-min",
+    "cookingTime": "0-min",
+    "servings": "Multiple",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Stir all ingredients until well mixed.",
+      "Cover.",
+      "Chill."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "Hellmann's Real Mayonnaise"
+      },
+      {
+        "amount": 0.5,
+        "unit": "cup",
+        "name": "sour cream"
+      },
+      {
+        "amount": 1,
+        "unit": "pkg",
+        "name": "frozen chopped spinach, thawed, drained"
+      },
+      {
+        "amount": 1,
+        "unit": "pkg",
+        "name": "Knorr vegetable soup & recipe mix"
+      },
+      {
+        "amount": 1,
+        "unit": "can",
+        "name": "water chestnuts, drained, chopped (optional)"
+      },
+      {
+        "amount": 3,
+        "unit": "whole",
+        "name": "green onions, chopped"
+      }
+    ]
+  },
+  {
+    "title": "Egg Nog",
+    "description": "A classic holiday egg nog with a blend of eggs, milk, ice cream, and a hint of brandy or rum.",
+    "preparationTime": "15-min",
+    "cookingTime": "0-min",
+    "servings": "Multiple",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Separate the eggs.",
+      "Beat egg whites, add 3/4 cup sugar and beat.",
+      "In a separate bowl, beat egg yolks, add 1/4 cup sugar and beat.",
+      "Mix egg mixtures together.",
+      "Add milk and brandy or rum and mix.",
+      "Float half a gallon of vanilla ice cream in bowl with mixture.",
+      "Sprinkle each serving with nutmeg."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 12,
+        "unit": "whole",
+        "name": "eggs, separated"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "sugar"
+      },
+      {
+        "amount": 0.75,
+        "unit": "gallon",
+        "name": "milk"
+      },
+      {
+        "amount": 0.5,
+        "unit": "gallon",
+        "name": "ice cream, vanilla"
+      },
+      {
+        "amount": 0.5,
+        "unit": "cup",
+        "name": "brandy or rum"
+      }
+    ]
+  },
+  {
+    "title": "Beef Kebabs",
+    "description": "Savory beef kebabs marinated in a blend of chablis, soy sauce, and seasonings, grilled with vegetables.",
+    "preparationTime": "20-min",
+    "cookingTime": "10-min",
+    "servings": "Varies",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Mix chablis, Worcestershire sauce, honey, soy sauce, grated ginger root, and pineapple juice for marinade.",
+      "Cut sirloin steak into 1\" cubes.",
+      "Skewer alternately with vegetables.",
+      "Marinate in the refrigerator for up to two days.",
+      "Grill until beef is done to your taste."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 0.5,
+        "unit": "cup",
+        "name": "chablis"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "Worcestershire sauce"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "honey"
+      },
+      {
+        "amount": 0.25,
+        "unit": "cup",
+        "name": "soy sauce"
+      },
+      {
+        "amount": 1,
+        "unit": "tsp",
+        "name": "grated ginger root"
+      },
+      {
+        "amount": 0.75,
+        "unit": "cup",
+        "name": "pineapple juice"
+      },
+      {
+        "amount": 1.5,
+        "unit": "lb",
+        "name": "sirloin steak, cut into 1\" cubes"
+      }
+    ]
+  },
+  {
+    "title": "Chicken Casserole",
+    "description": "Hearty chicken casserole with cheese, celery, and a crispy fried onion topping.",
+    "preparationTime": "30-min",
+    "cookingTime": "45-min",
+    "servings": "Multiple",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Skin chicken and boil in pot of water for 2 minutes.",
+      "Let chicken simmer in pot at low heat for 15-20 minutes.",
+      "Drain and let chicken cool for 15 minutes.",
+      "Debone chicken and cut into bite-size pieces.",
+      "In a bowl, mix remaining ingredients, except fried onions.",
+      "Add chicken pieces.",
+      "Place in casserole dish and bake for 45 minutes at 350 degrees.",
+      "Top with fried onions."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      {
+        "amount": 4,
+        "unit": "whole",
+        "name": "chicken breasts"
+      },
+      {
+        "amount": 1,
+        "unit": "can",
+        "name": "cream of mushroom soup"
+      },
+      {
+        "amount": 1,
+        "unit": "can",
+        "name": "cheddar cheese soup"
+      },
+      {
+        "amount": 1,
+        "unit": "sm",
+        "name": "can evaporated milk"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "chopped celery"
+      },
+      {
+        "amount": 1,
+        "unit": "sm",
+        "name": "jar pimento"
+      },
+      {
+        "amount": 1,
+        "unit": "cup",
+        "name": "chow mein noodles"
+      },
+      {
+        "amount": 1,
+        "unit": "tsp",
+        "name": "salt"
+      },
+      {
+        "amount": 8,
+        "unit": "to 10 froz",
+        "name": "green beans"
+      },
+      {
+        "amount": 1,
+        "unit": "can",
+        "name": "fried onions, for topping"
+      }
+    ]
+  },
+  {
+    "title": "Beef Shish-Kabob",
+    "description": "Marinated beef cubes skewered with assorted vegetables.",
+    "preparationTime": "15-min",
+    "cookingTime": "10-min",
+    "servings": "6",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "In a deep bowl, combine all ingredients except meat; mix well.",
+      "Add meat to the marinade and stir to coat.",
+      "Refrigerate overnight or let stand at room temperature for 2 or 3 hours, turning meat occasionally.",
+      "Skewer with assorted vegetables like green & red peppers, mushrooms, onion, and zucchini chunks."
+    ],
+    "authorId": "Lucy",
+    "ingredients": [
+      {
+        "amount": 0.5,
+        "unit": "cup",
+        "name": "salad oil"
+      },
+      {
+        "amount": 0.25,
+        "unit": "cup",
+        "name": "vinegar"
+      },
+      {
+        "amount": 0.25,
+        "unit": "cup",
+        "name": "chopped onion"
+      },
+      {
+        "amount": 1,
+        "unit": "tsp",
+        "name": "salt"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "coarsely ground pepper"
+      },
+      {
+        "amount": 2,
+        "unit": "tbsp",
+        "name": "Worcestershire sauce"
+      },
+      {
+        "amount": 2,
+        "unit": "lb",
+        "name": "lean beef round, sirloin cut in 1 1/2 inch cubes"
+      }
+    ]
+  },
+  {
+    "title": "Chicken Kiev",
+    "description": "A classic Chicken Kiev recipe where chicken breasts are stuffed with flavorful butter, coated in breadcrumbs, and baked.",
+    "preparationTime": "1-hr",
+    "cookingTime": "20-min",
+    "servings": "6",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Prepare chicken.",
+      "Mix margarine, parsley, chives, onions, salt, and pepper.",
+      "Shape the mixture into 6 sticks and chill or freeze.",
+      "Place chicken breast between two pieces of wax paper and pound with a mallet.",
+      "Place 1 stick of butter mixture on each breast, roll, and close edges with picks.",
+      "Sprinkle with salt and pepper.",
+      "Heat oven to 400 degrees.",
+      "Beat eggs and water.",
+      "Dredge breasts with flour, dip in egg, then roll in breadcrumbs.",
+      "Saute in margarine until brown.",
+      "Bake for 20 minutes."
+    ],
+    "authorId": "Charrlin",
+    "ingredients": [
+      {
+        "amount": 0.75,
+        "unit": "cup",
+        "name": "soft margarine"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "parsley"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "chopped chives"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "chopped onions"
+      },
+      {
+        "amount": 1.5,
+        "unit": "tsp",
+        "name": "salt"
+      },
+      {
+        "amount": 0.125,
+        "unit": "tsp",
+        "name": "pepper"
+      },
+      {
+        "amount": 6,
+        "unit": "whole",
+        "name": "chicken breasts"
+      },
+      {
+        "amount": 1,
+        "unit": "whole",
+        "name": "egg"
+      },
+      {
+        "amount": 1,
+        "unit": "tbsp",
+        "name": "cold water"
+      },
+      {
+        "amount": 1.25,
+        "unit": "cup",
+        "name": "margarine"
+      },
+      {
+        "amount": 2.67,
+        "unit": "cup",
+        "name": "bread crumbs"
+      }
+    ]
+  },
+  {
+    "title": "Meatloaf",
+    "description": "A traditional meatloaf recipe with a savory blend of spices and condiments.",
+    "preparationTime": "15-min",
+    "cookingTime": "1-hr",
+    "servings": "4-6",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Mix lean hamburger, bread crumbs or oats, eggs, chopped onion, onion powder, garlic powder, salt, and pepper.",
+      "Pack into a loaf pan.",
+      "Place bacon strips on top.",
+      "Bake at 375 for 60 min.",
+      "Optionally, put a can of beef gravy over top & place potatoes, carrots & onions around the meat.",
+      "Bake until vegetables are done."
+    ],
+    "authorId": "home_cooking_oct_1979",
+    "ingredients": [
+      { "amount": 2, "unit": "lb", "name": "lean hamburger" },
+      { "amount": 3, "unit": "whole", "name": "bread crumbs or oats" },
+      { "amount": 2, "unit": "whole", "name": "eggs" },
+      { "amount": 1, "unit": "c", "name": "chopped onion" },
+      { "amount": 1, "unit": "tsp", "name": "onion powder" },
+      { "amount": 1, "unit": "tsp", "name": "garlic powder" },
+      { "amount": 1, "unit": "tsp", "name": "salt" },
+      { "amount": 1, "unit": "tsp", "name": "pepper" },
+      { "amount": 1, "unit": "tbsp", "name": "parsley flakes" },
+      { "amount": 1, "unit": "c", "name": "catsup" },
+      { "amount": 1, "unit": "c", "name": "mayonnaise" },
+      { "amount": 0.5, "unit": "c", "name": "chopped green pepper" }
+    ]
+  },
+  {
+    "title": "Pork Roast, Grilled",
+    "description": "Grilled pork roast glazed with a sweet and tangy sauce.",
+    "preparationTime": "10-min",
+    "cookingTime": "2-hr",
+    "servings": "4-6",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Prepare the grill for the pork roast.",
+      "Mix baby food peaches, brown sugar, cider vinegar, ginger, catsup, garlic powder, and soy sauce.",
+      "Bring all ingredients except pork roast to a boil.",
+      "Use mixture to baste roast."
+    ],
+    "authorId": "postmeat",
+    "ingredients": [
+      { "amount": 6, "unit": "lb", "name": "pork roast" },
+      { "amount": 1, "unit": "jar", "name": "baby food, peaches" },
+      { "amount": 0.5, "unit": "c", "name": "brown sugar" },
+      { "amount": 0.5, "unit": "c", "name": "cider vinegar" },
+      { "amount": 1, "unit": "tsp", "name": "ginger" },
+      { "amount": 1, "unit": "c", "name": "catsup" },
+      { "amount": 1, "unit": "tbsp", "name": "garlic powder" },
+      { "amount": 1, "unit": "tbsp", "name": "soy sauce" }
+    ]
+  },
+  {
+    "title": "Venison Beer Stew",
+    "description": "A hearty stew with venison and vegetables, simmered in beer for a rich flavor.",
+    "preparationTime": "15-min",
+    "cookingTime": "1-hr-30-min",
+    "servings": "4",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Crumble bacon, set aside. Coat venison with flour.",
+      "Brown bacon drippings, drain off fat. Add undrained tomatoes, beer, onion, bouillon, sugar, thyme, black & red peppers. Bring to boil, reduce heat, cover, simmer 1 1/2 hours.",
+      "Add carrots, turnip, celery, cover, simmer 30 min more. Stir in frozen peas. Cook 5 min. Stir in bacon.",
+      "Spoon into serving bowls. Serve with crackers."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 4, "unit": "whole", "name": "slices bacon" },
+      { "amount": 2, "unit": "lb", "name": "boneless venison, cubed" },
+      { "amount": 1.25, "unit": "cup", "name": "flour" },
+      { "amount": 16, "unit": "oz", "name": "can tomatoes" },
+      { "amount": 1, "unit": "l", "name": "beer" },
+      { "amount": 1, "unit": "whole", "name": "medium onion" },
+      { "amount": 2, "unit": "tbsp", "name": "instant beef bouillon" },
+      { "amount": 1, "unit": "tsp", "name": "sugar" },
+      { "amount": 1, "unit": "tsp", "name": "dried thyme" },
+      { "amount": 0.25, "unit": "tsp", "name": "black pepper" },
+      { "amount": 1.5, "unit": "tsp", "name": "ground red pepper" },
+      { "amount": 3, "unit": "whole", "name": "medium carrots cut 1' pieces" },
+      { "amount": 2, "unit": "whole", "name": "small turnip, wedged" },
+      { "amount": 1, "unit": "stalk", "name": "celery, 1' pieces" },
+      { "amount": 1, "unit": "cup", "name": "frozen peas" }
+    ]
+  },
+  {
+    "title": "4 Hour Beef Stew",
+    "description": "A classic beef stew, slow-cooked with vegetables and thickened with tapioca.",
+    "preparationTime": "15-min",
+    "cookingTime": "4-hr",
+    "servings": "6",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Put meat & vegetables in pan.",
+      "Mix salt, sugar & tapioca into tomato sauce.",
+      "Pour over meat & vegetables.",
+      "Cover, bake at 250 degrees for 4 hours."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 2, "unit": "lb", "name": "beef stew meat, cubed" },
+      { "amount": 1, "unit": "whole", "name": "medium onion, sliced" },
+      { "amount": 1, "unit": "stalk", "name": "celery" },
+      { "amount": 6, "unit": "whole", "name": "carrots, chunked" },
+      { "amount": 3, "unit": "cup", "name": "tomato sauce" },
+      { "amount": 2, "unit": "tsp", "name": "salt" },
+      { "amount": 1, "unit": "Tbsp", "name": "sugar" },
+      { "amount": 2, "unit": "Tbsp", "name": "tapioca" }
+    ]
+  },
+  {
+    "title": "Country Style Veal Roast",
+    "description": "A savory veal roast with carrots and onion, flavored with marjoram and mushroom soup, perfect for a homely dinner.",
+    "preparationTime": "15-min",
+    "cookingTime": "2-hr-30-min",
+    "servings": "6",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Put roast to one side in pan, add carrots, onion.",
+      "Cook 5 min, skim off fat. Add water, undiluted soup, salt, pepper, marjoram & bay leaf, bring to boil.",
+      "Stirring constantly, reduce heat to low, cover & simmer 2 1/2 to 3 hours until meat is fork tender.",
+      "To serve, place meat on warm platter, discard bay leaf. Pour pan liquid into gravy boat."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 3, "unit": "lb", "name": "veal roast, boneless" },
+      { "amount": 3, "unit": "whole", "name": "medium carrots, diced" },
+      { "amount": 1, "unit": "whole", "name": "medium onion, chopped" },
+      { "amount": 2.75, "unit": "cup", "name": "water" },
+      { "amount": 1, "unit": "can", "name": "cream of mushroom soup" },
+      { "amount": 1, "unit": "tsp", "name": "salt" },
+      { "amount": 0.25, "unit": "tsp", "name": "pepper" },
+      { "amount": 0.25, "unit": "tbsp", "name": "marjoram" },
+      { "amount": 1, "unit": "whole", "name": "bay leaf" }
+    ]
+  },
+  {
+    "title": "Venison Stroganoff",
+    "description": "A delicious twist on the classic stroganoff, featuring venison and a rich, creamy mushroom sauce, served over noodles.",
+    "preparationTime": "15-min",
+    "cookingTime": "45-min",
+    "servings": "4",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Saute chopped onion in olive oil, add minced garlic to taste.",
+      "Add meat & brown. Add remaining ingredients except sour cream. Cover, simmer 30 min until meat is tender.",
+      "Stir in sour cream. Serve over cooked noodles."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 1, "unit": "tbsp", "name": "olive oil" },
+      { "amount": 1, "unit": "whole", "name": "chopped onion, to taste" },
+      { "amount": 1, "unit": "clove", "name": "minced garlic, to taste" },
+      { "amount": 1, "unit": "lb", "name": "deer tenderloin, in 1\" cubes" },
+      { "amount": 0.5, "unit": "cup", "name": "butter or margarine" },
+      { "amount": 1, "unit": "package", "name": "onion soup mix" },
+      { "amount": 1, "unit": "pt", "name": "sour cream" },
+      { "amount": 2, "unit": "can", "name": "cream of mushroom soup" },
+      { "amount": 1, "unit": "lb", "name": "cooked noodles" }
+    ]
+  },
+  {
+    "title": "Chicken & Shrimp Jambalaya",
+    "description": "A flavorful jambalaya with chicken, shrimp, and ham, mixed with rice and spiced with thyme, cayenne, and parsley.",
+    "preparationTime": "15-min",
+    "cookingTime": "1-hr",
+    "servings": "6-8",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Heat butter in large heavy skillet. Brown chicken, a few pieces at a time, transfer to casserole.",
+      "Add onion & garlic to skillet, saute over medium heat, stirring frequently, 3 to 5 min. Add rice, cook, stirring until rice is opaque but not brown, about 5 min.",
+      "Stir in tomatoes, broth, parsley, salt, thyme, & cayenne. Heat just to boil, pour over chicken. Cover, bake at 325 degrees for 30 min.",
+      "Stir gently to blend rice & chicken; add peppers, shrimp, & ham. Cover, bake 30 to 40 min, stirring once or twice until chicken is tender. Garnish with parsley when serving, if desired."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 2, "unit": "tbsp", "name": "butter or margarine" },
+      { "amount": 1, "unit": "whole", "name": "large onion, chopped" },
+      { "amount": 1.5, "unit": "cup", "name": "regular rice" },
+      { "amount": 28, "unit": "oz", "name": "whole tomatoes" },
+      { "amount": 13.75, "unit": "oz", "name": "chicken broth" },
+      { "amount": 2, "unit": "whole", "name": "small green peppers, strips" },
+      {
+        "amount": 0.5,
+        "unit": "lb",
+        "name": "small fresh or frozen shrimp, shelled, deveined"
+      },
+      { "amount": 1, "unit": "whole", "name": "chicken, cut up" },
+      { "amount": 1, "unit": "clove", "name": "garlic, minced" },
+      { "amount": 0.75, "unit": "tsp", "name": "thyme" },
+      { "amount": 2, "unit": "tbsp", "name": "chopped parsley" },
+      { "amount": 0.5, "unit": "tsp", "name": "cayenne pepper" },
+      { "amount": 1, "unit": "tbsp", "name": "bottled sauce" },
+      { "amount": 0.5, "unit": "lb", "name": "ham, cubed" }
+    ]
+  },
+  {
+    "title": "Sauerkraut-Kielbasa Oven Dinner",
+    "description": "A baked dish featuring sauerkraut and kielbasa with apples, onions, and potatoes, seasoned with a chicken gravy mix and caraway seeds.",
+    "preparationTime": "15-min",
+    "cookingTime": "1-hr",
+    "servings": "8",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Spoon sauerkraut into oven cooking bag, top with kielbasa, apples, potatoes & onions.",
+      "In a small bowl, combine gravy mix, water & caraway seeds; pour over ingredients in bag.",
+      "Close bag with twist tie to contain entire bag, make 4 small holes along top of bag with scissors or fork.",
+      "Bake at 375 degrees for 1 1/2 hours. Carefully lift bag onto large platter or serving dish; cut on corner or edge of bag & empty contents onto platter."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 2, "unit": "lb", "name": "sauerkraut" },
+      { "amount": 2.5, "unit": "lb", "name": "kielbasa, serving size pieces" },
+      { "amount": 4, "unit": "whole", "name": "apples, unpared, quartered" },
+      {
+        "amount": 2,
+        "unit": "whole",
+        "name": "medium onions, peeled, quartered"
+      },
+      { "amount": 4, "unit": "whole", "name": "potatoes, peeled, quartered" },
+      { "amount": 1, "unit": "package", "name": "chicken seasoned gravy mix" },
+      { "amount": 1, "unit": "tbsp", "name": "caraway seeds" }
+    ]
+  },
+  {
+    "title": "Old English Ragout",
+    "description": "A hearty beef stew with onions, carrots, eggplant, and beer, thickened with a pot roast seasoned gravy mix.",
+    "preparationTime": "15-min",
+    "cookingTime": "1-hr-30-min",
+    "servings": "6-8",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Put meat & vegetables into oven cooking bag.",
+      "In a small bowl, combine gravy mix & beer, pour over ingredients in bag.",
+      "Close bag with twist tie, make 4 small holes in top of bag.",
+      "Bake 375 degrees for 1 1/2 hours."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 2, "unit": "lb", "name": "beef stew meat" },
+      { "amount": 12, "unit": "whole", "name": "small white onions, peeled" },
+      { "amount": 2, "unit": "whole", "name": "carrots, 1' slices" },
+      { "amount": 1, "unit": "medium", "name": "eggplant, 1 1/2' chunks" },
+      { "amount": 1, "unit": "can", "name": "beer" },
+      { "amount": 1, "unit": "package", "name": "pot roast seasoned gravy mix" }
+    ]
+  },
+  {
+    "title": "Christmas Morning Italian Strata",
+    "description": "An Italian-inspired layered casserole with sausage, mushrooms, cheese, and bread, perfect for a holiday breakfast or brunch.",
+    "preparationTime": "30-min",
+    "cookingTime": "1-hr",
+    "servings": "12",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Grease baking dish, cook pork sausage meat in skillet over medium heat until thoroughly cooked and no longer pink. Using slotted spoon, remove sausage to paper towels to drain.",
+      "Cut French bread into 1/2\" cubes. Drain & chop mushrooms.",
+      "In baking dish, combine sausage, bread cubes & mushrooms.",
+      "Whisk together eggs, milk, Italian seasoning, garlic powder, & pepper. Pour egg mixture over sausage mixture. Cover with plastic wrap & refrigerate overnight.",
+      "Preheat oven to 350°F. Bake strata, uncovered, for 1 hour. Remove from oven & sprinkle evenly with mozzarella & Cheddar cheeses. Bake 15 min longer or until knife inserted in center comes out clean.",
+      "Remove from oven; let stand 10 min. Garnish with chopped parsley."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 1.5, "unit": "lb", "name": "pork sausage meat" },
+      { "amount": 12, "unit": "oz", "name": "loaf French bread" },
+      { "amount": 4, "unit": "oz", "name": "cans mushrooms" },
+      { "amount": 6, "unit": "whole", "name": "large eggs" },
+      { "amount": 1, "unit": "qt", "name": "milk" },
+      { "amount": 2, "unit": "tsp", "name": "Italian seasoning" },
+      { "amount": 2, "unit": "tsp", "name": "garlic powder (optional)" },
+      { "amount": 1.25, "unit": "tsp", "name": "pepper" },
+      { "amount": 8, "unit": "oz", "name": "shredded mozzarella cheese" },
+      { "amount": 4, "unit": "oz", "name": "shredded Cheddar cheese" },
+      { "amount": 1, "unit": "tbsp", "name": "chopped parsley for garnish" }
+    ]
+  },
+  {
+    "title": "Baked Beans",
+    "description": "A classic baked beans recipe with ground beef, bacon, and a sweet and savory sauce.",
+    "preparationTime": "15-min",
+    "cookingTime": "1-hr",
+    "servings": "8",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Brown beef & drain, mix with beans & ketchup.",
+      "Cook on low heat 15 min. Add other ingredients, bake 1 hour at 375 degrees."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 2, "unit": "can", "name": "pork & beans" },
+      { "amount": 1, "unit": "can", "name": "ketchup" },
+      { "amount": 1, "unit": "lb", "name": "ground beef" },
+      { "amount": 1, "unit": "whole", "name": "large onion, chopped" },
+      { "amount": 1, "unit": "lb", "name": "bacon, fried, diced" },
+      { "amount": 0.33, "unit": "cup", "name": "brown sugar" }
+    ]
+  },
+  {
+    "title": "Sauerkraut Noodle Dish",
+    "description": "A hearty dish of sauerkraut and noodles, enriched with bacon, mushrooms, and onions.",
+    "preparationTime": "15-min",
+    "cookingTime": "1-hr",
+    "servings": "6",
+    "difficultyLevel": "Medium",
+    "instructions": [
+      "Fry bacon, set aside. In bacon grease, saute chopped onions.",
+      "Add sauerkraut and fry until tender, about 1 hr, adding a little water if necessary.",
+      "Saute mushrooms in butter and add to cooked kraut.",
+      "Cook and drain kluski noodles and add to cooked sauerkraut."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 0.5, "unit": "lb", "name": "bacon, diced, fried" },
+      { "amount": 1, "unit": "qt", "name": "sauerkraut, drained" },
+      { "amount": 1, "unit": "pkg", "name": "kluski noodles" },
+      { "amount": 3, "unit": "whole", "name": "medium onions" },
+      { "amount": 0.5, "unit": "lb", "name": "mushrooms, sliced" },
+      { "amount": 1, "unit": "stick", "name": "butter" }
+    ]
+  },
+  {
+    "title": "Marquette Vegetable Salad",
+    "description": "A refreshing vegetable salad with a creamy dill dressing, topped with olives and hard-boiled eggs.",
+    "preparationTime": "15-min",
+    "cookingTime": "0-min",
+    "servings": "6",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Mix sour cream, mayo, dill, parsley flakes, seasoned salt, and onion salt for dressing.",
+      "Pour dressing over cauliflower, cherry tomatoes, sliced red onion, black olives, broccoli, and sliced hard boiled eggs."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 8, "unit": "oz", "name": "sour cream" },
+      { "amount": 1, "unit": "cup", "name": "mayo" },
+      { "amount": 0.5, "unit": "tsp", "name": "dill" },
+      { "amount": 0.5, "unit": "tsp", "name": "parsley flakes" },
+      { "amount": 0.5, "unit": "tsp", "name": "seasoned salt" },
+      { "amount": 0.5, "unit": "tsp", "name": "onion salt" },
+      { "amount": 1, "unit": "whole", "name": "medium head cauliflower" },
+      { "amount": 1, "unit": "pint", "name": "cherry tomatoes" },
+      { "amount": 1, "unit": "cup", "name": "sliced red onion" },
+      { "amount": 1, "unit": "cup", "name": "sliced black olives" },
+      { "amount": 1, "unit": "cup", "name": "broccoli" },
+      { "amount": 1, "unit": "whole", "name": "sliced hard boiled eggs" }
+    ]
+  },
+  {
+    "title": "5-Layer Macaroni Pile-Up",
+    "description": "A layered macaroni dish with cheese, vegetables, and bacon, served with a tangy salad dressing.",
+    "preparationTime": "20-min",
+    "cookingTime": "0-min",
+    "servings": "8-10",
+    "difficultyLevel": "Easy",
+    "instructions": [
+      "Prepare dinner as directed on package of macaroni.",
+      "Combine salad dressing, onions, mustard. Mix well. Add to macaroni.",
+      "In 12 x 8 baking dish, layer half of macaroni mixture, lettuce, tomatoes, and peas.",
+      "Cover with remaining macaroni mixture. Press mixture to edges to seal.",
+      "Cover, refrigerate several hours or overnight.",
+      "Top with crumbled bacon just before serving."
+    ],
+    "authorId": "unknown",
+    "ingredients": [
+      { "amount": 7.25, "unit": "oz", "name": "macaroni & cheese dinner" },
+      { "amount": 1, "unit": "cup", "name": "white salad dressing" },
+      { "amount": 1.5, "unit": "cup", "name": "chopped tomatoes" },
+      {
+        "amount": 4,
+        "unit": "whole",
+        "name": "crisply cooked bacon slices, crumbled"
+      },
+      { "amount": 0.25, "unit": "cup", "name": "chopped onion" },
+      { "amount": 1, "unit": "tbsp", "name": "mustard" },
+      { "amount": 2, "unit": "cup", "name": "shredded lettuce" },
+      { "amount": 1, "unit": "cup", "name": "frozen peas, thawed, drained" }
+    ]
+  }
+]

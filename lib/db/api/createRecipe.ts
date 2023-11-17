@@ -10,6 +10,8 @@ import getIngredient from './getIngredient'
 const createRecipe = async (recipe: RecipeForm) => {
   const newRecipeExec = await db.insert(recipes).values({
     title: recipe.title,
+    titleImage: recipe.titleImage,
+    helperImages: recipe.helperImages,
     description: recipe.description,
     preparationTime: recipe.preparationTime,
     cookingTime: recipe.cookingTime,
@@ -20,6 +22,10 @@ const createRecipe = async (recipe: RecipeForm) => {
   })
 
   const newRecipe = await getRecipe(parseInt(newRecipeExec.insertId))
+
+  if (!newRecipe) {
+    throw new Error('Failed to create recipe')
+  }
 
   const ingredientsList: Ingredient[] = []
   recipe.ingredients?.forEach(async (ingredient) => {

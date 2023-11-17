@@ -6,6 +6,8 @@ const getRecipe = async () => {
     .select({
       id: recipes.id,
       title: recipes.title,
+      titleImage: recipes.titleImage,
+      helperImages: recipes.helperImages,
       description: recipes.description,
       preparationTime: recipes.preparationTime,
       cookingTime: recipes.cookingTime,
@@ -13,6 +15,7 @@ const getRecipe = async () => {
       difficultyLevel: recipes.difficultyLevel,
       instructions: recipes.instructions,
       creationDate: recipes.creationDate,
+      updatedAt: recipes.updatedAt,
       authorId: recipes.authorId,
     })
     .from(recipes)

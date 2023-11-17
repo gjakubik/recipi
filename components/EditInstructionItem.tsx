@@ -39,10 +39,12 @@ export const EditInstructionItem = ({
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className="flex flex-row items-center gap-4 pt-4"
+      className="flex flex-row items-center gap-4 pt-4 w-full"
     >
       <HamburgerMenuIcon {...listeners} />
-      <Typography variant="bold">{index + 1}</Typography>
+      <Typography variant="bold" className="self-start pt-2">
+        {index + 1}
+      </Typography>
       <FormField
         control={form.control}
         name={`instructions.${index}.instruction`}
