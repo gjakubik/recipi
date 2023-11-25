@@ -17,12 +17,13 @@ import { timeValueToLabel } from '@/lib/utils'
 
 interface RecipeCardProps {
   recipe: Recipe
+  key: string | number
   onClick?: () => void
 }
 
-const RecipeCard = ({ recipe, onClick }: RecipeCardProps) => {
+const RecipeCard = ({ recipe, key, onClick }: RecipeCardProps) => {
   return (
-    <Link href={`/recipe/${recipe.id}`}>
+    <Link href={`/recipe/${recipe.id}`} key={key}>
       <Card
         className="h-full shadow hover:shadow-xl hover:cursor-pointer dark:hover:bg-gray-900 transition-all duration-200 ease-in-out"
         onClick={() => !!onClick && onClick()}
@@ -40,9 +41,11 @@ const RecipeCard = ({ recipe, onClick }: RecipeCardProps) => {
               />
             </AspectRatio>
           )}
-          <CardDescription>{recipe.description}</CardDescription>
         </CardHeader>
-        <CardContent className="flex justify-center mt-[-5px]">
+        <CardContent className="flex flex-col gap-2 justify-center">
+          <CardDescription className="h-[44px] line-clamp-2">
+            {recipe.description}
+          </CardDescription>
           <div className="flex items-center gap-4">
             <div className="flex flex-col text-center justify-center gap-0">
               <Typography variant="light">Prep Time</Typography>

@@ -8,8 +8,8 @@ import {
 } from 'drizzle-orm/mysql-core'
 
 // Categories Table (Optional for categorizing recipes)
-export const categories = mysqlTable(
-  'categories',
+export const tags = mysqlTable(
+  'tags',
   {
     id: int('id').autoincrement().notNull(),
     name: varchar('name', { length: 255 }).notNull(),
@@ -18,7 +18,6 @@ export const categories = mysqlTable(
     return {
       nameIdx: index('name_idx').on(table.name),
       categoriesId: primaryKey(table.id),
-      categoryId: unique('categoryID').on(table.id),
       categoriesNameUnique: unique('categories_name_unique').on(table.name),
     }
   }

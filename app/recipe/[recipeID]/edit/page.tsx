@@ -4,7 +4,7 @@ import { RecipeFormValues } from '@/lib/validations/recipe'
 import { getRecipe } from '@/lib/db/api'
 
 import { Typography } from '@/components/ui/typography'
-import { RecipeForm } from '@/components/RecipeForm'
+import { RecipeForm } from '@/components/forms/RecipeForm'
 
 interface EditRecipePageProps {
   params: { recipeID: string }

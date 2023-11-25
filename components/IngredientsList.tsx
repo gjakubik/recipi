@@ -13,7 +13,7 @@ export const IngredientsList = ({ ingredients }: IngredientsListProps) => (
       <>
         <div className="flex flex-row gap-2 justify-items-center">
           <div className="pt-px">
-            <DotFilledIcon className="flex w-6 h-6 pt-0.5" />
+            <DotFilledIcon className="flex w-5 h-5 pt-1.5" />
           </div>
           <div>
             <Typography>

@@ -8,18 +8,17 @@ import {
 } from 'drizzle-orm/mysql-core'
 
 // RecipeCategories Table (Many-to-Many Relationship Table)
-export const recipeCategories = mysqlTable(
-  'recipe_categories',
+export const recipeTags = mysqlTable(
+  'recipe_tags',
   {
     id: int('id').autoincrement().notNull(),
     recipeId: varchar('recipe_id', { length: 255 }).notNull(),
-    categoryId: varchar('category_id', { length: 255 }).notNull(),
+    tagId: varchar('tag_id', { length: 255 }).notNull(),
   },
   (table) => {
     return {
-      recipeIdIdx: index('recipe_id_idx').on(table.recipeId),
-      recipeCategoriesId: primaryKey(table.id),
-      recipeCategoryId: unique('recipeCategoryID').on(table.id),
+      recipeTagsId: primaryKey(table.id),
+      recipeTagId: unique('recipeTagID').on(table.id),
     }
   }
 )

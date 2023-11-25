@@ -92,6 +92,15 @@ export const MainNav = ({ user, children }: HeaderProps) => {
               My Recipes
             </Typography>
           </Link>
+          <Link href="/bulk-upload">
+            <Typography
+              className={
+                pathname === '/bulk-upload' ? 'font-semibold' : undefined
+              }
+            >
+              Bulk Upload
+            </Typography>
+          </Link>
         </div>
         <div className="flex flex-row space-x-4">
           {!!user && pathname !== '/create' && (

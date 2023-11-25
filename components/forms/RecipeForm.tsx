@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation'
 import { User } from 'next-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
 import { useForm, useFieldArray } from 'react-hook-form'
 import {
   DndContext,
@@ -21,7 +20,6 @@ import {
 } from '@dnd-kit/sortable'
 import Image from 'next/image'
 import { UploadDropzone } from '@uploadthing/react'
-import { UploadFileResponse } from 'uploadthing/client'
 import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
 import { createRecipe, updateRecipe } from '@/lib/db/api'
 import { RecipeFormValues, recipeFormSchema } from '@/lib/validations/recipe'
@@ -53,10 +51,12 @@ import { EditPreviewTabs } from '@/components/EditPreviewTabs'
 import { FormInput } from '@/components/FormInput'
 import { TimeInput } from '@/components/TimeInput'
 import { EditIngredientItem } from '@/components/EditIngredientItem'
-import { IngredientsList } from './IngredientsList'
+import { IngredientsList } from '../IngredientsList'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { EditInstructionItem } from '@/components/EditInstructionItem'
-import { InstructionsList } from './InstructoinsList'
+import { InstructionsList } from '../InstructoinsList'
+import { FancyBox } from '@/components/FancyBox'
+import { FancyMultiSelect } from '@/components/FancyMultiSelect'
 
 interface RecipeFormProps {
   initialValues?: RecipeFormValues & { id?: number }
@@ -210,7 +210,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
             <div className="flex h-full w-full sm:w-[300px]">
               {!titleImage ? (
                 <UploadDropzone<UploadThingFileRouter>
-                  className="drop-shadow-md"
+                  className="drop-shadow-md h-max-content"
                   endpoint="titleImage"
                   onClientUploadComplete={(res) => {
                     console.log(res)
@@ -412,6 +412,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
             )}
           </TabsContent>
         </EditPreviewTabs>
+        <FancyBox />
+        <FancyMultiSelect />
         <div className="flex flex-row space-x-4">
           <Button type="submit">{initialValues ? 'Save' : 'Submit'}</Button>
           <Button variant="ghost" type="reset">

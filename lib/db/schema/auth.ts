@@ -59,6 +59,7 @@ export const users = mysqlTable(
     email: varchar('email', { length: 255 }).notNull(),
     emailVerified: timestamp('emailVerified'),
     image: varchar('image', { length: 255 }),
+    role: varchar('role', { length: 255 }).default('basic'),
     created_at: timestamp('created_at').defaultNow(),
     updated_at: timestamp('updated_at').defaultNow().onUpdateNow(),
   },

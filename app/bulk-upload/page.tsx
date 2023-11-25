@@ -1,7 +1,7 @@
 import { getCurrentUser } from '@/lib/session'
 
 import { Typography } from '@/components/ui/typography'
-import { RecipeForm } from '@/components/forms/RecipeForm'
+import { BulkUploadForm } from '@/components/forms/BulkUploadForm'
 
 export default async function CreateRecipePage() {
   const user = await getCurrentUser()
@@ -13,8 +13,8 @@ export default async function CreateRecipePage() {
 
   return (
     <>
-      <Typography variant="h2">Create Recipe</Typography>
-      <RecipeForm user={user} />
+      <Typography variant="h2">Bulk Recipe Upload</Typography>
+      <BulkUploadForm user={user} />
     </>
   )
 }
