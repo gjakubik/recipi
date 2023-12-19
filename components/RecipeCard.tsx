@@ -13,7 +13,8 @@ import {
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Typography } from '@/components/ui/typography'
 import { Separator } from '@/components/ui/separator'
-import { timeValueToLabel } from '@/lib/utils'
+import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
+import { Clock, Users } from 'lucide-react'
 
 interface RecipeCardProps {
   recipe: Recipe
@@ -21,7 +22,7 @@ interface RecipeCardProps {
   onClick?: () => void
 }
 
-const RecipeCard = ({ recipe, key, onClick }: RecipeCardProps) => {
+export const RecipeCard = ({ recipe, key, onClick }: RecipeCardProps) => {
   return (
     <Link href={`/recipe/${recipe.id}`} key={key}>
       <Card
@@ -29,7 +30,7 @@ const RecipeCard = ({ recipe, key, onClick }: RecipeCardProps) => {
         onClick={() => !!onClick && onClick()}
       >
         <CardHeader>
-          <CardTitle>{recipe.title}</CardTitle>
+          <CardTitle className="text-xl">{recipe.title}</CardTitle>
           {recipe.titleImage && (
             <AspectRatio ratio={16 / 9}>
               <Image
@@ -42,36 +43,41 @@ const RecipeCard = ({ recipe, key, onClick }: RecipeCardProps) => {
             </AspectRatio>
           )}
         </CardHeader>
-        <CardContent className="flex flex-col gap-2 justify-center">
+        <CardContent className="flex flex-col gap-2 justify-between">
           <CardDescription className="h-[44px] line-clamp-2">
             {recipe.description}
           </CardDescription>
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col text-center justify-center gap-0">
-              <Typography variant="light">Prep Time</Typography>
-              <Typography variant="extralight">
-                {timeValueToLabel(recipe.preparationTime || '')}
-              </Typography>
-            </div>
-            <Separator orientation="vertical" />
-            <div className="flex flex-col text-center justify-center gap-0">
-              <Typography variant="light">Cook Time</Typography>
-              <Typography variant="extralight">
-                {timeValueToLabel(recipe.cookingTime || '')}
-              </Typography>
-            </div>
-            <Separator orientation="vertical" />
-            <div className="flex flex-col text-center justify-center gap-0">
-              <Typography variant="light">Amount</Typography>
-              <Typography variant="extralight">
-                {recipe.servings} Servings
-              </Typography>
-            </div>
+          <div className="grid grid-cols-[auto_auto_1fr] gap-2">
+            {!isZero(recipe.preparationTime) && (
+              <>
+                <Clock className="w-5 h-5" />
+                <Typography variant="light">Prep Time</Typography>
+                <Typography variant="extralight">
+                  {timeValueToLabel(recipe.preparationTime || '')}
+                </Typography>
+              </>
+            )}
+            {!isZero(recipe.cookingTime) && (
+              <>
+                <Clock className="w-5 h-5" />
+                <Typography variant="light">Cook Time</Typography>
+                <Typography variant="extralight">
+                  {timeValueToLabel(recipe.cookingTime || '')}
+                </Typography>
+              </>
+            )}
+            {recipe.servings && (
+              <>
+                <Users className="w-5 h-5" />
+                <Typography variant="light">Servings</Typography>
+                <Typography variant="extralight">
+                  {removeServings(recipe.servings)} Servings
+                </Typography>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
     </Link>
   )
 }
-
-export default RecipeCard

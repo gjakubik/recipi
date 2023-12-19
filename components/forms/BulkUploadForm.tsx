@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { User } from 'next-auth'
 import { ZodError } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Typography } from '@/components/ui/typography'
 import { Form, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
+import { Loader2 } from 'lucide-react'
 
 interface BulkUploadFormProps {
   user: User & { id: string }
@@ -27,8 +29,10 @@ export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
     resolver: zodResolver(bulkRecipeFormSchema),
     mode: 'onSubmit',
   })
+  const [isUploading, setIsUploading] = React.useState<boolean>(false)
 
   const onFormSubmit = (data: BulkRecipeFormValues) => {
+    setIsUploading(true)
     let json
     let recipes
     // Load the json
@@ -81,6 +85,12 @@ export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
       })
       return
     }
+
+    setIsUploading(false)
+    toast({
+      title: 'Success',
+      description: 'Recipes created successfully',
+    })
   }
 
   return (
@@ -105,7 +115,10 @@ export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
           )}
         />
         <div>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isUploading}>
+            {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Submit
+          </Button>
         </div>
       </form>
     </Form>

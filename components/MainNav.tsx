@@ -29,6 +29,7 @@ import {
   ChevronDownIcon,
   Cross1Icon,
 } from '@radix-ui/react-icons'
+import { Search } from './Search'
 
 export interface HeaderProps {
   user?: User | null
@@ -50,7 +51,7 @@ export const MainNav = ({ user, children }: HeaderProps) => {
 
   return (
     <header>
-      <div className="flex flex-row justify-between items-center px-4 sm:px-12 py-4">
+      <div className="flex flex-row justify-between gap-4 items-center px-4 sm:px-12 py-4">
         <div className="hidden sm:flex justify-center items-center gap-4">
           <ActivityLogIcon className="h-6 w-6" />
           <Typography variant="h3">Recipi</Typography>
@@ -75,7 +76,7 @@ export const MainNav = ({ user, children }: HeaderProps) => {
           )}
         </div>
         {isDropdownOpen && <MobileNav>{children}</MobileNav>}
-        <div className="hidden sm:flex flex-row space-x-8">
+        <div className="hidden lg:flex flex-row space-x-8">
           <Link href="/">
             <Typography
               className={pathname === '/' ? 'font-semibold' : undefined}
@@ -103,8 +104,9 @@ export const MainNav = ({ user, children }: HeaderProps) => {
           </Link>
         </div>
         <div className="flex flex-row space-x-4">
+          <Search />
           {!!user && pathname !== '/create' && (
-            <Button asChild>
+            <Button asChild className="hidden sm:flex min-w-[110px]">
               <Link href="/create">Add Recipe</Link>
             </Button>
           )}

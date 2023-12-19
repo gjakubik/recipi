@@ -46,6 +46,8 @@
     "drizzle-orm": "^0.28.6",
     "eslint": "8.50.0",
     "eslint-config-next": "13.5.2",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.298.0",
     "mysql2": "^3.6.1",
     "next": "14.0.1",
     "next-auth": "^4.24.3",
@@ -61,9 +63,11 @@
     "typescript": "5.2.2",
     "undici": "^5.25.2",
     "uploadthing": "^5.7.4",
-    "zod": "^3.22.2"
+    "zod": "^3.22.2",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "@types/react-beautiful-dnd": "^13.1.4",
     "drizzle-kit": "^0.19.13"
   }

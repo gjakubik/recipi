@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { Ingredient, InsertIngredient } from '@/lib/types'
 import { unitValueToLabel } from '@/lib/utils'
 import { Typography } from '@/components/ui/typography'
@@ -17,13 +18,14 @@ export const IngredientsList = ({ ingredients }: IngredientsListProps) => (
           </div>
           <div>
             <Typography>
-              {ingredient.amount} {unitValueToLabel(ingredient.unit)}
+              {ingredient.amount}{' '}
+              {unitValueToLabel(ingredient.unit) || ingredient.unit}
               {parseFloat(ingredient.amount) > 1 && 's'}
             </Typography>
           </div>
         </div>
         <div>
-          <Typography>{ingredient.name}</Typography>
+          <Typography>{_.capitalize(ingredient.name)}</Typography>
         </div>
         <div className="pt-px">
           <Typography variant="light" className="pt-1">

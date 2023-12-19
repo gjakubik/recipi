@@ -1,6 +1,6 @@
 import { getRecipe } from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
-import { timeValueToLabel, parseInstructions } from '@/lib/utils'
+import { timeValueToLabel, parseInstructions, isZero } from '@/lib/utils'
 
 import { Typography } from '@/components/ui/typography'
 import { IngredientsList } from '@/components/IngredientsList'
@@ -33,22 +33,27 @@ export default async function RecipePage({ params }: RecipePageProps) {
         )}
       </div>
       <div className="flex flex-col gap-0">
-        <div className="flex flex-row gap-2">
-          <Typography>Prep Time</Typography>
-          <div className="pt-px">
-            <Typography variant="light" className="pt-1">
-              {timeValueToLabel(recipe.preparationTime)}
-            </Typography>
+        {!isZero(recipe.preparationTime) && (
+          <div className="flex flex-row gap-2">
+            <Typography>Prep Time</Typography>
+            <div className="pt-px">
+              <Typography variant="light" className="pt-1">
+                {timeValueToLabel(recipe.preparationTime) ||
+                  recipe.preparationTime}
+              </Typography>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-row gap-2">
-          <Typography>Cook Time</Typography>
-          <div className="pt-px">
-            <Typography variant="light" className="pt-1">
-              {timeValueToLabel(recipe.cookingTime)}
-            </Typography>
+        )}
+        {!isZero(recipe.cookingTime) && (
+          <div className="flex flex-row gap-2">
+            <Typography>Cook Time</Typography>
+            <div className="pt-px">
+              <Typography variant="light" className="pt-1">
+                {timeValueToLabel(recipe.cookingTime) || recipe.cookingTime}
+              </Typography>
+            </div>
           </div>
-        </div>
+        )}
         <div className="flex flex-row gap-2">
           <Typography>Servings</Typography>
           <div className="pt-px">
