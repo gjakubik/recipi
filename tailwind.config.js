@@ -9,6 +9,18 @@ module.exports = withUt({
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.long-dashed-border': {
+          borderBottom: '3px dashed',
+          borderImage:
+            'repeating-linear-gradient(to right, black 0, black 10px, transparent 10px, transparent 20px) 1',
+        },
+      }
+      addUtilities(newUtilities)
+    },
+  ],
   theme: {
     container: {
       center: true,

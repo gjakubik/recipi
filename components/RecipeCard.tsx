@@ -16,7 +16,6 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
@@ -57,6 +56,7 @@ export const RecipeCard = ({
         height: targetRef.current.offsetHeight,
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [forceUpdate, search])
 
   const visibleIngredients = useMemo(
@@ -69,136 +69,135 @@ export const RecipeCard = ({
   )
 
   return (
-    <TooltipProvider>
-      <Card
-        key={cardKey}
-        className="flex flex-col h-full shadow hover:shadow-xl hover:cursor-pointer dark:hover:bg-gray-900 transition-all duration-200 ease-in-out"
-        onClick={() => onClick?.()}
-      >
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link href={`/recipe/${recipe.id}`} className="grow flex flex-col">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-xl">{recipe.title}</CardTitle>
-                {recipe.titleImage && (
-                  <AspectRatio ratio={16 / 9}>
-                    <Image
-                      src={recipe.titleImage.url}
-                      alt={recipe.title}
-                      fill
-                      className="rounded-md object-cover"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    />
-                  </AspectRatio>
+    <Card
+      key={cardKey}
+      className="flex flex-col h-full shadow hover:shadow-xl hover:cursor-pointer dark:hover:bg-gray-900 transition-all duration-200 ease-in-out"
+      onClick={() => onClick?.()}
+    >
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Link href={`/recipe/${recipe.id}`} className="grow flex flex-col">
+            <CardHeader className="pb-2">
+              <CardTitle>
+                <Typography className="text-xl border-b long-dashed-border">
+                  {recipe.title}
+                </Typography>
+              </CardTitle>
+              {recipe.titleImage && (
+                <AspectRatio ratio={16 / 9}>
+                  <Image
+                    src={recipe.titleImage.url}
+                    alt={recipe.title}
+                    fill
+                    className="rounded-md object-cover"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                </AspectRatio>
+              )}
+              <CardDescription>{recipe.description}</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-2 justify-between grow">
+              <div className="grid grid-cols-[auto_auto_1fr] gap-1">
+                {!isZero(recipe.preparationTime) && (
+                  <>
+                    <Clock className="w-3 h-3 mt-1" />
+                    <Typography variant="light">Prep Time</Typography>
+                    <Typography variant="extralight">
+                      {timeValueToLabel(recipe.preparationTime || '')}
+                    </Typography>
+                  </>
                 )}
-                <CardDescription>{recipe.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-2 justify-between grow">
-                <div className="grid grid-cols-[auto_auto_1fr] gap-1">
-                  {!isZero(recipe.preparationTime) && (
-                    <>
-                      <Clock className="w-3 h-3 mt-1" />
-                      <Typography variant="light">Prep Time</Typography>
-                      <Typography variant="extralight">
-                        {timeValueToLabel(recipe.preparationTime || '')}
-                      </Typography>
-                    </>
-                  )}
-                  {!isZero(recipe.cookingTime) && (
-                    <>
-                      <Clock className="w-3 h-3 mt-1" />
-                      <Typography variant="light">Cook Time</Typography>
-                      <Typography variant="extralight">
-                        {timeValueToLabel(recipe.cookingTime || '')}
-                      </Typography>
-                    </>
-                  )}
-                  {recipe.servings && (
-                    <>
-                      <Users className="w-3 h-3 mt-1" />
-                      <Typography variant="light">Servings</Typography>
-                      <Typography variant="extralight">
-                        {removeServings(recipe.servings)} Servings
-                      </Typography>
-                    </>
-                  )}
+                {!isZero(recipe.cookingTime) && (
+                  <>
+                    <Clock className="w-3 h-3 mt-1" />
+                    <Typography variant="light">Cook Time</Typography>
+                    <Typography variant="extralight">
+                      {timeValueToLabel(recipe.cookingTime || '')}
+                    </Typography>
+                  </>
+                )}
+                {recipe.servings && (
+                  <>
+                    <Users className="w-3 h-3 mt-1" />
+                    <Typography variant="light">Servings</Typography>
+                    <Typography variant="extralight">
+                      {removeServings(recipe.servings)} Servings
+                    </Typography>
+                  </>
+                )}
+              </div>
+              <div className="grow flex flex-col justify-end">
+                <div
+                  className={`grow ${
+                    showAllIngredients ? '' : 'min-h-[65px] overflow-clip'
+                  }`}
+                  ref={targetRef}
+                >
+                  <IngredientsList
+                    ingredients={visibleIngredients}
+                    v3
+                    className="justify-end"
+                  />
                 </div>
-                <div className="grow flex flex-col justify-end">
-                  <div
-                    className={`grow ${
-                      showAllIngredients ? '' : 'min-h-[65px] overflow-clip'
-                    }`}
-                    ref={targetRef}
-                  >
-                    <IngredientsList
-                      ingredients={visibleIngredients}
-                      v3
-                      className="justify-end"
-                    />
+                {recipe.ingredients.length > visibleIngredients.length ? (
+                  <div className="ml-1">
+                    <Button
+                      variant="smallAction"
+                      size="xxs"
+                      onClick={(event) => {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        setForceUpdate(forceUpdate + 1)
+                        setShowAllIngredients(true)
+                      }}
+                    >
+                      {recipe.ingredients.length - visibleIngredients.length}{' '}
+                      more...
+                    </Button>
                   </div>
-                  {recipe.ingredients.length > visibleIngredients.length ? (
-                    <div className="ml-1">
-                      <Button
-                        variant="smallAction"
-                        size="xxs"
-                        onClick={(event) => {
-                          event.preventDefault()
-                          event.stopPropagation()
-                          setForceUpdate(forceUpdate + 1)
-                          setShowAllIngredients(true)
-                        }}
-                        // stop event propogation while hovering
-                        onMouseEnter={(event) => event.stopPropagation()}
-                        onMouseLeave={(event) => event.stopPropagation()}
-                      >
-                        {recipe.ingredients.length - visibleIngredients.length}{' '}
-                        more...
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="ml-1 h-7"></div>
-                  )}
-                </div>
-                <div>
-                  <Separator className="mb-4" />
-                  <div className="flex flex-row justify-between items-center">
-                    <div className="flex flex-row gap-2 items-center">
-                      {recipe.author.image && (
-                        <Image
-                          src={recipe.author.image}
-                          alt={recipe.author.name!}
-                          width={30}
-                          height={30}
-                          className="rounded-full object-cover"
-                        />
-                      )}
-                      <Typography variant="light">
-                        {recipe.author.name}
-                      </Typography>
-                    </div>
+                ) : (
+                  <div className="ml-1 h-7"></div>
+                )}
+              </div>
+              <div>
+                <Separator className="mb-4" />
+                <div className="flex flex-row justify-between items-center">
+                  <div className="flex flex-row gap-2 items-center">
+                    {recipe.author.image && (
+                      <img
+                        src={recipe.author.image}
+                        alt={recipe.author.name!}
+                        width={30}
+                        height={30}
+                        className="rounded-full object-cover"
+                      />
+                    )}
                     <Typography variant="light">
-                      {recipe.creationDate
-                        ? new Date(recipe.creationDate).toLocaleDateString()
-                        : ''}
+                      {recipe.author.name}
                     </Typography>
                   </div>
+                  <Typography variant="light">
+                    {recipe.creationDate
+                      ? new Date(recipe.creationDate).toLocaleDateString()
+                      : ''}
+                  </Typography>
                 </div>
-              </CardContent>
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent>
-            <Typography>Go to {recipe.title}</Typography>
-          </TooltipContent>
-        </Tooltip>
-        <CardFooter className="flex flex-row justify-end items-center gap-4">
-          {isOwner && (
-            <Button asChild size="sm" variant="outline">
-              <Link href={`/recipe/${recipe.id}/edit`}>Edit Recipe</Link>
-            </Button>
-          )}
-          <Button size="sm">Add to Menu</Button>
-        </CardFooter>
-      </Card>
-    </TooltipProvider>
+              </div>
+            </CardContent>
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent>
+          <Typography>Go to {recipe.title}</Typography>
+        </TooltipContent>
+      </Tooltip>
+      <CardFooter className="flex flex-row justify-end items-center gap-4">
+        {isOwner && (
+          <Button asChild size="sm" variant="outline">
+            <Link href={`/recipe/${recipe.id}/edit`}>Edit Recipe</Link>
+          </Button>
+        )}
+        <Button size="sm">Add to Menu</Button>
+      </CardFooter>
+    </Card>
   )
 }

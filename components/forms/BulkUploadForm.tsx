@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import _ from 'lodash'
 import { User } from 'next-auth'
 import { ZodError } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -75,7 +76,11 @@ export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
     // Create the recipes
     try {
       recipes.forEach(async (recipe, i) => {
-        const withAuthor = { ...recipe, authorId: user.id }
+        const withAuthor = {
+          ...recipe,
+          authorId: user.id,
+          difficultyLevel: _.toLower(recipe.difficultyLevel),
+        }
         await createRecipe(withAuthor)
         const progress = (100 / recipes.length) * (i + 1)
         setProgress(progress)

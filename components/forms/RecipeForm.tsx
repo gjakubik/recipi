@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import _ from 'lodash'
 import { useRouter } from 'next/navigation'
 import { User } from 'next-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -58,6 +59,7 @@ import { EditInstructionItem } from '@/components/EditInstructionItem'
 import { InstructionsList } from '../InstructoinsList'
 import { FancyBox } from '@/components/FancyBox'
 import { FancyMultiSelect } from '@/components/FancyMultiSelect'
+import { TimePicker } from '@/components/ui/time-picker'
 
 interface RecipeFormProps {
   initialValues?: RecipeFormValues & { id?: number }
@@ -69,7 +71,10 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
   const { toast } = useToast()
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeFormSchema),
-    defaultValues: initialValues || {
+    defaultValues: {
+      ...initialValues,
+      difficultyLevel: _.lowerCase(initialValues?.difficultyLevel),
+    } || {
       title: '',
       description: '',
       preparationTime: '30-min',
@@ -81,6 +86,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
       authorId: user.id,
     },
   })
+
+  console.log(form.formState)
 
   const errors = form.formState.errors
   console.log(errors)
@@ -258,12 +265,24 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
               )}
             </div>
           </div>
-          <div className="flex flex-wrap flex-row gap-2 justify-between">
-            <div className="flex flex-row gap-2">
-              <TimeInput name="preparationTime" />
-              <TimeInput name="cookingTime" />
+          <div className="flex flex-wrap flex-row gap-2 justify-between items-start">
+            <div className="flex flex-row gap-6">
+              <TimePicker
+                label="Prep Time"
+                time={form.getValues('preparationTime')}
+                setTime={(date: string): void => {
+                  form.setValue('preparationTime', date)
+                }}
+              />
+              <TimePicker
+                label="Cook Time"
+                time={form.getValues('cookingTime')}
+                setTime={(date: string): void => {
+                  form.setValue('cookingTime', date)
+                }}
+              />
             </div>
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-2 items-start">
               <FormInput
                 name="servings"
                 label="Servings"

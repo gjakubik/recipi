@@ -52,6 +52,39 @@ export const timeValueToLabel = (value?: string | null): string | undefined => {
   }
 }
 
+export const timeToValues = (time: string) => {
+  const [hours, minutes, seconds] = time.split(':')
+  return {
+    hours: parseInt(hours),
+    minutes: parseInt(minutes),
+    seconds: parseInt(seconds),
+  }
+}
+
+export const timeToStrValues = (time: string) => {
+  const [hours, minutes, seconds] = time.split(':')
+  return {
+    hours: hours,
+    minutes: minutes,
+    seconds: seconds,
+  }
+}
+
+export const setTimeByType = (time: string, value: string, type: string) => {
+  const { hours, minutes, seconds } = timeToValues(time)
+
+  switch (type) {
+    case 'hours':
+      return `${value}:${minutes}:${seconds}`
+    case 'minutes':
+      return `${hours}:${value}:${seconds}`
+    case 'seconds':
+      return `${hours}:${minutes}:${value}`
+    default:
+      return time
+  }
+}
+
 export const unitValueToLabel = (value?: string | null) => {
   try {
     return UNIT_TO_LABEL[value as keyof typeof UNIT_TO_LABEL]

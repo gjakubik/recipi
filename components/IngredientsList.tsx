@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { Ingredient, IngredientForm } from '@/lib/types'
 import { unitValueToLabel } from '@/lib/utils'
 import { Typography } from '@/components/ui/typography'
+import { FormLabel } from '@/components/ui/form'
 import { DotFilledIcon } from '@radix-ui/react-icons'
 
 interface IngredientsListProps {
@@ -78,13 +79,16 @@ export const IngredientsList = ({
     )
 
   return (
-    <div className="grid grid-cols-[auto_auto_1fr] gap-x-4 gap-7-0 justify-items-star">
-      {ingredients.map((ingredient) => (
+    <div className="grid grid-cols-[auto_auto_1fr] gap-x-4 gap-7-0 pt-2">
+      <FormLabel>Amount</FormLabel>
+      <FormLabel>Ingredient</FormLabel>
+      <FormLabel className="mb-2">Note</FormLabel>
+      {ingredients.map((ingredient, i) => (
         <>
           <div className="flex flex-row gap-2 justify-items-center">
-            <div className="pt-px">
+            {/* <div className="pt-px">
               <DotFilledIcon className="flex w-5 h-5 pt-1.5" />
-            </div>
+            </div> */}
             <div>
               <Typography>
                 {ingredient.amount}{' '}
@@ -101,6 +105,7 @@ export const IngredientsList = ({
               {ingredient.note}
             </Typography>
           </div>
+          <div className="col-span-3 border-1 border-b long-dashed-border border-gray-700 mt-[-1px] pt-0 mb-2" />
         </>
       ))}
     </div>

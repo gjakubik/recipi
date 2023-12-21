@@ -2,7 +2,11 @@ import { db } from '@/lib/db'
 import { recipes, users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 
-const getRecipe = async () => {
+interface GetAuthorRecipes {
+  userId: string
+}
+
+const getAuthorRecipes = async ({ userId }: GetAuthorRecipes) => {
   const allRecipes = await db
     .select({
       id: recipes.id,
@@ -31,6 +35,7 @@ const getRecipe = async () => {
       },
     })
     .from(recipes)
+    .where(eq(recipes.authorId, userId))
     .innerJoin(users, eq(recipes.authorId, users.id))
 
   console.log(allRecipes)
@@ -38,4 +43,4 @@ const getRecipe = async () => {
   return allRecipes
 }
 
-export default getRecipe
+export default getAuthorRecipes
