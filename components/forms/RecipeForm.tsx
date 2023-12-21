@@ -51,7 +51,6 @@ import { useToast } from '@/components/ui/use-toast'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { EditPreviewTabs } from '@/components/EditPreviewTabs'
 import { FormInput } from '@/components/FormInput'
-import { TimeInput } from '@/components/TimeInput'
 import { EditIngredientItem } from '@/components/EditIngredientItem'
 import { IngredientsList } from '../IngredientsList'
 import { PlusIcon } from '@radix-ui/react-icons'
@@ -71,26 +70,28 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
   const { toast } = useToast()
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeFormSchema),
-    defaultValues: {
-      ...initialValues,
-      difficultyLevel: _.lowerCase(initialValues?.difficultyLevel),
-    } || {
-      title: '',
-      description: '',
-      preparationTime: '30-min',
-      cookingTime: '30-min',
-      servings: '',
-      difficultyLevel: 'easy',
-      instructions: [{ id: 0, instruction: '' }],
-      ingredients: [{ id: 0, name: '', note: '', amount: '', unit: '' }],
-      authorId: user.id,
-    },
+    defaultValues: !!initialValues
+      ? {
+          ...initialValues,
+          difficultyLevel: _.lowerCase(initialValues?.difficultyLevel),
+        }
+      : {
+          title: '',
+          description: '',
+          preparationTime: '000:00:00',
+          cookingTime: '000:00:00',
+          servings: '',
+          difficultyLevel: 'easy',
+          instructions: [{ id: 0, instruction: '' }],
+          ingredients: [{ id: 0, name: '', note: '', amount: '', unit: '' }],
+          authorId: user.id,
+        },
   })
 
-  console.log(form.formState)
+  // console.log(form.formState)
 
-  const errors = form.formState.errors
-  console.log(errors)
+  // const errors = form.formState.errors
+  // console.log(errors)
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -267,19 +268,31 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
           </div>
           <div className="flex flex-wrap flex-row gap-2 justify-between items-start">
             <div className="flex flex-row gap-6">
-              <TimePicker
-                label="Prep Time"
-                time={form.getValues('preparationTime')}
-                setTime={(date: string): void => {
-                  form.setValue('preparationTime', date)
-                }}
+              <FormField
+                control={form.control}
+                name="preparationTime"
+                render={({ field }) => (
+                  <TimePicker
+                    label="Prep Time"
+                    time={field.value}
+                    setTime={(time: string): void => {
+                      form.setValue('preparationTime', time)
+                    }}
+                  />
+                )}
               />
-              <TimePicker
-                label="Cook Time"
-                time={form.getValues('cookingTime')}
-                setTime={(date: string): void => {
-                  form.setValue('cookingTime', date)
-                }}
+              <FormField
+                control={form.control}
+                name="cookingTime"
+                render={({ field }) => (
+                  <TimePicker
+                    label="Cook Time"
+                    time={field.value}
+                    setTime={(time: string): void => {
+                      form.setValue('cookingTime', time)
+                    }}
+                  />
+                )}
               />
             </div>
             <div className="flex flex-row gap-2 items-start">

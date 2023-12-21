@@ -13,8 +13,8 @@ export const savedImageSchema = z.object({
 export const recipeFormSchema = z.object({
   id: z.number().optional(),
   title: z.string(),
-  titleImage: savedImageSchema.nullable(),
-  helperImages: z.array(savedImageSchema).nullable(),
+  titleImage: z.optional(savedImageSchema.nullable()),
+  helperImages: z.optional(z.array(savedImageSchema).nullable()),
   description: z.string().optional(),
   preparationTime: z.string(),
   cookingTime: z.string(),
