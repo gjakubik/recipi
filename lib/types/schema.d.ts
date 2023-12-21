@@ -15,13 +15,20 @@ export type Category = InferModel<typeof categories>
 
 export type Comment = InferModel<typeof comments>
 
-export type Ingredient = InferModel<typeof ingredients>
+export type Ingredient = {
+  name: string
+  note?: string
+  amount: string
+  unit: string
+}
 
-// recipeId is not required because it is automatically added by the database
-export type InsertIngredient = Omit<
-  InferModel<typeof ingredients, 'insert'>,
-  'recipeId'
->
+export type IngredientForm = {
+  id?: string | number
+  name: string
+  note?: string
+  amount: string
+  unit: string
+}
 
 export type Like = InferModel<typeof likes>
 
@@ -36,14 +43,12 @@ export type StoredFile = {
 }
 
 export type Recipe = InferModel<typeof recipes> & {
-  instructions: string[] | null
+  author: User
 }
 
 export type InsertRecipe = InferModel<typeof recipes, 'insert'>
 
-export type RecipeForm = InsertRecipe & {
-  ingredients?: InsertIngredient[]
-}
+export type RecipeForm = InsertRecipe
 
 export type User = InferModel<typeof users>
 

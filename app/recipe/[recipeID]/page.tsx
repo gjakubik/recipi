@@ -34,38 +34,32 @@ export default async function RecipePage({ params }: RecipePageProps) {
       </div>
       <div className="flex flex-col gap-0">
         {!isZero(recipe.preparationTime) && (
-          <div className="flex flex-row gap-2">
-            <Typography>Prep Time</Typography>
-            <div className="pt-px">
-              <Typography variant="light" className="pt-1">
-                {timeValueToLabel(recipe.preparationTime) ||
-                  recipe.preparationTime}
-              </Typography>
-            </div>
+          <div className="flex flex-row items-center gap-2">
+            <Typography variant="bold">Prep Time</Typography>
+            <Typography variant="pn" className="pt-px">
+              {timeValueToLabel(recipe.preparationTime) ||
+                recipe.preparationTime}
+            </Typography>
           </div>
         )}
         {!isZero(recipe.cookingTime) && (
-          <div className="flex flex-row gap-2">
-            <Typography>Cook Time</Typography>
-            <div className="pt-px">
-              <Typography variant="light" className="pt-1">
-                {timeValueToLabel(recipe.cookingTime) || recipe.cookingTime}
-              </Typography>
-            </div>
-          </div>
-        )}
-        <div className="flex flex-row gap-2">
-          <Typography>Servings</Typography>
-          <div className="pt-px">
-            <Typography variant="light" className="pt-1">
-              {recipe.servings}
+          <div className="flex flex-row items-center gap-2">
+            <Typography variant="bold">Cook Time</Typography>
+            <Typography variant="pn" className="pt-px">
+              {timeValueToLabel(recipe.cookingTime) || recipe.cookingTime}
             </Typography>
           </div>
+        )}
+        <div className="flex flex-row items-center gap-2">
+          <Typography variant="bold">Servings</Typography>
+          <Typography variant="pn" className="pt-px">
+            {recipe.servings}
+          </Typography>
         </div>
       </div>
       <Typography>{recipe.description}</Typography>
       <Typography variant="h4">Ingredients</Typography>
-      <IngredientsList ingredients={recipe.ingredients} />
+      <IngredientsList ingredients={recipe.ingredients} v2 />
       <Typography variant="h4">Instructions</Typography>
       <InstructionsList className="pl-2" instructions={recipe.instructions} />
     </>

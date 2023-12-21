@@ -18,6 +18,7 @@ import { Typography } from '@/components/ui/typography'
 import { Form, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
+import { Progress } from '@/components/ui/progress'
 
 interface BulkUploadFormProps {
   user: User & { id: string }
@@ -30,8 +31,9 @@ export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
     mode: 'onSubmit',
   })
   const [isUploading, setIsUploading] = React.useState<boolean>(false)
+  const [progress, setProgress] = React.useState<number>(0)
 
-  const onFormSubmit = (data: BulkRecipeFormValues) => {
+  const onFormSubmit = async (data: BulkRecipeFormValues) => {
     setIsUploading(true)
     let json
     let recipes
@@ -72,9 +74,11 @@ export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
 
     // Create the recipes
     try {
-      recipes.forEach((recipe) => {
-        const withAuthor = { ...recipe, author: user.id }
-        createRecipe(withAuthor)
+      recipes.forEach(async (recipe, i) => {
+        const withAuthor = { ...recipe, authorId: user.id }
+        await createRecipe(withAuthor)
+        const progress = (100 / recipes.length) * (i + 1)
+        setProgress(progress)
       })
     } catch (err) {
       console.log(err)
@@ -114,6 +118,7 @@ export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
             </FormItem>
           )}
         />
+        {isUploading && <Progress value={progress} className="w-full" />}
         <div>
           <Button type="submit" disabled={isUploading}>
             {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

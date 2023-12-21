@@ -6,9 +6,10 @@ import useSearch from '@/app/store/useSearch'
 
 interface RecipeListProps {
   recipes: Recipe[]
+  userId?: string
 }
 
-export function RecipeList({ recipes }: RecipeListProps) {
+export function RecipeList({ recipes, userId }: RecipeListProps) {
   const { search } = useSearch()
 
   const filteredRecipes = recipes.filter((recipe) => {
@@ -26,7 +27,12 @@ export function RecipeList({ recipes }: RecipeListProps) {
   return (
     <>
       {filteredRecipes.map((recipe) => (
-        <RecipeCard key={recipe.id} recipe={recipe} />
+        <RecipeCard
+          key={recipe.id}
+          cardKey={recipe.id}
+          recipe={recipe}
+          isOwner={userId === recipe.authorId}
+        />
       ))}
     </>
   )

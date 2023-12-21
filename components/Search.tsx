@@ -1,13 +1,18 @@
 'use client'
 
+import { cn } from '@/lib/utils'
 import useSearch from '@/app/store/useSearch'
 import { Input } from '@/components/ui/input'
 
-export function Search() {
+interface SearchProps {
+  className?: string
+}
+
+export function Search({ className }: SearchProps) {
   const { search, setSearch } = useSearch()
 
   return (
-    <div className="relative w-30">
+    <div className={cn(className, 'relative')}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-500 left-3"

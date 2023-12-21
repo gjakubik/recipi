@@ -1,5 +1,7 @@
 'use client'
 
+import { useRef, useState, useLayoutEffect, useMemo } from 'react'
+import _ from 'lodash'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Recipe } from '@/lib/types'
@@ -9,26 +11,57 @@ import {
   CardContent,
   CardTitle,
   CardDescription,
+  CardFooter,
 } from '@/components/ui/card'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Typography } from '@/components/ui/typography'
 import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { IngredientsList } from './IngredientsList'
 import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
-import { Clock, Users } from 'lucide-react'
+import { Clock, MoreHorizontal, Users } from 'lucide-react'
 
 interface RecipeCardProps {
   recipe: Recipe
-  key: string | number
+  cardKey: string | number
   onClick?: () => void
+  isOwner?: boolean
 }
 
-export const RecipeCard = ({ recipe, key, onClick }: RecipeCardProps) => {
+export const RecipeCard = ({
+  recipe,
+  cardKey,
+  onClick,
+  isOwner,
+}: RecipeCardProps) => {
+  const targetRef = useRef<HTMLDivElement>(null)
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+
+  useLayoutEffect(() => {
+    if (targetRef.current) {
+      setDimensions({
+        width: targetRef.current.offsetWidth,
+        height: targetRef.current.offsetHeight,
+      })
+    }
+  }, [])
+
+  console.log(recipe.title, dimensions.height, dimensions.height / 30)
+
+  const visibleIngredients = useMemo(
+    () => recipe.ingredients.slice(0, _.floor(dimensions.height / 30)),
+    [dimensions.height, recipe.ingredients]
+  )
+
+  console.log(visibleIngredients)
+
   return (
-    <Link href={`/recipe/${recipe.id}`} key={key}>
-      <Card
-        className="h-full shadow hover:shadow-xl hover:cursor-pointer dark:hover:bg-gray-900 transition-all duration-200 ease-in-out"
-        onClick={() => !!onClick && onClick()}
-      >
+    <Card
+      key={cardKey}
+      className="flex flex-col h-full shadow hover:shadow-xl hover:cursor-pointer dark:hover:bg-gray-900 transition-all duration-200 ease-in-out"
+      onClick={() => !!onClick && onClick()}
+    >
+      <Link href={`/recipe/${recipe.id}`} className="grow flex flex-col">
         <CardHeader>
           <CardTitle className="text-xl">{recipe.title}</CardTitle>
           {recipe.titleImage && (
@@ -42,11 +75,9 @@ export const RecipeCard = ({ recipe, key, onClick }: RecipeCardProps) => {
               />
             </AspectRatio>
           )}
+          <CardDescription>{recipe.description}</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-2 justify-between">
-          <CardDescription className="h-[44px] line-clamp-2">
-            {recipe.description}
-          </CardDescription>
+        <CardContent className="flex flex-col gap-2 justify-between grow">
           <div className="grid grid-cols-[auto_auto_1fr] gap-2">
             {!isZero(recipe.preparationTime) && (
               <>
@@ -76,8 +107,53 @@ export const RecipeCard = ({ recipe, key, onClick }: RecipeCardProps) => {
               </>
             )}
           </div>
+          <div className="grow flex flex-col justify-end">
+            <div
+              className="grow h-0 min-h-[65px] overflow-clip"
+              ref={targetRef}
+            >
+              <IngredientsList
+                ingredients={visibleIngredients}
+                v3
+                className="justify-end"
+              />
+            </div>
+            {recipe.ingredients.length > visibleIngredients.length && (
+              <MoreHorizontal className="w-5 h-5" />
+            )}
+          </div>
+          <div>
+            <Separator className="mb-4" />
+            <div className="flex flex-row justify-between items-center">
+              <div className="flex flex-row gap-2 items-center">
+                {recipe.author.image && (
+                  <Image
+                    src={recipe.author.image}
+                    alt={recipe.author.name!}
+                    width={30}
+                    height={30}
+                    className="rounded-full object-cover"
+                  />
+                )}
+                <Typography variant="light">{recipe.author.name}</Typography>
+              </div>
+              <Typography variant="light">
+                {recipe.creationDate
+                  ? new Date(recipe.creationDate).toLocaleDateString()
+                  : ''}
+              </Typography>
+            </div>
+          </div>
         </CardContent>
-      </Card>
-    </Link>
+      </Link>
+      <CardFooter className="flex flex-row justify-end items-center gap-4">
+        {isOwner && (
+          <Button asChild size="sm" variant="outline">
+            <Link href={`/recipe/${recipe.id}/edit`}>Edit Recipe</Link>
+          </Button>
+        )}
+        <Button size="sm">Add to Menu</Button>
+      </CardFooter>
+    </Card>
   )
 }

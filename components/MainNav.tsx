@@ -104,7 +104,7 @@ export const MainNav = ({ user, children }: HeaderProps) => {
           </Link>
         </div>
         <div className="flex flex-row space-x-4">
-          <Search />
+          <Search className="hidden sm:flex" />
           {!!user && pathname !== '/create' && (
             <Button asChild className="hidden sm:flex min-w-[110px]">
               <Link href="/create">Add Recipe</Link>

@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useRouter } from 'next/navigation'
 import { User } from 'next-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -77,8 +78,12 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
       difficultyLevel: 'easy',
       instructions: [{ id: 0, instruction: '' }],
       ingredients: [{ id: 0, name: '', note: '', amount: '', unit: '' }],
+      authorId: user.id,
     },
   })
+
+  const errors = form.formState.errors
+  console.log(errors)
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -92,6 +97,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
     append: appendIngredient,
     remove: removeIngredient,
     move: moveIngredient,
+    update: updateIngredient,
   } = useFieldArray({
     control: form.control,
     name: 'ingredients',
@@ -102,6 +108,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
     append: appendInstruction,
     remove: removeInstruction,
     move: moveInstruction,
+    update: updateInstruction,
   } = useFieldArray({
     control: form.control,
     name: 'instructions',
@@ -119,14 +126,15 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
     try {
       const upsertedRecipe = initialValues
         ? await updateRecipe(prepRecipe)
-        : await createRecipe({
-            ...prepRecipe,
-            authorId: user.id,
-            ingredients: data.ingredients.map((i) => ({
-              ...i,
-              id: undefined,
-            })),
-          })
+        : await createRecipe(prepRecipe)
+      if (!upsertedRecipe) {
+        toast({
+          title: `Error ${initialValues ? 'updating' : 'creating'} recipe`,
+          description: 'Something went wrong',
+        })
+        return
+      }
+
       toast({
         title: `Recipe ${upsertedRecipe.id} ${
           initialValues ? 'updated' : 'created'
@@ -176,6 +184,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
       oldIndex !== -1 && newIndex !== -1 && moveInstruction(oldIndex, newIndex)
     }
   }
+
   return (
     <Form {...form}>
       <form
@@ -306,18 +315,18 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 items={ingredients.map((i) => i.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="flex flex-row justify-between items-end mt-4 max-w-[600px] m-auto">
-                  <div className="flex flex-row items-end w-[400px]">
-                    <div className="w-[40px]" />
+                <div className="flex flex-row gap-2 items-end mt-4 max-w-[600px] m-auto">
+                  <div className="w-[40px]" />
+                  <div className="w-[60px]">
+                    <FormLabel>Amount</FormLabel>
+                  </div>
+                  <div className="w-[100px]">
+                    <FormLabel>Unit</FormLabel>
+                  </div>
+                  <div className="grow">
                     <FormLabel>Name</FormLabel>
                   </div>
                   <div className="flex flex-row items-end gap-1">
-                    <div className="w-[80px]">
-                      <FormLabel>Amount</FormLabel>
-                    </div>
-                    <div className="w-[100px]">
-                      <FormLabel>Unit</FormLabel>
-                    </div>
                     <div className="w-[30px]" />
                   </div>
                 </div>
@@ -331,6 +340,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                         ingredients.findIndex((i) => i.id === id)
                       )
                     }
+                    hasNote={!!i.note}
+                    updateIngredient={updateIngredient}
                   />
                 ))}
               </SortableContext>
@@ -385,6 +396,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                           instructions.findIndex((i) => i.id === id)
                         )
                       }
+                      updateInstruction={updateInstruction}
                     />
                   ))}
                 </div>
@@ -412,8 +424,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
             )}
           </TabsContent>
         </EditPreviewTabs>
-        <FancyBox />
-        <FancyMultiSelect />
+        {/* <FancyBox />
+        <FancyMultiSelect /> */}
         <div className="flex flex-row space-x-4">
           <Button type="submit">{initialValues ? 'Save' : 'Submit'}</Button>
           <Button variant="ghost" type="reset">

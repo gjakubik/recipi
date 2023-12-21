@@ -4,7 +4,7 @@
     "description": "A creamy and herby pesto dip perfect for chips or vegetables.",
     "preparationTime": "00:15:00",
     "cookingTime": "00:00:00",
-    "servings": "4-6",
+    "servings": "4",
     "difficultyLevel": "Easy",
     "instructions": [
       "In blender or food processor, blend all ingredients until almost smooth.",
@@ -29,7 +29,7 @@
     "description": "A tangy and refreshing dip with a kick of ginger, perfect as a companion for fruit or crackers.",
     "preparationTime": "00:10:00",
     "cookingTime": "00:00:00",
-    "servings": "4-6",
+    "servings": "4",
     "difficultyLevel": "Easy",
     "instructions": [
       "Stir all ingredients until well mixed.",
@@ -49,7 +49,7 @@
     "description": "A tangy and sweet chicken wing dish with a combination of vinegar, pineapple juice, soy sauce, and spices.",
     "preparationTime": "00:15:00",
     "cookingTime": "00:30:00",
-    "servings": "4 servings",
+    "servings": "4",
     "difficultyLevel": "Medium",
     "instructions": [
       "Brown chicken on all sides in hot fat in a large heavy skillet.",
@@ -410,7 +410,7 @@
     "description": "A creamy, cheesy artichoke dip that's perfect for parties.",
     "preparationTime": "00:10:00",
     "cookingTime": "00:30:00",
-    "servings": "Multiple",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Stir all ingredients until well mixed.",
@@ -451,7 +451,7 @@
     "description": "A fresh, tangy guacamole dip perfect for dipping or as a spread.",
     "preparationTime": "00:15:00",
     "cookingTime": "00:00:00",
-    "servings": "Multiple",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Stir all ingredients until well mixed.",
@@ -503,7 +503,7 @@
     "description": "A savory spinach dip with a mix of spinach and herbs, great for entertaining.",
     "preparationTime": "00:15:00",
     "cookingTime": "00:00:00",
-    "servings": "Multiple",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Stir all ingredients until well mixed.",
@@ -549,7 +549,7 @@
     "description": "A classic holiday egg nog with a blend of eggs, milk, ice cream, and a hint of brandy or rum.",
     "preparationTime": "00:15:00",
     "cookingTime": "00:00:00",
-    "servings": "Multiple",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Separate the eggs.",
@@ -647,7 +647,7 @@
     "description": "Hearty chicken casserole with cheese, celery, and a crispy fried onion topping.",
     "preparationTime": "00:30:00",
     "cookingTime": "00:45:00",
-    "servings": "Multiple",
+    "servings": "8",
     "difficultyLevel": "Medium",
     "instructions": [
       "Skin chicken and boil in pot of water for 2 minutes.",
@@ -849,7 +849,7 @@
     "description": "A traditional meatloaf recipe with a savory blend of spices and condiments.",
     "preparationTime": "00:15:00",
     "cookingTime": "01:00:00",
-    "servings": "4-6",
+    "servings": "4",
     "difficultyLevel": "Medium",
     "instructions": [
       "Mix lean hamburger, bread crumbs or oats, eggs, chopped onion, onion powder, garlic powder, salt, and pepper.",
@@ -880,7 +880,7 @@
     "description": "Grilled pork roast glazed with a sweet and tangy sauce.",
     "preparationTime": "00:10:00",
     "cookingTime": "02:00:00",
-    "servings": "4-6",
+    "servings": "4",
     "difficultyLevel": "Medium",
     "instructions": [
       "Prepare the grill for the pork roast.",
@@ -1013,7 +1013,7 @@
     "description": "A flavorful jambalaya with chicken, shrimp, and ham, mixed with rice and spiced with thyme, cayenne, and parsley.",
     "preparationTime": "00:15:00",
     "cookingTime": "01:00:00",
-    "servings": "6-8",
+    "servings": "6",
     "difficultyLevel": "Medium",
     "instructions": [
       "Heat butter in large heavy skillet. Brown chicken, a few pieces at a time, transfer to casserole.",
@@ -1076,7 +1076,7 @@
     "description": "A hearty beef stew with onions, carrots, eggplant, and beer, thickened with a pot roast seasoned gravy mix.",
     "preparationTime": "00:15:00",
     "cookingTime": "01:30:00",
-    "servings": "6-8",
+    "servings": "6",
     "difficultyLevel": "Medium",
     "instructions": [
       "Put meat & vegetables into oven cooking bag.",
@@ -1200,7 +1200,7 @@
     "description": "A layered macaroni dish with cheese, vegetables, and bacon, served with a tangy salad dressing.",
     "preparationTime": "00:20:00",
     "cookingTime": "00:00:00",
-    "servings": "8-10",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Prepare dinner as directed on package of macaroni.",
