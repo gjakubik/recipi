@@ -20,12 +20,15 @@ import { Button } from '@/components/ui/button'
 import { IngredientsList } from './IngredientsList'
 import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
 import { Clock, MoreHorizontal, Users } from 'lucide-react'
+import useSearch from '@/app/store/useSearch'
 
 interface RecipeCardProps {
   recipe: Recipe
   cardKey: string | number
   onClick?: () => void
   isOwner?: boolean
+  forceUpdate: number
+  setForceUpdate: (value: number) => void
 }
 
 export const RecipeCard = ({
@@ -33,9 +36,13 @@ export const RecipeCard = ({
   cardKey,
   onClick,
   isOwner,
+  forceUpdate,
+  setForceUpdate,
 }: RecipeCardProps) => {
   const targetRef = useRef<HTMLDivElement>(null)
+  const { search } = useSearch()
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+  const [showAllIngredients, setShowAllIngredients] = useState(false)
 
   useLayoutEffect(() => {
     if (targetRef.current) {
@@ -44,16 +51,16 @@ export const RecipeCard = ({
         height: targetRef.current.offsetHeight,
       })
     }
-  }, [])
-
-  console.log(recipe.title, dimensions.height, dimensions.height / 30)
+  }, [forceUpdate, search])
 
   const visibleIngredients = useMemo(
-    () => recipe.ingredients.slice(0, _.floor(dimensions.height / 30)),
-    [dimensions.height, recipe.ingredients]
+    () =>
+      showAllIngredients
+        ? recipe.ingredients
+        : recipe.ingredients.slice(0, dimensions.height / 21),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dimensions.height, recipe.ingredients, showAllIngredients, forceUpdate]
   )
-
-  console.log(visibleIngredients)
 
   return (
     <Card
@@ -62,7 +69,7 @@ export const RecipeCard = ({
       onClick={() => !!onClick && onClick()}
     >
       <Link href={`/recipe/${recipe.id}`} className="grow flex flex-col">
-        <CardHeader>
+        <CardHeader className="pb-2">
           <CardTitle className="text-xl">{recipe.title}</CardTitle>
           {recipe.titleImage && (
             <AspectRatio ratio={16 / 9}>
@@ -78,10 +85,10 @@ export const RecipeCard = ({
           <CardDescription>{recipe.description}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-2 justify-between grow">
-          <div className="grid grid-cols-[auto_auto_1fr] gap-2">
+          <div className="grid grid-cols-[auto_auto_1fr] gap-1">
             {!isZero(recipe.preparationTime) && (
               <>
-                <Clock className="w-5 h-5" />
+                <Clock className="w-3 h-3 mt-1" />
                 <Typography variant="light">Prep Time</Typography>
                 <Typography variant="extralight">
                   {timeValueToLabel(recipe.preparationTime || '')}
@@ -90,7 +97,7 @@ export const RecipeCard = ({
             )}
             {!isZero(recipe.cookingTime) && (
               <>
-                <Clock className="w-5 h-5" />
+                <Clock className="w-3 h-3 mt-1" />
                 <Typography variant="light">Cook Time</Typography>
                 <Typography variant="extralight">
                   {timeValueToLabel(recipe.cookingTime || '')}
@@ -99,7 +106,7 @@ export const RecipeCard = ({
             )}
             {recipe.servings && (
               <>
-                <Users className="w-5 h-5" />
+                <Users className="w-3 h-3 mt-1" />
                 <Typography variant="light">Servings</Typography>
                 <Typography variant="extralight">
                   {removeServings(recipe.servings)} Servings
@@ -109,7 +116,9 @@ export const RecipeCard = ({
           </div>
           <div className="grow flex flex-col justify-end">
             <div
-              className="grow h-0 min-h-[65px] overflow-clip"
+              className={`grow ${
+                showAllIngredients ? '' : 'min-h-[65px] overflow-clip'
+              }`}
               ref={targetRef}
             >
               <IngredientsList
@@ -118,8 +127,24 @@ export const RecipeCard = ({
                 className="justify-end"
               />
             </div>
-            {recipe.ingredients.length > visibleIngredients.length && (
-              <MoreHorizontal className="w-5 h-5" />
+            {recipe.ingredients.length > visibleIngredients.length ? (
+              <div className="ml-1">
+                <Button
+                  variant="smallAction"
+                  size="xxs"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    event.stopPropagation()
+                    setForceUpdate(forceUpdate + 1)
+                    setShowAllIngredients(true)
+                  }}
+                >
+                  {recipe.ingredients.length - visibleIngredients.length}{' '}
+                  more...
+                </Button>
+              </div>
+            ) : (
+              <div className="ml-1 h-6"></div>
             )}
           </div>
           <div>

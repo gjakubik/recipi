@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Recipe } from '@/lib/types'
 import { RecipeCard } from './RecipeCard'
 import useSearch from '@/app/store/useSearch'
@@ -11,6 +12,7 @@ interface RecipeListProps {
 
 export function RecipeList({ recipes, userId }: RecipeListProps) {
   const { search } = useSearch()
+  const [forceUpdate, setForceUpdate] = useState(0)
 
   const filteredRecipes = recipes.filter((recipe) => {
     if (search.length < 2) return true
@@ -32,6 +34,8 @@ export function RecipeList({ recipes, userId }: RecipeListProps) {
           cardKey={recipe.id}
           recipe={recipe}
           isOwner={userId === recipe.authorId}
+          forceUpdate={forceUpdate}
+          setForceUpdate={setForceUpdate}
         />
       ))}
     </>

@@ -25,9 +25,11 @@ export const IngredientsList = ({
       <div className={cn(className, 'flex flex-col gap-0.5 w-full')}>
         {ingredients.map((ingredient, i) => (
           <div className="flex flex-row w-full" key={i}>
-            <DotFilledIcon className="w-[15px] h-[15px] min-w-[15px] mt-1.5" />
+            <div className="pt-px">
+              <DotFilledIcon className="w-[10px] h-[10px] min-w-[10px] mt-1" />
+            </div>
             <Typography
-              variant="pn"
+              variant="light"
               className=" w-max text-ellipsis overflow-hidden whitespace-nowrap"
             >
               {ingredient.amount}{' '}
