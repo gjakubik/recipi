@@ -1,5 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
+import { RecipeFormValues } from '@/lib/validations/recipe'
+
 import {
   Dialog,
   DialogTrigger,
@@ -18,7 +20,6 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { RecipeFormValues } from '@/lib/validations/recipe'
 
 interface AddNoteModalProps extends PropsWithChildren {
   index: number

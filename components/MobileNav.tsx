@@ -1,10 +1,10 @@
 import * as React from 'react'
 import Link from 'next/link'
-
 import { cn } from '@/lib/utils'
 import { useLockBody } from '@/hooks/use-lock-body'
-import { ActivityLogIcon } from '@radix-ui/react-icons'
+
 import { Typography } from './ui/typography'
+import { ActivityLogIcon } from '@radix-ui/react-icons'
 
 interface MobileNavProps {
   children?: React.ReactNode

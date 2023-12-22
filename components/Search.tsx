@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils'
 import useSearch from '@/app/store/useSearch'
+
 import { Input } from '@/components/ui/input'
 
 interface SearchProps {

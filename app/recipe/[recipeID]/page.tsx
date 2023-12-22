@@ -1,16 +1,15 @@
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { getRecipe } from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
-import { timeValueToLabel, parseInstructions, isZero } from '@/lib/utils'
-
-import { Typography } from '@/components/ui/typography'
-import { IngredientsList } from '@/components/IngredientsList'
+import { timeValueToLabel, isZero } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import { Typography } from '@/components/ui/typography'
+import { IngredientsList } from '@/components/IngredientsList'
+import { DeleteRecipeButton } from '@/components/DeleteRecipeButton'
 import { InstructionsList } from '@/components/InstructoinsList'
 import { Clock, Users } from 'lucide-react'
-import { DeleteRecipeButton } from '@/components/DeleteRecipeButton'
 
 interface RecipePageProps {
   params: { recipeID: string }

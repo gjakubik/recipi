@@ -1,7 +1,7 @@
 'use client'
 
-import { deleteRecipe } from '@/lib/db/api'
 import { useRouter } from 'next/navigation'
+import { deleteRecipe } from '@/lib/db/api'
 import {
   AlertDialog,
   AlertDialogAction,

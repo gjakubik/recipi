@@ -15,11 +15,10 @@ import {
 
 import { useToast } from '@/components/ui/use-toast'
 import { Textarea } from '@/components/ui/textarea'
-import { Typography } from '@/components/ui/typography'
+import { Progress } from '@/components/ui/progress'
 import { Form, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
-import { Progress } from '@/components/ui/progress'
 
 interface BulkUploadFormProps {
   user: User & { id: string }

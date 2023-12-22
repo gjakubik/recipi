@@ -6,6 +6,7 @@ import { User } from 'next-auth'
 import { usePathname } from 'next/navigation'
 import { signIn, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
+
 import { Separator } from '@/components/ui/separator'
 import { Typography } from '@/components/ui/typography'
 import { Button } from '@/components/ui/button'
@@ -21,7 +22,8 @@ import {
   DropdownMenuPortal,
   DropdownMenuSubContent,
 } from '@/components/ui/dropdown-menu'
-import { MobileNav } from './MobileNav'
+import { Search } from '@/components/Search'
+import { MobileNav } from '@/components/MobileNav'
 import {
   ActivityLogIcon,
   HamburgerMenuIcon,
@@ -29,7 +31,6 @@ import {
   ChevronDownIcon,
   Cross1Icon,
 } from '@radix-ui/react-icons'
-import { Search } from './Search'
 
 export interface HeaderProps {
   user?: User | null

@@ -20,7 +20,6 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import Image from 'next/image'
 import { UploadDropzone } from '@uploadthing/react'
 import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
 import { createRecipe, updateRecipe } from '@/lib/db/api'
@@ -49,17 +48,17 @@ import { TabsContent } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
+import { TimePicker } from '@/components/ui/time-picker'
 import { EditPreviewTabs } from '@/components/EditPreviewTabs'
 import { FormInput } from '@/components/FormInput'
+import { DeleteRecipeButton } from '@/components/DeleteRecipeButton'
 import { EditIngredientItem } from '@/components/EditIngredientItem'
-import { IngredientsList } from '../IngredientsList'
-import { PlusIcon } from '@radix-ui/react-icons'
+import { IngredientsList } from '@/components/IngredientsList'
 import { EditInstructionItem } from '@/components/EditInstructionItem'
 import { InstructionsList } from '../InstructoinsList'
 import { FancyBox } from '@/components/FancyBox'
 import { FancyMultiSelect } from '@/components/FancyMultiSelect'
-import { TimePicker } from '@/components/ui/time-picker'
-import { DeleteRecipeButton } from '../DeleteRecipeButton'
+import { PlusIcon } from '@radix-ui/react-icons'
 
 interface RecipeFormProps {
   initialValues?: RecipeFormValues & { id?: number }

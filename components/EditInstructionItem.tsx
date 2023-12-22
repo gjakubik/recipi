@@ -1,6 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
+import { RecipeFormValues } from '@/lib/validations/recipe'
 
 import { Textarea } from '@/components/ui/textarea'
 import {
@@ -12,7 +13,6 @@ import {
 import { Typography } from '@/components/ui/typography'
 import { Button } from '@/components/ui/button'
 import { HamburgerMenuIcon, Cross1Icon } from '@radix-ui/react-icons'
-import { RecipeFormValues } from '@/lib/validations/recipe'
 
 interface EditInstructionItemProps {
   id: string

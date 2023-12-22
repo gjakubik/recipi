@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { Recipe } from '@/lib/types'
-import { RecipeCard } from './RecipeCard'
 import useSearch from '@/app/store/useSearch'
+
+import { RecipeCard } from '@/components/RecipeCard'
 
 interface RecipeListProps {
   recipes: Recipe[]

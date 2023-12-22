@@ -1,6 +1,7 @@
-import { MainNav } from '@/components/MainNav'
-import { Container } from '@/components/ui/container'
 import { getCurrentUser } from '@/lib/session'
+
+import { Container } from '@/components/ui/container'
+import { MainNav } from '@/components/MainNav'
 
 export default async function RecipePageLayout({
   children,

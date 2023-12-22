@@ -6,6 +6,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Recipe } from '@/lib/types'
 import { useResizableRef } from '@/hooks/use-resizable-observer'
+import useSearch from '@/app/store/useSearch'
+import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
+
 import {
   Card,
   CardHeader,
@@ -23,10 +26,8 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Typography } from '@/components/ui/typography'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
-import { IngredientsList } from './IngredientsList'
-import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
+import { IngredientsList } from '@/components/IngredientsList'
 import { Clock, Users } from 'lucide-react'
-import useSearch from '@/app/store/useSearch'
 
 interface RecipeCardProps {
   recipe: Recipe

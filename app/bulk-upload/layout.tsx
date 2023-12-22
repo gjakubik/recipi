@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@/lib/session'
-import { MainNav } from '@/components/MainNav'
+
 import { Container } from '@/components/ui/container'
+import { MainNav } from '@/components/MainNav'
 
 export default async function CreateLayout({
   children,
