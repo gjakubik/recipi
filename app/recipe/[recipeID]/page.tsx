@@ -4,22 +4,13 @@ import { timeValueToLabel, parseInstructions, isZero } from '@/lib/utils'
 
 import { Typography } from '@/components/ui/typography'
 import { IngredientsList } from '@/components/IngredientsList'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
 
 import { Button } from '@/components/ui/button'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { InstructionsList } from '@/components/InstructoinsList'
 import { Clock, Users } from 'lucide-react'
+import { DeleteRecipeButton } from '@/components/DeleteRecipeButton'
 
 interface RecipePageProps {
   params: { recipeID: string }
@@ -32,7 +23,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
   console.log(recipe)
 
   if (!recipe) {
-    return <Typography>Recipe not found</Typography>
+    redirect('/')
   }
 
   return (
@@ -45,26 +36,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
               <Button asChild>
                 <Link href={`/recipe/${recipe.id}/edit`}>Edit</Link>
               </Button>
-              <AlertDialog>
-                <Button variant="destructive" asChild>
-                  <AlertDialogTrigger>Delete</AlertDialogTrigger>
-                </Button>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      the recipe.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <DeleteRecipeButton recipeId={recipe.id} />
             </>
           )}
         </div>

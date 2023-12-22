@@ -59,6 +59,7 @@ import { InstructionsList } from '../InstructoinsList'
 import { FancyBox } from '@/components/FancyBox'
 import { FancyMultiSelect } from '@/components/FancyMultiSelect'
 import { TimePicker } from '@/components/ui/time-picker'
+import { DeleteRecipeButton } from '../DeleteRecipeButton'
 
 interface RecipeFormProps {
   initialValues?: RecipeFormValues & { id?: number }
@@ -87,11 +88,6 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
           authorId: user.id,
         },
   })
-
-  // console.log(form.formState)
-
-  // const errors = form.formState.errors
-  // console.log(errors)
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -123,7 +119,6 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
   })
 
   const onFormSubmit = async (data: RecipeFormValues) => {
-    console.log('calling submit', data)
     const prepRecipe = {
       ...data,
       instructions: data.instructions?.map((i) => i.instruction),
@@ -233,7 +228,6 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                         className="drop-shadow-md h-max-content"
                         endpoint="titleImage"
                         onClientUploadComplete={(res) => {
-                          console.log(res)
                           if (!res) {
                             toast({
                               title: 'Error uploading image',
@@ -241,7 +235,6 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                             })
                             return
                           }
-                          console.log(res[0])
                           form.setValue('titleImage', res[0])
                           toast({
                             title: 'Image uploaded',
@@ -342,7 +335,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         </div>
 
         <EditPreviewTabs title="Ingredients">
-          <TabsContent value="edit">
+          <TabsContent value="edit" className="pt-4">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -352,21 +345,6 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 items={ingredients.map((i) => i.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="hidden sm:flex flex-row gap-2 items-end mt-4 max-w-[600px] m-auto">
-                  <div className="w-[40px]" />
-                  <div className="w-[60px]">
-                    <FormLabel>Amount</FormLabel>
-                  </div>
-                  <div className="w-[100px]">
-                    <FormLabel>Unit</FormLabel>
-                  </div>
-                  <div className="grow">
-                    <FormLabel>Name</FormLabel>
-                  </div>
-                  <div className="flex flex-row items-end gap-1">
-                    <div className="w-[30px]" />
-                  </div>
-                </div>
                 {ingredients.map((i, index) => (
                   <EditIngredientItem
                     key={i.id}
@@ -463,11 +441,14 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         </EditPreviewTabs>
         {/* <FancyBox />
         <FancyMultiSelect /> */}
-        <div className="flex flex-row space-x-4">
-          <Button type="submit">{initialValues ? 'Save' : 'Submit'}</Button>
-          <Button variant="ghost" type="reset">
-            {initialValues ? 'Reset' : 'Clear'}
-          </Button>
+        <div className="flex flex-row w-full justify-between">
+          <div className="flex flex-row gap-4">
+            <Button variant="ghost" type="reset">
+              {initialValues ? 'Reset' : 'Clear'}
+            </Button>
+            <Button type="submit">{initialValues ? 'Save' : 'Submit'}</Button>
+          </div>
+          {initialValues && <DeleteRecipeButton recipeId={initialValues.id!} />}
         </div>
       </form>
     </Form>

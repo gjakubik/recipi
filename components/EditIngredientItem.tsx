@@ -4,18 +4,10 @@ import React from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
+import { UNIT_OPTIONS } from '@/lib/constants'
+import { RecipeFormValues } from '@/lib/validations/recipe'
 
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from '@/components/ui/dialog'
 import {
   FormField,
   FormItem,
@@ -32,17 +24,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
+import { AddNoteModal } from '@/components/AddNoteModal'
 import { FormInput } from '@/components/FormInput'
-import { UNIT_OPTIONS } from '@/lib/constants'
 import {
   HamburgerMenuIcon,
   PlusIcon,
   Cross1Icon,
   Pencil1Icon,
 } from '@radix-ui/react-icons'
-import { RecipeFormValues } from '@/lib/validations/recipe'
-import { AddNoteModal } from './AddNoteModal'
 
 interface EditIngredientItemProps {
   id: string
@@ -87,7 +76,7 @@ export const EditIngredientItem = ({
               name={`ingredients.${index}.amount`}
               className="w-[60px] grow"
               label="Amount"
-              labelClassName="flex sm:hidden"
+              labelClassName={`flex ${!(index === 0) && 'sm:hidden'}`}
               onBlur={() => {
                 updateIngredient(index, {
                   ...form.getValues(`ingredients.${index}`),
@@ -101,7 +90,11 @@ export const EditIngredientItem = ({
                 name={`ingredients.${index}.unit`}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex sm:hidden">Unit</FormLabel>
+                    <FormLabel
+                      className={`flex ${!(index === 0) && 'sm:hidden'}`}
+                    >
+                      Unit
+                    </FormLabel>
                     <Select
                       onValueChange={(e) => {
                         field.onChange(e)
@@ -154,9 +147,8 @@ export const EditIngredientItem = ({
                 name={`ingredients.${index}.name`}
                 placeholder="Ingredient name..."
                 label="Name"
-                labelClassName="flex sm:hidden"
+                labelClassName={`flex ${!(index === 0) && 'sm:hidden'}`}
                 onBlur={() => {
-                  console.log('updating')
                   updateIngredient(index, {
                     ...form.getValues(`ingredients.${index}`),
                     name: form.getValues(`ingredients.${index}.name`),

@@ -38,8 +38,6 @@ const getAuthorRecipes = async ({ userId }: GetAuthorRecipes) => {
     .where(eq(recipes.authorId, userId))
     .innerJoin(users, eq(recipes.authorId, users.id))
 
-  console.log(allRecipes)
-
   return allRecipes
 }
 

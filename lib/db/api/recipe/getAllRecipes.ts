@@ -33,8 +33,6 @@ const getAllRecipes = async () => {
     .from(recipes)
     .innerJoin(users, eq(recipes.authorId, users.id))
 
-  console.log(allRecipes)
-
   return allRecipes
 }
 

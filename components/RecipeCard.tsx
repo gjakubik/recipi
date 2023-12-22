@@ -1,10 +1,11 @@
 'use client'
 
-import { useRef, useState, useLayoutEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import _ from 'lodash'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Recipe } from '@/lib/types'
+import { useResizableRef } from '@/hooks/use-resizable-observer'
 import {
   Card,
   CardHeader,
@@ -24,7 +25,7 @@ import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { IngredientsList } from './IngredientsList'
 import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
-import { Clock, MoreHorizontal, Users } from 'lucide-react'
+import { Clock, Users } from 'lucide-react'
 import useSearch from '@/app/store/useSearch'
 
 interface RecipeCardProps {
@@ -44,26 +45,16 @@ export const RecipeCard = ({
   forceUpdate,
   setForceUpdate,
 }: RecipeCardProps) => {
-  const targetRef = useRef<HTMLDivElement>(null)
   const { search } = useSearch()
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
   const [showAllIngredients, setShowAllIngredients] = useState(false)
 
-  useLayoutEffect(() => {
-    if (targetRef.current) {
-      setDimensions({
-        width: targetRef.current.offsetWidth,
-        height: targetRef.current.offsetHeight,
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [forceUpdate, search])
+  const { targetRef, dimensions } = useResizableRef()
 
   const visibleIngredients = useMemo(
     () =>
       showAllIngredients
         ? recipe.ingredients
-        : recipe.ingredients.slice(0, dimensions.height / 21),
+        : recipe.ingredients.slice(0, dimensions.height / 20),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dimensions.height, recipe.ingredients, showAllIngredients, forceUpdate]
   )

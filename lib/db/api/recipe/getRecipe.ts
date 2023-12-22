@@ -43,7 +43,7 @@ const getRecipe = async (recipeID: number) => {
     return recipe[0]
   } catch (error) {
     console.log(error)
-    return undefined
+    return
   }
 }
 
