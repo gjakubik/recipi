@@ -97,33 +97,33 @@ export const RecipeCard = ({
               <CardDescription>{recipe.description}</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-2 justify-between grow">
-              <div className="grid grid-cols-[auto_auto_1fr] gap-1">
+              <div className="flex flex-col gap-1">
                 {!isZero(recipe.preparationTime) && (
-                  <>
+                  <div className="flex flex-row gap-1">
                     <Clock className="w-3 h-3 mt-1" />
-                    <Typography variant="light">Prep Time</Typography>
-                    <Typography variant="extralight">
+                    <Typography variant="light">Prep</Typography>
+                    <Typography variant="extralight" className="ml-1">
                       {timeValueToLabel(recipe.preparationTime || '')}
                     </Typography>
-                  </>
+                  </div>
                 )}
                 {!isZero(recipe.cookingTime) && (
-                  <>
+                  <div className="flex flex-row gap-1">
                     <Clock className="w-3 h-3 mt-1" />
-                    <Typography variant="light">Cook Time</Typography>
-                    <Typography variant="extralight">
+                    <Typography variant="light">Cook</Typography>
+                    <Typography variant="extralight" className="ml-1">
                       {timeValueToLabel(recipe.cookingTime || '')}
                     </Typography>
-                  </>
+                  </div>
                 )}
                 {recipe.servings && (
-                  <>
+                  <div className="flex flex-row gap-1">
                     <Users className="w-3 h-3 mt-1" />
                     <Typography variant="light">Servings</Typography>
-                    <Typography variant="extralight">
-                      {removeServings(recipe.servings)} Servings
+                    <Typography variant="extralight" className="ml-1">
+                      {removeServings(recipe.servings)}
                     </Typography>
-                  </>
+                  </div>
                 )}
               </div>
               <div className="grow flex flex-col justify-end">

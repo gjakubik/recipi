@@ -15,6 +15,8 @@ const updateRecipe = async (recipe: RecipeForm) => {
     .update(recipes)
     .set({
       title: recipe.title,
+      titleImage: recipe.titleImage,
+      helperImages: recipe.helperImages,
       description: recipe.description,
       preparationTime: recipe.preparationTime,
       cookingTime: recipe.cookingTime,

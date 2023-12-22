@@ -4,9 +4,22 @@ import { timeValueToLabel, parseInstructions, isZero } from '@/lib/utils'
 
 import { Typography } from '@/components/ui/typography'
 import { IngredientsList } from '@/components/IngredientsList'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { InstructionsList } from '@/components/InstructoinsList'
+import { Clock, Users } from 'lucide-react'
 
 interface RecipePageProps {
   params: { recipeID: string }
@@ -26,16 +39,41 @@ export default async function RecipePage({ params }: RecipePageProps) {
     <>
       <div className="flex flex-row justify-between justify-items-center w-full">
         <Typography variant="h3">{recipe.title}</Typography>
-        {user?.id === recipe.authorId && (
-          <Button asChild>
-            <Link href={`/recipe/${recipe.id}/edit`}>Edit</Link>
-          </Button>
-        )}
+        <div className="flex flex-row gap-4">
+          {user?.id === recipe.authorId && (
+            <>
+              <Button asChild>
+                <Link href={`/recipe/${recipe.id}/edit`}>Edit</Link>
+              </Button>
+              <AlertDialog>
+                <Button variant="destructive" asChild>
+                  <AlertDialogTrigger>Delete</AlertDialogTrigger>
+                </Button>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      the recipe.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
+          )}
+        </div>
       </div>
       <div className="flex flex-col gap-0">
         {!isZero(recipe.preparationTime) && (
           <div className="flex flex-row items-center gap-2">
-            <Typography variant="bold">Prep Time</Typography>
+            <Clock className="w-4 h-4" />
+            <Typography variant="bold">Prep</Typography>
             <Typography variant="pn" className="pt-px">
               {timeValueToLabel(recipe.preparationTime) ||
                 recipe.preparationTime}
@@ -44,13 +82,15 @@ export default async function RecipePage({ params }: RecipePageProps) {
         )}
         {!isZero(recipe.cookingTime) && (
           <div className="flex flex-row items-center gap-2">
-            <Typography variant="bold">Cook Time</Typography>
+            <Clock className="w-4 h-4" />
+            <Typography variant="bold">Cook</Typography>
             <Typography variant="pn" className="pt-px">
               {timeValueToLabel(recipe.cookingTime) || recipe.cookingTime}
             </Typography>
           </div>
         )}
         <div className="flex flex-row items-center gap-2">
+          <Users className="w-4 h-4" />
           <Typography variant="bold">Servings</Typography>
           <Typography variant="pn" className="pt-px">
             {recipe.servings}

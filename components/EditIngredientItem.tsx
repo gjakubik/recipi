@@ -77,7 +77,7 @@ export const EditIngredientItem = ({
       key={id}
       suppressHydrationWarning
     >
-      <div className="flex flex-row gap-2 items-center sm:items-end max-w-[600px] m-auto">
+      <div className="flex flex-row gap-2 items-center sm:items-end max-w-[600px] m-auto  mt-6 sm:mt-0">
         <div {...listeners} className="p-2.5">
           <HamburgerMenuIcon />
         </div>

@@ -122,10 +122,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
     name: 'instructions',
   })
 
-  const titleImage = form.getValues('titleImage')
-
   const onFormSubmit = async (data: RecipeFormValues) => {
-    console.log('calling submit')
+    console.log('calling submit', data)
     const prepRecipe = {
       ...data,
       instructions: data.instructions?.map((i) => i.instruction),
@@ -225,45 +223,52 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
               />
             </div>
             <div className="flex h-full w-full sm:w-[300px]">
-              {!titleImage ? (
-                <UploadDropzone<UploadThingFileRouter>
-                  className="drop-shadow-md h-max-content"
-                  endpoint="titleImage"
-                  onClientUploadComplete={(res) => {
-                    console.log(res)
-                    if (!res) {
-                      toast({
-                        title: 'Error uploading image',
-                        description: 'Something went wrong',
-                      })
-                      return
-                    }
-                    console.log(res[0])
-                    form.setValue('titleImage', res[0])
-                    toast({
-                      title: 'Image uploaded',
-                      description: 'Image uploaded successfully',
-                    })
-                  }}
-                  onUploadError={(err: Error) => {
-                    console.log(err.message)
-                    toast({
-                      title: 'Error uploading image',
-                      description: err.message,
-                    })
-                  }}
-                />
-              ) : (
-                <AspectRatio ratio={1 / 1}>
-                  <Image
-                    src={titleImage.url || '/images/placeholder.png'}
-                    alt="Recipe title image"
-                    fill
-                    className="object-cover rounded-md"
-                    loading="lazy"
-                  />
-                </AspectRatio>
-              )}
+              <FormField
+                control={form.control}
+                name="titleImage"
+                render={({ field }) => (
+                  <>
+                    {!field.value ? (
+                      <UploadDropzone<UploadThingFileRouter>
+                        className="drop-shadow-md h-max-content"
+                        endpoint="titleImage"
+                        onClientUploadComplete={(res) => {
+                          console.log(res)
+                          if (!res) {
+                            toast({
+                              title: 'Error uploading image',
+                              description: 'Something went wrong',
+                            })
+                            return
+                          }
+                          console.log(res[0])
+                          form.setValue('titleImage', res[0])
+                          toast({
+                            title: 'Image uploaded',
+                            description: 'Image uploaded successfully',
+                          })
+                        }}
+                        onUploadError={(err: Error) => {
+                          console.log(err.message)
+                          toast({
+                            title: 'Error uploading image',
+                            description: err.message,
+                          })
+                        }}
+                      />
+                    ) : (
+                      <AspectRatio ratio={1 / 1}>
+                        <img
+                          src={field.value.url || '/images/placeholder.png'}
+                          alt="Recipe title image"
+                          className="fill object-cover rounded-md"
+                          loading="lazy"
+                        />
+                      </AspectRatio>
+                    )}
+                  </>
+                )}
+              />
             </div>
           </div>
           <div className="flex flex-wrap flex-row gap-4 justify-between items-start mt-2">
