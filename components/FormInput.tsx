@@ -13,10 +13,12 @@ export interface FormInputProps extends InputProps {
   placeholder?: string
   name: string
   className?: string
+  labelClassName?: string
 }
 
 export const FormInput = ({
   label,
+  labelClassName,
   placeholder,
   name,
   className,
@@ -29,7 +31,7 @@ export const FormInput = ({
       name={name}
       render={({ field }) => (
         <FormItem className={className}>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className={labelClassName}>{label}</FormLabel>
           <FormControl>
             <Input {...field} {...props} placeholder={placeholder} />
           </FormControl>

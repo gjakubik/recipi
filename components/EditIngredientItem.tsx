@@ -42,6 +42,7 @@ import {
   Pencil1Icon,
 } from '@radix-ui/react-icons'
 import { RecipeFormValues } from '@/lib/validations/recipe'
+import { AddNoteModal } from './AddNoteModal'
 
 interface EditIngredientItemProps {
   id: string
@@ -59,7 +60,7 @@ export const EditIngredientItem = ({
   hasNote,
 }: EditIngredientItemProps) => {
   const form = useFormContext()
-  const { attributes, listeners, setNodeRef, transform, transition } =
+  const { attributes, listeners, node, setNodeRef, transform, transition } =
     useSortable({ id })
 
   const style = {
@@ -71,125 +72,111 @@ export const EditIngredientItem = ({
     <div
       ref={setNodeRef}
       style={style}
+      className="w-full"
       {...attributes}
       key={id}
       suppressHydrationWarning
     >
-      <div className="flex flex-row gap-2 items-end max-w-[600px] m-auto">
+      <div className="flex flex-row gap-2 items-center sm:items-end max-w-[600px] m-auto">
         <div {...listeners} className="p-2.5">
           <HamburgerMenuIcon />
         </div>
-
-        <FormInput
-          name={`ingredients.${index}.amount`}
-          className="w-[60px]"
-          onBlur={() => {
-            updateIngredient(index, {
-              ...form.getValues(`ingredients.${index}`),
-              amount: form.getValues(`ingredients.${index}.amount`),
-            })
-          }}
-        />
-        <FormField
-          control={form.control}
-          name={`ingredients.${index}.unit`}
-          render={({ field }) => (
-            <FormItem>
-              <Select
-                onValueChange={(e) => {
-                  field.onChange(e)
+        <div className="grow flex flex-col sm:flex-row gap-2 items-start sm:items-end w-full">
+          <div className="flex flex-row gap-2 items-end w-full">
+            <FormInput
+              name={`ingredients.${index}.amount`}
+              className="w-[60px] grow"
+              label="Amount"
+              labelClassName="flex sm:hidden"
+              onBlur={() => {
+                updateIngredient(index, {
+                  ...form.getValues(`ingredients.${index}`),
+                  amount: form.getValues(`ingredients.${index}.amount`),
+                })
+              }}
+            />
+            <div className="grow-[2]">
+              <FormField
+                control={form.control}
+                name={`ingredients.${index}.unit`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex sm:hidden">Unit</FormLabel>
+                    <Select
+                      onValueChange={(e) => {
+                        field.onChange(e)
+                        updateIngredient(index, {
+                          ...form.getValues(`ingredients.${index}`),
+                          unit: e,
+                        })
+                      }}
+                      value={field.value}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className=" w-full min-w-[100px]">
+                          <SelectValue placeholder="Unit" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Unit Type</SelectLabel>
+                          {UNIT_OPTIONS.map((option) => {
+                            return (
+                              <SelectItem
+                                key={option.value}
+                                value={option.value}
+                              >
+                                {option.label}
+                              </SelectItem>
+                            )
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <AddNoteModal index={index} updateIngredient={updateIngredient}>
+              <Button variant="ghost" className="hidden xs:flex sm:hidden">
+                <div className="pr-2">
+                  {hasNote ? <Pencil1Icon /> : <PlusIcon />}
+                </div>{' '}
+                Note
+              </Button>
+            </AddNoteModal>
+          </div>
+          <div className="grow flex flex-row gap-2 items-center w-full">
+            <div className="grow">
+              <FormInput
+                name={`ingredients.${index}.name`}
+                placeholder="Ingredient name..."
+                label="Name"
+                labelClassName="flex sm:hidden"
+                onBlur={() => {
+                  console.log('updating')
                   updateIngredient(index, {
                     ...form.getValues(`ingredients.${index}`),
-                    unit: e,
+                    name: form.getValues(`ingredients.${index}.name`),
                   })
                 }}
-                value={field.value}
-                defaultValue={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="w-[100px]">
-                    <SelectValue placeholder="Unit" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Unit Type</SelectLabel>
-                    {UNIT_OPTIONS.map((option) => {
-                      return (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      )
-                    })}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="grow">
-          <FormInput
-            name={`ingredients.${index}.name`}
-            placeholder="Ingredient name..."
-            onBlur={() => {
-              updateIngredient(index, {
-                ...form.getValues(`ingredients.${index}`),
-                name: form.getValues(`ingredients.${index}.name`),
-              })
-            }}
-          />
-        </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="ghost">
+              />
+            </div>
+          </div>
+          <AddNoteModal index={index} updateIngredient={updateIngredient}>
+            <Button variant="ghost" className="flex xs:hidden sm:flex p-0">
               <div className="pr-2">
                 {hasNote ? <Pencil1Icon /> : <PlusIcon />}
               </div>{' '}
               Note
             </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add a note</DialogTitle>
-            </DialogHeader>
-            <DialogDescription>
-              Add some flavor to your ingredient
-            </DialogDescription>
-            <FormField
-              control={form.control}
-              name={`ingredients.${index}.note`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder="Add a note..."
-                      className="w-full"
-                      onBlur={() => {
-                        updateIngredient(index, {
-                          ...form.getValues(`ingredients.${index}`),
-                          note: form.getValues(`ingredients.${index}.note`),
-                        })
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button>Save</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
+          </AddNoteModal>
+        </div>
         <Button
           variant="ghost"
-          className="p-2.5"
+          className="p-2.5 px-1.5 sm:px-2.5"
           onClick={() => onDelete?.(id)}
         >
           <Cross1Icon />

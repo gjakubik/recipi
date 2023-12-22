@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import _ from 'lodash'
 import { cn } from '@/lib/utils'
 import { Ingredient, IngredientForm } from '@/lib/types'
@@ -84,7 +85,7 @@ export const IngredientsList = ({
       <FormLabel>Ingredient</FormLabel>
       <FormLabel className="mb-2">Note</FormLabel>
       {ingredients.map((ingredient, i) => (
-        <>
+        <React.Fragment key={i}>
           <div className="flex flex-row gap-2 justify-items-center">
             {/* <div className="pt-px">
               <DotFilledIcon className="flex w-5 h-5 pt-1.5" />
@@ -93,7 +94,7 @@ export const IngredientsList = ({
               <Typography>
                 {ingredient.amount}{' '}
                 {unitValueToLabel(ingredient.unit) || ingredient.unit}
-                {parseFloat(ingredient.amount) > 1 && 's'}
+                {parseFloat(ingredient.amount) > 1 && ingredient.unit && 's'}
               </Typography>
             </div>
           </div>
@@ -106,7 +107,7 @@ export const IngredientsList = ({
             </Typography>
           </div>
           <div className="col-span-3 border-1 border-b long-dashed-border border-gray-700 mt-[-1px] pt-0 mb-2" />
-        </>
+        </React.Fragment>
       ))}
     </div>
   )

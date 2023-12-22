@@ -1,4 +1,5 @@
 import { withUt } from 'uploadthing/tw'
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = withUt({
@@ -22,6 +23,10 @@ module.exports = withUt({
     },
   ],
   theme: {
+    screens: {
+      xs: '475px',
+      ...defaultTheme.screens,
+    },
     container: {
       center: true,
       padding: '2rem',

@@ -266,8 +266,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
               )}
             </div>
           </div>
-          <div className="flex flex-wrap flex-row gap-2 justify-between items-start">
-            <div className="flex flex-row gap-6">
+          <div className="flex flex-wrap flex-row gap-4 justify-between items-start mt-2">
+            <div className="flex flex-col sm:flex-row gap-6">
               <FormField
                 control={form.control}
                 name="preparationTime"
@@ -347,7 +347,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 items={ingredients.map((i) => i.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="flex flex-row gap-2 items-end mt-4 max-w-[600px] m-auto">
+                <div className="hidden sm:flex flex-row gap-2 items-end mt-4 max-w-[600px] m-auto">
                   <div className="w-[40px]" />
                   <div className="w-[60px]">
                     <FormLabel>Amount</FormLabel>

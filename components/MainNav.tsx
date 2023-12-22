@@ -52,14 +52,14 @@ export const MainNav = ({ user, children }: HeaderProps) => {
   return (
     <header>
       <div className="flex flex-row justify-between gap-4 items-center px-4 sm:px-12 py-4">
-        <div className="hidden sm:flex justify-center items-center gap-4">
+        <div className="hidden md:flex justify-center items-center gap-4">
           <ActivityLogIcon className="h-6 w-6" />
           <Typography variant="h3">Recipi</Typography>
         </div>
 
         <div
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="flex sm:hidden justify-center items-center gap-1 hover:cursor-pointer"
+          className="flex md:hidden justify-center items-center gap-1 hover:cursor-pointer"
         >
           <div className="flex justify-center items-center gap-3">
             {isDropdownOpen ? (
@@ -76,7 +76,7 @@ export const MainNav = ({ user, children }: HeaderProps) => {
           )}
         </div>
         {isDropdownOpen && <MobileNav>{children}</MobileNav>}
-        <div className="hidden lg:flex flex-row space-x-8">
+        <div className="hidden md:flex flex-row space-x-8">
           <Link href="/">
             <Typography
               className={pathname === '/' ? 'font-semibold' : undefined}
