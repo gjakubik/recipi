@@ -2,6 +2,19 @@
 
 Welcome to Recipi, a Next.js project that harnesses the power of Next.js 13 app router along with a suite of modern development tools.
 
+## Table of Contents
+
+- [About](#about)
+- [Getting Started](#getting-started)
+- [Built With](#built-with)
+- [Drizzle Studio](#drizzle-studio)
+- [Authors](#authors)
+- [Acknowledgments](#acknowledgments)
+
+## About
+
+Recipi is a recipe management application that allows users to create, store, and share recipes. The application is built using Next.js 13, a React framework for production, and Tailwind CSS, a utility-first CSS framework for rapid UI development. The application is powered by a MySQL database hosted on Planetscale, a scalable MySQL platform for developers. The application also uses Next Auth for authentication and React Hook Form for form management.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -59,10 +72,18 @@ This project is built using several key technologies:
 - [Planetscale](https://planetscale.com/) - Scalable MySQL platform for developers
 - [React Hook Form](https://react-hook-form.com/) - Performant, flexible and extensible forms with easy-to-use validation
 
-### Authors
+## Drizzle Studio
+
+To run Drizzle Studio, run the following command:
+
+```bash
+npx drizzle-kit studio
+```
+
+## Authors
 
 - Gavin Jakubik - [gjakubik](https://github.com/gjakubik)
 
-### Acknowlegments
+## Acknowlegments
 
 - [shadcn-ui/taxonomy](https://github.com/shadcn-ui/taxonomy): Design and architecture inspiration
