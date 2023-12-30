@@ -67,6 +67,7 @@ This project is built using several key technologies:
 
 - [Next.js](https://nextjs.org/) - The React framework for production
 - [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework for rapid UI development
+- [shadcn/ui](https://ui.shadcn.com/) - A React component library for building modern applications
 - [Drizzle ORM](https://github.com/drizzle-orm/drizzle) - Object Relational Mapping library for managing database state
 - [Next Auth](https://next-auth.js.org/) - Authentication for Next.js applications
 - [Planetscale](https://planetscale.com/) - Scalable MySQL platform for developers
