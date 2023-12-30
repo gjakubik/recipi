@@ -6,6 +6,7 @@ import { User } from 'next-auth'
 import { usePathname } from 'next/navigation'
 import { signIn, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
+import { NavConfig } from '@/types'
 
 import { Separator } from '@/components/ui/separator'
 import { Typography } from '@/components/ui/typography'
@@ -34,9 +35,10 @@ import {
 
 export interface HeaderProps {
   user?: User | null
+  config: NavConfig
   children?: React.ReactNode
 }
-export const MainNav = ({ user, children }: HeaderProps) => {
+export const MainNav = ({ user, config, children }: HeaderProps) => {
   const { setTheme } = useTheme()
   const pathname = usePathname()
   const [isLoading, setIsLoading] = useState(false)
@@ -50,13 +52,17 @@ export const MainNav = ({ user, children }: HeaderProps) => {
     })
   }
 
+  console.log('user', user)
+
   return (
     <header>
       <div className="flex flex-row justify-between gap-4 items-center px-4 sm:px-12 py-4">
-        <div className="hidden md:flex justify-center items-center gap-4">
-          <ActivityLogIcon className="h-6 w-6" />
-          <Typography variant="h3">Recipi</Typography>
-        </div>
+        <Link href="/">
+          <div className="hidden md:flex justify-center items-center gap-4">
+            <ActivityLogIcon className="h-6 w-6" />
+            <Typography variant="h3">Recipi</Typography>
+          </div>
+        </Link>
 
         <div
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -76,37 +82,29 @@ export const MainNav = ({ user, children }: HeaderProps) => {
             <ChevronRightIcon className="mt-1" />
           )}
         </div>
-        {isDropdownOpen && <MobileNav>{children}</MobileNav>}
-        <div className="hidden md:flex flex-row space-x-8">
-          <Link href="/">
-            <Typography
-              className={pathname === '/' ? 'font-semibold' : undefined}
-            >
-              Explore
-            </Typography>
-          </Link>
-          <Link href="/my-recipes">
-            <Typography
-              className={
-                pathname === '/my-recipes' ? 'font-semibold' : undefined
-              }
-            >
-              My Recipes
-            </Typography>
-          </Link>
-          <Link href="/bulk-upload">
-            <Typography
-              className={
-                pathname === '/bulk-upload' ? 'font-semibold' : undefined
-              }
-            >
-              Bulk Upload
-            </Typography>
-          </Link>
+        {isDropdownOpen && (
+          <MobileNav user={user} pathname={pathname} config={config}>
+            {children}
+          </MobileNav>
+        )}
+        <div className="hidden md:flex flex-row space-x-8 justify-start grow ml-4">
+          {config.items.map((item) => {
+            if (item.admin && user?.role !== 'admin') return null
+            if (item.authenticated && !user) return null
+            return (
+              <Link key={item.href} href={item.href}>
+                <Typography
+                  className={pathname === item.href ? 'font-semibold' : ''}
+                >
+                  {item.title}
+                </Typography>
+              </Link>
+            )
+          })}
         </div>
         <div className="flex flex-row space-x-4">
-          <Search className="hidden sm:flex" />
-          {!!user && pathname !== '/create' && (
+          {config.searchVisible && <Search className="hidden sm:flex" />}
+          {!!user && pathname !== '/create' && config.createVisible && (
             <Button asChild className="hidden sm:flex min-w-[110px]">
               <Link href="/create">Add Recipe</Link>
             </Button>

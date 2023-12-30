@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db'
 import { recipes } from '@/lib/db/schema'
-import { RecipeForm } from '@/lib/types'
+import { RecipeForm } from '@/types'
 import getRecipe from './getRecipe'
 
 const createRecipe = async (recipe: RecipeForm) => {

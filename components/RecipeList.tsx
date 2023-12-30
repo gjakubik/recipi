@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Recipe } from '@/lib/types'
+import { Recipe } from '@/types'
 import useSearch from '@/app/store/useSearch'
 
 import { RecipeCard } from '@/components/RecipeCard'

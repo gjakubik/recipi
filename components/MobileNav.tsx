@@ -1,18 +1,27 @@
 import * as React from 'react'
 import Link from 'next/link'
+import { User } from 'next-auth'
 import { cn } from '@/lib/utils'
 import { useLockBody } from '@/hooks/use-lock-body'
+import { NavConfig } from '@/types'
 
 import { Typography } from './ui/typography'
 import { ActivityLogIcon } from '@radix-ui/react-icons'
 
 interface MobileNavProps {
   children?: React.ReactNode
+  user?: User | null
+  pathname: string
+  config: NavConfig
 }
 
-export function MobileNav({ children }: MobileNavProps) {
+export function MobileNav({
+  children,
+  user,
+  pathname,
+  config,
+}: MobileNavProps) {
   useLockBody()
-
   return (
     <div
       className={cn(
@@ -25,9 +34,20 @@ export function MobileNav({ children }: MobileNavProps) {
           <Typography variant="h3">Recipi</Typography>
         </Link>
         <nav className="grid grid-flow-row auto-rows-max text-sm gap-4 text-muted-foreground">
-          <Link href="/">Explore</Link>
-          <Link href="/my-recipes">My Recipes</Link>
-          <Link href="/create">Create Recipe</Link>
+          {config.items.map((item) => {
+            if (item.admin && user?.role !== 'admin') return null
+            if (item.authenticated && !user) return null
+            return (
+              <Link key={item.href} href={item.href}>
+                <Typography>{item.title}</Typography>
+              </Link>
+            )
+          })}
+          {!!user && pathname !== '/create' && config.createVisible && (
+            <Link href="/create">
+              <Typography>Create Recipe</Typography>
+            </Link>
+          )}
         </nav>
         {children}
       </div>

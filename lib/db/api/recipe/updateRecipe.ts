@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db'
 import { recipes } from '@/lib/db/schema'
-import { RecipeForm } from '@/lib/types'
+import { RecipeForm } from '@/types'
 import { eq } from 'drizzle-orm'
 import getRecipe from './getRecipe'
 

@@ -3,7 +3,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { cn } from '@/lib/utils'
-import { Ingredient, IngredientForm } from '@/lib/types'
+import { Ingredient, IngredientForm } from '@/types'
 import { unitValueToLabel } from '@/lib/utils'
 
 import { Typography } from '@/components/ui/typography'

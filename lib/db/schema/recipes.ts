@@ -1,4 +1,4 @@
-import { Ingredient, StoredFile } from '@/lib/types'
+import { Ingredient, StoredFile } from '@/types'
 import {
   mysqlTable,
   timestamp,

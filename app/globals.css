@@ -86,3 +86,29 @@
     )
     1;
 }
+
+.dashed-border-hover {
+  position: relative; /* Needed for absolute positioning of the pseudo-element */
+  overflow: hidden; /* Ensures the border doesn't exceed the content width */
+}
+
+.dashed-border-hover::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0; /* Start with no visible border */
+  height: 1px; /* Same thickness as your existing border */
+  background: repeating-linear-gradient(
+    to right,
+    black 0,
+    black 20px,
+    transparent 20px,
+    transparent 30px
+  ); /* Same pattern as your existing border */
+  transition: width 0.5s ease; /* Smooth transition for the animation */
+}
+
+.dashed-border-hover:hover::before {
+  width: 100%; /* Full width on hover */
+}

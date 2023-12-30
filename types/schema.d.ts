@@ -9,7 +9,7 @@ import {
   sessions,
   verificationTokens,
   accounts,
-} from '../db/schema'
+} from '../lib/db/schema'
 
 export type Category = InferModel<typeof categories>
 

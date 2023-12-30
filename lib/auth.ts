@@ -6,6 +6,8 @@ import { users } from './db/schema'
 import { eq } from 'drizzle-orm'
 
 export const authOptions: NextAuthOptions = {
+  // eslint-disable-next-line @typescript-eslint/ts-ignore
+  // @ts-ignore
   adapter: DrizzleAdapter(db),
   session: {
     strategy: 'jwt',
@@ -19,15 +21,18 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async session({ token, session }) {
-      if (token) {
+      if (session.user) {
         session.user.id = token.id
         session.user.name = token.name
         session.user.email = token.email
         session.user.image = token.picture
+        session.user.role = token.role
       }
 
       return session
     },
+    // eslint-disable-next-line @typescript-eslint/ts-ignore
+    // @ts-ignore
     async jwt({ token, user }) {
       const [dbUser] = await db
         .select()
@@ -37,7 +42,8 @@ export const authOptions: NextAuthOptions = {
 
       if (!dbUser) {
         if (user) {
-          token.id = user?.id
+          token.id = user.id
+          token.role = user.role
         }
         return token
       }
