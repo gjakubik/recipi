@@ -1,7 +1,8 @@
 import { db } from '@/lib/db'
-import { recipes } from '@/lib/db/schema'
+import { recipes, users } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
 
-const getRecipe = async () => {
+const getAllRecipes = async () => {
   const allRecipes = await db
     .select({
       id: recipes.id,
@@ -13,16 +14,26 @@ const getRecipe = async () => {
       cookingTime: recipes.cookingTime,
       servings: recipes.servings,
       difficultyLevel: recipes.difficultyLevel,
+      ingredients: recipes.ingredients,
       instructions: recipes.instructions,
       creationDate: recipes.creationDate,
       updatedAt: recipes.updatedAt,
       authorId: recipes.authorId,
+      author: {
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        image: users.image,
+        role: users.role,
+        updated_at: users.updated_at,
+        created_at: users.created_at,
+        emailVerified: users.emailVerified,
+      },
     })
     .from(recipes)
-
-  console.log(allRecipes)
+    .innerJoin(users, eq(recipes.authorId, users.id))
 
   return allRecipes
 }
 
-export default getRecipe
+export default getAllRecipes

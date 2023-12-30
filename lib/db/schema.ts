@@ -1,5 +1,4 @@
 export { recipes } from './schema/recipes'
-export { ingredients } from './schema/ingredients'
 export { comments } from './schema/comments'
 export { likes } from './schema/likes'
 export { recipeTags } from './schema/recipeTags'

@@ -1,5 +1,7 @@
 'use client'
 
+import React from 'react'
+import _ from 'lodash'
 import { useRouter } from 'next/navigation'
 import { User } from 'next-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,7 +20,6 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import Image from 'next/image'
 import { UploadDropzone } from '@uploadthing/react'
 import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
 import { createRecipe, updateRecipe } from '@/lib/db/api'
@@ -47,16 +48,17 @@ import { TabsContent } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
+import { TimePicker } from '@/components/ui/time-picker'
 import { EditPreviewTabs } from '@/components/EditPreviewTabs'
 import { FormInput } from '@/components/FormInput'
-import { TimeInput } from '@/components/TimeInput'
+import { DeleteRecipeButton } from '@/components/DeleteRecipeButton'
 import { EditIngredientItem } from '@/components/EditIngredientItem'
-import { IngredientsList } from '../IngredientsList'
-import { PlusIcon } from '@radix-ui/react-icons'
+import { IngredientsList } from '@/components/IngredientsList'
 import { EditInstructionItem } from '@/components/EditInstructionItem'
 import { InstructionsList } from '../InstructoinsList'
 import { FancyBox } from '@/components/FancyBox'
 import { FancyMultiSelect } from '@/components/FancyMultiSelect'
+import { PlusIcon } from '@radix-ui/react-icons'
 
 interface RecipeFormProps {
   initialValues?: RecipeFormValues & { id?: number }
@@ -68,16 +70,22 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
   const { toast } = useToast()
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeFormSchema),
-    defaultValues: initialValues || {
-      title: '',
-      description: '',
-      preparationTime: '30-min',
-      cookingTime: '30-min',
-      servings: '',
-      difficultyLevel: 'easy',
-      instructions: [{ id: 0, instruction: '' }],
-      ingredients: [{ id: 0, name: '', note: '', amount: '', unit: '' }],
-    },
+    defaultValues: !!initialValues
+      ? {
+          ...initialValues,
+          difficultyLevel: _.lowerCase(initialValues?.difficultyLevel),
+        }
+      : {
+          title: '',
+          description: '',
+          preparationTime: '000:00:00',
+          cookingTime: '000:00:00',
+          servings: '',
+          difficultyLevel: 'easy',
+          instructions: [{ id: 0, instruction: '' }],
+          ingredients: [{ id: 0, name: '', note: '', amount: '', unit: '' }],
+          authorId: user.id,
+        },
   })
 
   const sensors = useSensors(
@@ -92,6 +100,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
     append: appendIngredient,
     remove: removeIngredient,
     move: moveIngredient,
+    update: updateIngredient,
   } = useFieldArray({
     control: form.control,
     name: 'ingredients',
@@ -102,15 +111,13 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
     append: appendInstruction,
     remove: removeInstruction,
     move: moveInstruction,
+    update: updateInstruction,
   } = useFieldArray({
     control: form.control,
     name: 'instructions',
   })
 
-  const titleImage = form.getValues('titleImage')
-
   const onFormSubmit = async (data: RecipeFormValues) => {
-    console.log('calling submit')
     const prepRecipe = {
       ...data,
       instructions: data.instructions?.map((i) => i.instruction),
@@ -119,14 +126,15 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
     try {
       const upsertedRecipe = initialValues
         ? await updateRecipe(prepRecipe)
-        : await createRecipe({
-            ...prepRecipe,
-            authorId: user.id,
-            ingredients: data.ingredients.map((i) => ({
-              ...i,
-              id: undefined,
-            })),
-          })
+        : await createRecipe(prepRecipe)
+      if (!upsertedRecipe) {
+        toast({
+          title: `Error ${initialValues ? 'updating' : 'creating'} recipe`,
+          description: 'Something went wrong',
+        })
+        return
+      }
+
       toast({
         title: `Recipe ${upsertedRecipe.id} ${
           initialValues ? 'updated' : 'created'
@@ -176,6 +184,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
       oldIndex !== -1 && newIndex !== -1 && moveInstruction(oldIndex, newIndex)
     }
   }
+
   return (
     <Form {...form}>
       <form
@@ -208,53 +217,82 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
               />
             </div>
             <div className="flex h-full w-full sm:w-[300px]">
-              {!titleImage ? (
-                <UploadDropzone<UploadThingFileRouter>
-                  className="drop-shadow-md h-max-content"
-                  endpoint="titleImage"
-                  onClientUploadComplete={(res) => {
-                    console.log(res)
-                    if (!res) {
-                      toast({
-                        title: 'Error uploading image',
-                        description: 'Something went wrong',
-                      })
-                      return
-                    }
-                    console.log(res[0])
-                    form.setValue('titleImage', res[0])
-                    toast({
-                      title: 'Image uploaded',
-                      description: 'Image uploaded successfully',
-                    })
-                  }}
-                  onUploadError={(err: Error) => {
-                    console.log(err.message)
-                    toast({
-                      title: 'Error uploading image',
-                      description: err.message,
-                    })
-                  }}
-                />
-              ) : (
-                <AspectRatio ratio={1 / 1}>
-                  <Image
-                    src={titleImage.url || '/images/placeholder.png'}
-                    alt="Recipe title image"
-                    fill
-                    className="object-cover rounded-md"
-                    loading="lazy"
-                  />
-                </AspectRatio>
-              )}
+              <FormField
+                control={form.control}
+                name="titleImage"
+                render={({ field }) => (
+                  <>
+                    {!field.value ? (
+                      <UploadDropzone<UploadThingFileRouter>
+                        className="drop-shadow-md h-max-content"
+                        endpoint="titleImage"
+                        onClientUploadComplete={(res) => {
+                          if (!res) {
+                            toast({
+                              title: 'Error uploading image',
+                              description: 'Something went wrong',
+                            })
+                            return
+                          }
+                          form.setValue('titleImage', res[0])
+                          toast({
+                            title: 'Image uploaded',
+                            description: 'Image uploaded successfully',
+                          })
+                        }}
+                        onUploadError={(err: Error) => {
+                          console.log(err.message)
+                          toast({
+                            title: 'Error uploading image',
+                            description: err.message,
+                          })
+                        }}
+                      />
+                    ) : (
+                      <AspectRatio ratio={1 / 1}>
+                        <img
+                          src={field.value.url || '/images/placeholder.png'}
+                          alt="Recipe title image"
+                          className="fill object-cover rounded-md"
+                          loading="lazy"
+                        />
+                      </AspectRatio>
+                    )}
+                  </>
+                )}
+              />
             </div>
           </div>
-          <div className="flex flex-wrap flex-row gap-2 justify-between">
-            <div className="flex flex-row gap-2">
-              <TimeInput name="preparationTime" />
-              <TimeInput name="cookingTime" />
+          <div className="flex flex-wrap flex-row gap-4 justify-between items-start mt-2">
+            <div className="flex flex-col sm:flex-row gap-6">
+              <FormField
+                control={form.control}
+                name="preparationTime"
+                render={({ field }) => (
+                  <TimePicker
+                    label="Prep Time"
+                    time={field.value}
+                    setTime={(time: string): void => {
+                      form.setValue('preparationTime', time)
+                    }}
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="cookingTime"
+                render={({ field }) => (
+                  <TimePicker
+                    label="Cook Time"
+                    time={field.value}
+                    setTime={(time: string): void => {
+                      form.setValue('cookingTime', time)
+                    }}
+                  />
+                )}
+              />
             </div>
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-2 items-start">
               <FormInput
                 name="servings"
                 label="Servings"
@@ -296,7 +334,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         </div>
 
         <EditPreviewTabs title="Ingredients">
-          <TabsContent value="edit">
+          <TabsContent value="edit" className="pt-4">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -306,21 +344,6 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 items={ingredients.map((i) => i.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="flex flex-row justify-between items-end mt-4 max-w-[600px] m-auto">
-                  <div className="flex flex-row items-end w-[400px]">
-                    <div className="w-[40px]" />
-                    <FormLabel>Name</FormLabel>
-                  </div>
-                  <div className="flex flex-row items-end gap-1">
-                    <div className="w-[80px]">
-                      <FormLabel>Amount</FormLabel>
-                    </div>
-                    <div className="w-[100px]">
-                      <FormLabel>Unit</FormLabel>
-                    </div>
-                    <div className="w-[30px]" />
-                  </div>
-                </div>
                 {ingredients.map((i, index) => (
                   <EditIngredientItem
                     key={i.id}
@@ -331,6 +354,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                         ingredients.findIndex((i) => i.id === id)
                       )
                     }
+                    hasNote={!!i.note}
+                    updateIngredient={updateIngredient}
                   />
                 ))}
               </SortableContext>
@@ -385,6 +410,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                           instructions.findIndex((i) => i.id === id)
                         )
                       }
+                      updateInstruction={updateInstruction}
                     />
                   ))}
                 </div>
@@ -412,13 +438,16 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
             )}
           </TabsContent>
         </EditPreviewTabs>
-        <FancyBox />
-        <FancyMultiSelect />
-        <div className="flex flex-row space-x-4">
-          <Button type="submit">{initialValues ? 'Save' : 'Submit'}</Button>
-          <Button variant="ghost" type="reset">
-            {initialValues ? 'Reset' : 'Clear'}
-          </Button>
+        {/* <FancyBox />
+        <FancyMultiSelect /> */}
+        <div className="flex flex-row w-full justify-between">
+          <div className="flex flex-row gap-4">
+            <Button variant="ghost" type="reset">
+              {initialValues ? 'Reset' : 'Clear'}
+            </Button>
+            <Button type="submit">{initialValues ? 'Save' : 'Submit'}</Button>
+          </div>
+          {initialValues && <DeleteRecipeButton recipeId={initialValues.id!} />}
         </div>
       </form>
     </Form>

@@ -13,8 +13,8 @@ export const savedImageSchema = z.object({
 export const recipeFormSchema = z.object({
   id: z.number().optional(),
   title: z.string(),
-  titleImage: savedImageSchema.optional(),
-  helperImages: z.array(savedImageSchema).optional(),
+  titleImage: z.optional(savedImageSchema.nullable()),
+  helperImages: z.optional(z.array(savedImageSchema).nullable()),
   description: z.string().optional(),
   preparationTime: z.string(),
   cookingTime: z.string(),
@@ -22,14 +22,15 @@ export const recipeFormSchema = z.object({
   difficultyLevel: z.string(),
   instructions: z
     .array(z.object({ id: z.number(), instruction: z.string() }))
-    .optional(),
+    .nullable(),
   ingredients: z.array(
     z.object({
-      id: z.number(),
+      id: z.number().optional(),
       name: z.string(),
       note: z.string().optional(),
       amount: z.string(),
       unit: z.string(),
     })
   ),
+  authorId: z.string(),
 })

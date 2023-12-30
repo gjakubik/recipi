@@ -1,5 +1,4 @@
 import { getCurrentUser } from '@/lib/session'
-import { useParams } from 'next/navigation'
 import { RecipeFormValues } from '@/lib/validations/recipe'
 import { getRecipe } from '@/lib/db/api'
 

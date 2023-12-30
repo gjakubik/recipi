@@ -1,4 +1,4 @@
-import { StoredFile } from '@/lib/types'
+import { Ingredient, StoredFile } from '@/types'
 import {
   mysqlTable,
   timestamp,
@@ -8,6 +8,7 @@ import {
   primaryKey,
   json,
   index,
+  time,
 } from 'drizzle-orm/mysql-core'
 
 // Recipes Table
@@ -21,14 +22,18 @@ export const recipes = mysqlTable(
       .$type<StoredFile[] | null>()
       .default(null),
     description: text('description'),
-    preparationTime: varchar('preparation_time', { length: 50 }).notNull(),
-    cookingTime: varchar('cooking_time', { length: 50 }).notNull(),
+    preparationTime: time('preparation_time').default('00:00:00'),
+    cookingTime: time('cooking_time').default('00:00:00'),
     servings: varchar('servings', { length: 50 }).notNull(),
     difficultyLevel: varchar('difficulty_level', { length: 50 }).notNull(),
-    instructions: json('instructions').$type<string[] | null>().default(null),
+    ingredients: json('ingredients')
+      .$type<Ingredient[]>()
+      .default([])
+      .notNull(),
+    instructions: json('instructions').$type<string[]>().default([]).notNull(),
     creationDate: timestamp('creation_date', { mode: 'string' }).defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
-    authorId: varchar('author_id', { length: 255 }),
+    authorId: varchar('author_id', { length: 255 }).notNull(),
   },
   (table) => {
     return {

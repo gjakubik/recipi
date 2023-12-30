@@ -1,6 +1,5 @@
 import { db } from '@/lib/db'
-import { recipes, ingredients } from '@/lib/db/schema'
-import { parseInstructions } from '@/lib/utils'
+import { recipes, users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 
 const getRecipe = async (recipeID: number) => {
@@ -16,38 +15,35 @@ const getRecipe = async (recipeID: number) => {
         cookingTime: recipes.cookingTime,
         servings: recipes.servings,
         difficultyLevel: recipes.difficultyLevel,
+        ingredients: recipes.ingredients,
         instructions: recipes.instructions,
         creationDate: recipes.creationDate,
         updatedAt: recipes.updatedAt,
         authorId: recipes.authorId,
+        author: {
+          id: users.id,
+          name: users.name,
+          email: users.email,
+          image: users.image,
+          role: users.role,
+          updated_at: users.updated_at,
+          created_at: users.created_at,
+          emailVerified: users.emailVerified,
+        },
       })
       .from(recipes)
+      .innerJoin(users, eq(recipes.authorId, users.id))
       .where(eq(recipes.id, recipeID))
       .limit(1)
 
-    const allIngredients = await db
-      .select({
-        id: ingredients.id,
-        name: ingredients.name,
-        note: ingredients.note,
-        amount: ingredients.amount,
-        unit: ingredients.unit,
-        recipeId: ingredients.recipeId,
-      })
-      .from(ingredients)
-      .where(eq(ingredients.recipeId, recipeID.toString()))
-
-    const fullRecipe = {
-      ...recipe[0],
-      ingredients: allIngredients,
+    if (!recipe[0]) {
+      throw new Error('Recipe not found')
     }
 
-    console.log(fullRecipe)
-
-    return fullRecipe
+    return recipe[0]
   } catch (error) {
     console.log(error)
-    return undefined
+    return
   }
 }
 

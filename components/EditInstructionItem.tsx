@@ -1,6 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { useFormContext } from 'react-hook-form'
+import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
+import { RecipeFormValues } from '@/lib/validations/recipe'
 
 import { Textarea } from '@/components/ui/textarea'
 import {
@@ -17,12 +18,14 @@ interface EditInstructionItemProps {
   id: string
   index: number
   onDelete?: (id: string) => void
+  updateInstruction: UseFieldArrayUpdate<RecipeFormValues, 'instructions'>
 }
 
 export const EditInstructionItem = ({
   index,
   id,
   onDelete,
+  updateInstruction,
 }: EditInstructionItemProps) => {
   const form = useFormContext()
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -40,8 +43,11 @@ export const EditInstructionItem = ({
       style={style}
       {...attributes}
       className="flex flex-row items-center gap-4 pt-4 w-full"
+      suppressHydrationWarning
     >
-      <HamburgerMenuIcon {...listeners} />
+      <div className="self-start pt-3">
+        <HamburgerMenuIcon {...listeners} />
+      </div>
       <Typography variant="bold" className="self-start pt-2">
         {index + 1}
       </Typography>
@@ -55,6 +61,14 @@ export const EditInstructionItem = ({
                 {...field}
                 placeholder="Add an instruction..."
                 className="w-full"
+                onBlur={() => {
+                  updateInstruction(index, {
+                    ...form.getValues(`instructions.${index}`),
+                    instruction: form.getValues(
+                      `instructions.${index}.instruction`
+                    ),
+                  })
+                }}
               />
             </FormControl>
             <FormMessage />

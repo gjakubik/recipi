@@ -2,9 +2,9 @@
   {
     "title": "Pesto Dip",
     "description": "A creamy and herby pesto dip perfect for chips or vegetables.",
-    "preparationTime": "15-min",
-    "cookingTime": "0-min",
-    "servings": "4-6",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:00:00",
+    "servings": "4",
     "difficultyLevel": "Easy",
     "instructions": [
       "In blender or food processor, blend all ingredients until almost smooth.",
@@ -27,9 +27,9 @@
   {
     "title": "Ginger Lime Dip",
     "description": "A tangy and refreshing dip with a kick of ginger, perfect as a companion for fruit or crackers.",
-    "preparationTime": "10-min",
-    "cookingTime": "0-min",
-    "servings": "4-6",
+    "preparationTime": "00:10:00",
+    "cookingTime": "00:00:00",
+    "servings": "4",
     "difficultyLevel": "Easy",
     "instructions": [
       "Stir all ingredients until well mixed.",
@@ -47,9 +47,9 @@
   {
     "title": "Sweet Sour Chicken Wings",
     "description": "A tangy and sweet chicken wing dish with a combination of vinegar, pineapple juice, soy sauce, and spices.",
-    "preparationTime": "15-min",
-    "cookingTime": "30-min",
-    "servings": "4 servings",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:30:00",
+    "servings": "4",
     "difficultyLevel": "Medium",
     "instructions": [
       "Brown chicken on all sides in hot fat in a large heavy skillet.",
@@ -109,8 +109,8 @@
   {
     "title": "Shrimp Louis Dip",
     "description": "A creamy and savory dip with a base of mayonnaise and sour cream, enhanced with fresh shrimp, green pepper, and a kick of horseradish.",
-    "preparationTime": "15-min",
-    "cookingTime": "0-min",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:00:00",
     "servings": "Variable",
     "difficultyLevel": "Easy",
     "instructions": [
@@ -159,8 +159,8 @@
   {
     "title": "French Onion Dip",
     "description": "A classic creamy dip flavored with French onion soup mix.",
-    "preparationTime": "10-min",
-    "cookingTime": "0-min",
+    "preparationTime": "00:10:00",
+    "cookingTime": "00:00:00",
     "servings": "Variable",
     "difficultyLevel": "Easy",
     "instructions": [
@@ -189,8 +189,8 @@
   {
     "title": "Bacon Horseradish Dip",
     "description": "A rich dip with bold flavors of bacon and horseradish.",
-    "preparationTime": "15-min",
-    "cookingTime": "0-min",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:00:00",
     "servings": "Variable",
     "difficultyLevel": "Easy",
     "instructions": [
@@ -226,8 +226,8 @@
   {
     "title": "Green Onion Dip",
     "description": "A fresh and zesty dip with green onions and Dijon mustard.",
-    "preparationTime": "10-min",
-    "cookingTime": "0-min",
+    "preparationTime": "00:10:00",
+    "cookingTime": "00:00:00",
     "servings": "Variable",
     "difficultyLevel": "Easy",
     "instructions": [
@@ -273,8 +273,8 @@
   {
     "title": "Canning Carrots, Corn, Beans",
     "description": "Home canning process for preserving carrots, corn, and beans.",
-    "preparationTime": "1-hr",
-    "cookingTime": "3-hr",
+    "preparationTime": "01:00:00",
+    "cookingTime": "03:00:00",
     "servings": "Variable",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -315,8 +315,8 @@
   {
     "title": "48-Hour Crock Pickles",
     "description": "A traditional crock pickle recipe requiring 48 hours of brining.",
-    "preparationTime": "15-min",
-    "cookingTime": "48-hr",
+    "preparationTime": "00:15:00",
+    "cookingTime": "48:00:00",
     "servings": "Varies",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -353,8 +353,8 @@
   {
     "title": "Frozen Sweet Dill Pickles",
     "description": "Sweet dill pickles recipe that is frozen for preservation and taste.",
-    "preparationTime": "15-min",
-    "cookingTime": "2-hr",
+    "preparationTime": "00:15:00",
+    "cookingTime": "02:00:00",
     "servings": "Varies",
     "difficultyLevel": "Easy",
     "instructions": [
@@ -408,9 +408,9 @@
   {
     "title": "Hot Artichoke Dip",
     "description": "A creamy, cheesy artichoke dip that's perfect for parties.",
-    "preparationTime": "10-min",
-    "cookingTime": "30-min",
-    "servings": "Multiple",
+    "preparationTime": "00:10:00",
+    "cookingTime": "00:30:00",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Stir all ingredients until well mixed.",
@@ -449,9 +449,9 @@
   {
     "title": "Guacamole Dip",
     "description": "A fresh, tangy guacamole dip perfect for dipping or as a spread.",
-    "preparationTime": "15-min",
-    "cookingTime": "0-min",
-    "servings": "Multiple",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:00:00",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Stir all ingredients until well mixed.",
@@ -501,9 +501,9 @@
   {
     "title": "Spinach Dip",
     "description": "A savory spinach dip with a mix of spinach and herbs, great for entertaining.",
-    "preparationTime": "15-min",
-    "cookingTime": "0-min",
-    "servings": "Multiple",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:00:00",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Stir all ingredients until well mixed.",
@@ -547,9 +547,9 @@
   {
     "title": "Egg Nog",
     "description": "A classic holiday egg nog with a blend of eggs, milk, ice cream, and a hint of brandy or rum.",
-    "preparationTime": "15-min",
-    "cookingTime": "0-min",
-    "servings": "Multiple",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:00:00",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Separate the eggs.",
@@ -592,8 +592,8 @@
   {
     "title": "Beef Kebabs",
     "description": "Savory beef kebabs marinated in a blend of chablis, soy sauce, and seasonings, grilled with vegetables.",
-    "preparationTime": "20-min",
-    "cookingTime": "10-min",
+    "preparationTime": "00:20:00",
+    "cookingTime": "00:10:00",
     "servings": "Varies",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -645,9 +645,9 @@
   {
     "title": "Chicken Casserole",
     "description": "Hearty chicken casserole with cheese, celery, and a crispy fried onion topping.",
-    "preparationTime": "30-min",
-    "cookingTime": "45-min",
-    "servings": "Multiple",
+    "preparationTime": "00:30:00",
+    "cookingTime": "00:45:00",
+    "servings": "8",
     "difficultyLevel": "Medium",
     "instructions": [
       "Skin chicken and boil in pot of water for 2 minutes.",
@@ -716,8 +716,8 @@
   {
     "title": "Beef Shish-Kabob",
     "description": "Marinated beef cubes skewered with assorted vegetables.",
-    "preparationTime": "15-min",
-    "cookingTime": "10-min",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:10:00",
     "servings": "6",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -768,8 +768,8 @@
   {
     "title": "Chicken Kiev",
     "description": "A classic Chicken Kiev recipe where chicken breasts are stuffed with flavorful butter, coated in breadcrumbs, and baked.",
-    "preparationTime": "1-hr",
-    "cookingTime": "20-min",
+    "preparationTime": "01:00:00",
+    "cookingTime": "00:20:00",
     "servings": "6",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -847,9 +847,9 @@
   {
     "title": "Meatloaf",
     "description": "A traditional meatloaf recipe with a savory blend of spices and condiments.",
-    "preparationTime": "15-min",
-    "cookingTime": "1-hr",
-    "servings": "4-6",
+    "preparationTime": "00:15:00",
+    "cookingTime": "01:00:00",
+    "servings": "4",
     "difficultyLevel": "Medium",
     "instructions": [
       "Mix lean hamburger, bread crumbs or oats, eggs, chopped onion, onion powder, garlic powder, salt, and pepper.",
@@ -878,9 +878,9 @@
   {
     "title": "Pork Roast, Grilled",
     "description": "Grilled pork roast glazed with a sweet and tangy sauce.",
-    "preparationTime": "10-min",
-    "cookingTime": "2-hr",
-    "servings": "4-6",
+    "preparationTime": "00:10:00",
+    "cookingTime": "02:00:00",
+    "servings": "4",
     "difficultyLevel": "Medium",
     "instructions": [
       "Prepare the grill for the pork roast.",
@@ -903,8 +903,8 @@
   {
     "title": "Venison Beer Stew",
     "description": "A hearty stew with venison and vegetables, simmered in beer for a rich flavor.",
-    "preparationTime": "15-min",
-    "cookingTime": "1-hr-30-min",
+    "preparationTime": "00:15:00",
+    "cookingTime": "01:30:00",
     "servings": "4",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -935,8 +935,8 @@
   {
     "title": "4 Hour Beef Stew",
     "description": "A classic beef stew, slow-cooked with vegetables and thickened with tapioca.",
-    "preparationTime": "15-min",
-    "cookingTime": "4-hr",
+    "preparationTime": "00:15:00",
+    "cookingTime": "04:00:00",
     "servings": "6",
     "difficultyLevel": "Easy",
     "instructions": [
@@ -960,8 +960,8 @@
   {
     "title": "Country Style Veal Roast",
     "description": "A savory veal roast with carrots and onion, flavored with marjoram and mushroom soup, perfect for a homely dinner.",
-    "preparationTime": "15-min",
-    "cookingTime": "2-hr-30-min",
+    "preparationTime": "00:15:00",
+    "cookingTime": "02:30:00",
     "servings": "6",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -986,8 +986,8 @@
   {
     "title": "Venison Stroganoff",
     "description": "A delicious twist on the classic stroganoff, featuring venison and a rich, creamy mushroom sauce, served over noodles.",
-    "preparationTime": "15-min",
-    "cookingTime": "45-min",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:45:00",
     "servings": "4",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -1011,9 +1011,9 @@
   {
     "title": "Chicken & Shrimp Jambalaya",
     "description": "A flavorful jambalaya with chicken, shrimp, and ham, mixed with rice and spiced with thyme, cayenne, and parsley.",
-    "preparationTime": "15-min",
-    "cookingTime": "1-hr",
-    "servings": "6-8",
+    "preparationTime": "00:15:00",
+    "cookingTime": "01:00:00",
+    "servings": "6",
     "difficultyLevel": "Medium",
     "instructions": [
       "Heat butter in large heavy skillet. Brown chicken, a few pieces at a time, transfer to casserole.",
@@ -1046,8 +1046,8 @@
   {
     "title": "Sauerkraut-Kielbasa Oven Dinner",
     "description": "A baked dish featuring sauerkraut and kielbasa with apples, onions, and potatoes, seasoned with a chicken gravy mix and caraway seeds.",
-    "preparationTime": "15-min",
-    "cookingTime": "1-hr",
+    "preparationTime": "00:15:00",
+    "cookingTime": "01:00:00",
     "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
@@ -1074,9 +1074,9 @@
   {
     "title": "Old English Ragout",
     "description": "A hearty beef stew with onions, carrots, eggplant, and beer, thickened with a pot roast seasoned gravy mix.",
-    "preparationTime": "15-min",
-    "cookingTime": "1-hr-30-min",
-    "servings": "6-8",
+    "preparationTime": "00:15:00",
+    "cookingTime": "01:30:00",
+    "servings": "6",
     "difficultyLevel": "Medium",
     "instructions": [
       "Put meat & vegetables into oven cooking bag.",
@@ -1097,8 +1097,8 @@
   {
     "title": "Christmas Morning Italian Strata",
     "description": "An Italian-inspired layered casserole with sausage, mushrooms, cheese, and bread, perfect for a holiday breakfast or brunch.",
-    "preparationTime": "30-min",
-    "cookingTime": "1-hr",
+    "preparationTime": "00:30:00",
+    "cookingTime": "01:00:00",
     "servings": "12",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -1127,8 +1127,8 @@
   {
     "title": "Baked Beans",
     "description": "A classic baked beans recipe with ground beef, bacon, and a sweet and savory sauce.",
-    "preparationTime": "15-min",
-    "cookingTime": "1-hr",
+    "preparationTime": "00:15:00",
+    "cookingTime": "01:00:00",
     "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
@@ -1148,8 +1148,8 @@
   {
     "title": "Sauerkraut Noodle Dish",
     "description": "A hearty dish of sauerkraut and noodles, enriched with bacon, mushrooms, and onions.",
-    "preparationTime": "15-min",
-    "cookingTime": "1-hr",
+    "preparationTime": "00:15:00",
+    "cookingTime": "01:00:00",
     "servings": "6",
     "difficultyLevel": "Medium",
     "instructions": [
@@ -1171,8 +1171,8 @@
   {
     "title": "Marquette Vegetable Salad",
     "description": "A refreshing vegetable salad with a creamy dill dressing, topped with olives and hard-boiled eggs.",
-    "preparationTime": "15-min",
-    "cookingTime": "0-min",
+    "preparationTime": "00:15:00",
+    "cookingTime": "00:00:00",
     "servings": "6",
     "difficultyLevel": "Easy",
     "instructions": [
@@ -1198,9 +1198,9 @@
   {
     "title": "5-Layer Macaroni Pile-Up",
     "description": "A layered macaroni dish with cheese, vegetables, and bacon, served with a tangy salad dressing.",
-    "preparationTime": "20-min",
-    "cookingTime": "0-min",
-    "servings": "8-10",
+    "preparationTime": "00:20:00",
+    "cookingTime": "00:00:00",
+    "servings": "8",
     "difficultyLevel": "Easy",
     "instructions": [
       "Prepare dinner as directed on package of macaroni.",
