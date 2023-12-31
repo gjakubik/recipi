@@ -4,40 +4,40 @@ export const DIFFICULTY_OPTIONS = [
   { value: 'hard', label: 'Hard' },
 ]
 
-export const UNITS = {
-  tsp: 'tsp',
-  tbsp: 'tbsp',
-  cup: 'cup',
-  oz: 'oz',
-  lb: 'lb',
-  ml: 'ml',
-  l: 'l',
-  g: 'g',
-  kg: 'kg',
+export const ABBREVIATION_TO_UNIT = {
+  t: 'Teaspoon',
+  tsp: 'Teaspoon',
+  T: 'Tablespoon',
+  TB: 'Tablespoon',
+  Tbl: 'Tablespoon',
+  Tbsp: 'Tablespoon',
+  tbsp: 'Tablespoon',
+  C: 'Cup',
+  c: 'Cup',
+  oz: 'Ounce',
+  lb: 'Pound',
+  mL: 'Milliliter',
+  ml: 'Milliliter',
+  L: 'Liter',
+  l: 'Liter',
+  g: 'Gram',
+  kg: 'Kilogram',
+  pt: 'Pint',
+  pkg: 'Package',
+  qt: 'Quart',
 }
 
-export const UNIT_TO_LABEL = {
-  [UNITS.tsp]: 'Teaspoon',
-  [UNITS.tbsp]: 'Tablespoon',
-  [UNITS.cup]: 'Cup',
-  [UNITS.oz]: 'Ounce',
-  [UNITS.lb]: 'Pound',
-  [UNITS.ml]: 'Milliliter',
-  [UNITS.l]: 'Liter',
-  [UNITS.g]: 'Gram',
-  [UNITS.kg]: 'Kilogram',
-}
-
-export const UNIT_OPTIONS = [
-  { value: UNITS.tsp, label: UNIT_TO_LABEL[UNITS.tsp] },
-  { value: UNITS.tbsp, label: UNIT_TO_LABEL[UNITS.tbsp] },
-  { value: UNITS.cup, label: UNIT_TO_LABEL[UNITS.cup] },
-  { value: UNITS.oz, label: UNIT_TO_LABEL[UNITS.oz] },
-  { value: UNITS.lb, label: UNIT_TO_LABEL[UNITS.lb] },
-  { value: UNITS.ml, label: UNIT_TO_LABEL[UNITS.ml] },
-  { value: UNITS.l, label: UNIT_TO_LABEL[UNITS.l] },
-  { value: UNITS.g, label: UNIT_TO_LABEL[UNITS.g] },
-  { value: UNITS.kg, label: UNIT_TO_LABEL[UNITS.kg] },
+export const UNITS = [
+  'Teaspoon',
+  'Tablespoon',
+  'Cup',
+  'Ounce',
+  'Pound',
+  'Milliliter',
+  'Liter',
+  'Gram',
+  'Kilogram',
+  'Pint',
 ]
 
 const TIMES = {

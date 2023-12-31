@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import _ from 'lodash'
 import { useRouter } from 'next/navigation'
 import { User } from 'next-auth'
@@ -24,6 +24,8 @@ import { UploadDropzone } from '@uploadthing/react'
 import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
 import { createRecipe, updateRecipe } from '@/lib/db/api'
 import { RecipeFormValues, recipeFormSchema } from '@/lib/validations/recipe'
+import { UNITS } from '@/lib/constants'
+import { abbToUnit } from '@/lib/utils'
 
 import {
   Form,
@@ -42,6 +44,7 @@ import {
   SelectItem,
   SelectLabel,
 } from '@/components/ui/select'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Textarea } from '@/components/ui/textarea'
 import { Typography } from '@/components/ui/typography'
 import { TabsContent } from '@/components/ui/tabs'
@@ -55,6 +58,7 @@ import { DeleteRecipeButton } from '@/components/DeleteRecipeButton'
 import { EditIngredientItem } from '@/components/EditIngredientItem'
 import { IngredientsList } from '@/components/IngredientsList'
 import { EditInstructionItem } from '@/components/EditInstructionItem'
+import { AIUploadModal } from '@/components/modals/AIUploadModal'
 import { InstructionsList } from '../InstructoinsList'
 import { FancyBox } from '@/components/FancyBox'
 import { FancyMultiSelect } from '@/components/FancyMultiSelect'
@@ -87,6 +91,32 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
           authorId: user.id,
         },
   })
+
+  const [customUnitOptions, setCustomUnitOptions] = React.useState<string[]>([])
+
+  const addCustomUnit = (unit: string) => {
+    setCustomUnitOptions([unit, ...customUnitOptions])
+  }
+
+  // calculate unit optons based on UNIT_OPTIONS + [{ label: 'unit', value: 'unit' } for each ingredient unit]
+  const unitOptions = useMemo(() => {
+    const unitOptions = UNITS
+    const ingunits = form.getValues('ingredients')
+    const ingredientUnits = ingunits
+      .map((i) => i.unit)
+      .filter((u) => !!u)
+      .map(abbToUnit)
+      .map((u) => _.capitalize(u))
+    const uniqueIngredientUnits = _.uniq(
+      ingredientUnits.concat(customUnitOptions)
+    )
+    uniqueIngredientUnits.forEach((unit) => {
+      if (!unitOptions.find((u) => u === unit)) {
+        unitOptions.unshift(unit)
+      }
+    })
+    return unitOptions
+  }, [form.getValues('ingredients'), customUnitOptions])
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -191,6 +221,17 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         onSubmit={form.handleSubmit(onFormSubmit)}
         className="flex-col space-y-8"
       >
+        <Alert>
+          <AlertTitle>AI Upload</AlertTitle>
+          <AlertDescription className="flex flex-row justify-between items-center gap-4 w-full">
+            <Typography>
+              Use ChatGPT to prefill your recipe from an image or text
+            </Typography>
+            <AIUploadModal>
+              <Button>AI Upload</Button>
+            </AIUploadModal>
+          </AlertDescription>
+        </Alert>
         <div className="flex flex-col gap-2">
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
             <div className="flex flex-col gap-2 flex-grow">
@@ -354,8 +395,10 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                         ingredients.findIndex((i) => i.id === id)
                       )
                     }
+                    addCustomUnit={addCustomUnit}
                     hasNote={!!i.note}
                     updateIngredient={updateIngredient}
+                    units={unitOptions}
                   />
                 ))}
               </SortableContext>

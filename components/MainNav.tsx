@@ -52,8 +52,6 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
     })
   }
 
-  console.log('user', user)
-
   return (
     <header>
       <div className="flex flex-row justify-between gap-4 items-center px-4 sm:px-12 py-4">
