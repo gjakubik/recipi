@@ -1,3 +1,5 @@
+'use client'
+
 import { PropsWithChildren } from 'react'
 import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
 import { RecipeFormValues } from '@/lib/validations/recipe'

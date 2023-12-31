@@ -1,9 +1,46 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { TIME_TO_LABEL, UNIT_TO_LABEL } from './constants'
+import _ from 'lodash'
+import { ABBREVIATION_TO_UNIT } from './constants'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export const abbToUnit = (abb: string) => {
+  try {
+    return (
+      ABBREVIATION_TO_UNIT[
+        _.trimEnd(abb, 's') as keyof typeof ABBREVIATION_TO_UNIT
+      ] || abb
+    )
+  } catch (e) {
+    return abb
+  }
+}
+
+export const fractionToFloat = (str: string) => {
+  // Split the string into parts using space as a delimiter
+  const parts = _.split(str, ' ')
+
+  // Initialize the result
+  let result = 0
+
+  // Loop through the parts
+  _.forEach(parts, (part) => {
+    if (part.includes('/')) {
+      // If the part is a fraction, split it further and perform division
+      const fractionParts = _.split(part, '/')
+      const numerator = _.parseInt(fractionParts[0])
+      const denominator = _.parseInt(fractionParts[1])
+      result += numerator / denominator
+    } else {
+      // If the part is an integer, parse it and add it to the result
+      result += _.parseInt(part)
+    }
+  })
+
+  return result
 }
 
 export const removeServings = (s: string) => {
@@ -82,14 +119,6 @@ export const setTimeByType = (time: string, value: string, type: string) => {
       return `${hours}:${minutes}:${value}`
     default:
       return time
-  }
-}
-
-export const unitValueToLabel = (value?: string | null) => {
-  try {
-    return UNIT_TO_LABEL[value as keyof typeof UNIT_TO_LABEL]
-  } catch {
-    return 'Unknown'
   }
 }
 

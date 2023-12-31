@@ -18,16 +18,16 @@ export type Comment = InferModel<typeof comments>
 export type Ingredient = {
   name: string
   note?: string
-  amount: string
-  unit: string
+  amount?: string
+  unit?: string
 }
 
 export type IngredientForm = {
   id?: string | number
   name: string
   note?: string
-  amount: string
-  unit: string
+  amount?: string
+  unit?: string
 }
 
 export type Like = InferModel<typeof likes>

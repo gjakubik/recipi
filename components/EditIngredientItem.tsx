@@ -1,30 +1,15 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
-import { UNIT_OPTIONS } from '@/lib/constants'
 import { RecipeFormValues } from '@/lib/validations/recipe'
+import { OptionType } from '@/types'
 
 import { Button } from '@/components/ui/button'
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { AddNoteModal } from '@/components/AddNoteModal'
+import { FormField, FormItem, FormLabel } from '@/components/ui/form'
+import { AddNoteModal } from '@/components/modals/AddNoteModal'
 import { FormInput } from '@/components/FormInput'
 import {
   HamburgerMenuIcon,
@@ -32,20 +17,25 @@ import {
   Cross1Icon,
   Pencil1Icon,
 } from '@radix-ui/react-icons'
+import { IngredientUnitSelect } from './IngredientUnitSelect'
 
 interface EditIngredientItemProps {
   id: string
   index: number
+  units: string[]
   onDelete?: (id: string) => void
   updateIngredient: UseFieldArrayUpdate<RecipeFormValues, 'ingredients'>
+  addCustomUnit: (unit: string) => void
   hasNote?: boolean
 }
 
 export const EditIngredientItem = ({
   id,
   index,
+  units,
   onDelete,
   updateIngredient,
+  addCustomUnit,
   hasNote,
 }: EditIngredientItemProps) => {
   const form = useFormContext()
@@ -56,6 +46,14 @@ export const EditIngredientItem = ({
     transform: CSS.Transform.toString(transform),
     transition,
   }
+
+  // Hack to prevent SSR mismatch
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return <></>
 
   return (
     <div
@@ -74,9 +72,9 @@ export const EditIngredientItem = ({
           <div className="flex flex-row gap-2 items-end w-full">
             <FormInput
               name={`ingredients.${index}.amount`}
-              className="w-[60px] grow"
+              className="w-[60px]"
               label="Amount"
-              labelClassName={`flex ${!(index === 0) && 'sm:hidden'}`}
+              labelClassName={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
               onBlur={() => {
                 updateIngredient(index, {
                   ...form.getValues(`ingredients.${index}`),
@@ -84,54 +82,28 @@ export const EditIngredientItem = ({
                 })
               }}
             />
-            <div className="grow-[2]">
+            <div className="grow">
               <FormField
                 control={form.control}
                 name={`ingredients.${index}.unit`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel
-                      className={`flex ${!(index === 0) && 'sm:hidden'}`}
+                      className={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
                     >
                       Unit
                     </FormLabel>
-                    <Select
-                      onValueChange={(e) => {
-                        field.onChange(e)
-                        updateIngredient(index, {
-                          ...form.getValues(`ingredients.${index}`),
-                          unit: e,
-                        })
-                      }}
-                      value={field.value}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className=" w-full min-w-[100px]">
-                          <SelectValue placeholder="Unit" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Unit Type</SelectLabel>
-                          {UNIT_OPTIONS.map((option) => {
-                            return (
-                              <SelectItem
-                                key={option.value}
-                                value={option.value}
-                              >
-                                {option.label}
-                              </SelectItem>
-                            )
-                          })}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
+                    <IngredientUnitSelect
+                      field={field}
+                      index={index}
+                      units={units}
+                      addCustomUnit={addCustomUnit}
+                    />
                   </FormItem>
                 )}
               />
             </div>
+
             <AddNoteModal index={index} updateIngredient={updateIngredient}>
               <Button variant="ghost" className="hidden xs:flex sm:hidden">
                 <div className="pr-2">
@@ -141,21 +113,20 @@ export const EditIngredientItem = ({
               </Button>
             </AddNoteModal>
           </div>
-          <div className="grow flex flex-row gap-2 items-center w-full">
-            <div className="grow">
-              <FormInput
-                name={`ingredients.${index}.name`}
-                placeholder="Ingredient name..."
-                label="Name"
-                labelClassName={`flex ${!(index === 0) && 'sm:hidden'}`}
-                onBlur={() => {
-                  updateIngredient(index, {
-                    ...form.getValues(`ingredients.${index}`),
-                    name: form.getValues(`ingredients.${index}.name`),
-                  })
-                }}
-              />
-            </div>
+          <div className="grow w-full">
+            <FormInput
+              name={`ingredients.${index}.name`}
+              placeholder="Ingredient name..."
+              label="Name"
+              labelClassName={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
+              className="w-full"
+              onBlur={() => {
+                updateIngredient(index, {
+                  ...form.getValues(`ingredients.${index}`),
+                  name: form.getValues(`ingredients.${index}.name`),
+                })
+              }}
+            />
           </div>
           <AddNoteModal index={index} updateIngredient={updateIngredient}>
             <Button variant="ghost" className="flex xs:hidden sm:flex p-0">

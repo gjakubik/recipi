@@ -4,7 +4,7 @@ import React from 'react'
 import _ from 'lodash'
 import { cn } from '@/lib/utils'
 import { Ingredient, IngredientForm } from '@/types'
-import { unitValueToLabel } from '@/lib/utils'
+import { abbToUnit } from '@/lib/utils'
 
 import { Typography } from '@/components/ui/typography'
 import { FormLabel } from '@/components/ui/form'
@@ -36,8 +36,10 @@ export const IngredientsList = ({
               className=" w-max text-ellipsis overflow-hidden whitespace-nowrap"
             >
               {ingredient.amount}{' '}
-              {unitValueToLabel(ingredient.unit) || ingredient.unit}
-              {parseFloat(ingredient.amount) > 1 && ingredient.unit && 's'}{' '}
+              {_.capitalize(abbToUnit(ingredient.unit || ''))}
+              {parseFloat(ingredient.amount || '') > 1 &&
+                ingredient.unit &&
+                's'}{' '}
               <b>{_.capitalize(ingredient.name)}</b> <i>{ingredient.note}</i>
             </Typography>
           </div>
@@ -60,8 +62,10 @@ export const IngredientsList = ({
               <div>
                 <Typography>
                   {ingredient.amount}{' '}
-                  {unitValueToLabel(ingredient.unit) || ingredient.unit}
-                  {parseFloat(ingredient.amount) > 1 && ingredient.unit && 's'}
+                  {_.capitalize(abbToUnit(ingredient.unit || ''))}
+                  {parseFloat(ingredient.amount || '') > 1 &&
+                    ingredient.unit &&
+                    's'}
                 </Typography>
               </div>
             </div>
@@ -94,8 +98,10 @@ export const IngredientsList = ({
             <div>
               <Typography>
                 {ingredient.amount}{' '}
-                {unitValueToLabel(ingredient.unit) || ingredient.unit}
-                {parseFloat(ingredient.amount) > 1 && ingredient.unit && 's'}
+                {_.capitalize(abbToUnit(ingredient.unit || ''))}
+                {parseFloat(ingredient.amount || '') > 1 &&
+                  ingredient.unit &&
+                  's'}
               </Typography>
             </div>
           </div>
