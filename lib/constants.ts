@@ -1,3 +1,17 @@
+interface MenuQuery {
+  LIMIT: number
+  PAGE: number
+  SORT: 'asc' | 'desc'
+  SORT_BY: 'title' | 'creationDate' | 'updatedAt'
+}
+
+export const MENU_QUERY: MenuQuery = {
+  LIMIT: 5,
+  PAGE: 0,
+  SORT: 'desc',
+  SORT_BY: 'updatedAt',
+}
+
 export const DIFFICULTY_OPTIONS = [
   { value: 'easy', label: 'Easy' },
   { value: 'medium', label: 'Medium' },

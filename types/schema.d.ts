@@ -9,7 +9,17 @@ import {
   sessions,
   verificationTokens,
   accounts,
+  menus,
 } from '../lib/db/schema'
+
+export type Menu = InferModel<typeof menus>
+
+export type MenuWithRecipes = Menu & {
+  author: User
+  recipeInfo?: Recipe[]
+}
+
+export type InsertMenu = InferModel<typeof menus, 'insert'>
 
 export type Category = InferModel<typeof categories>
 

@@ -6,12 +6,13 @@ import { User } from 'next-auth'
 import { ZodError } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { createRecipe } from '@/lib/db/api'
+import { createRecipe, createMenu } from '@/lib/db/api'
 import {
   bulkRecipeFormSchema,
   bulkRecipeJsonSchema,
+  bulkMenuJsonSchema,
   BulkRecipeFormValues,
-} from '@/lib/validations/bulkRecipe'
+} from '@/lib/validations/bulkUpload'
 
 import { useToast } from '@/components/ui/use-toast'
 import { Textarea } from '@/components/ui/textarea'
@@ -22,9 +23,10 @@ import { Loader2 } from 'lucide-react'
 
 interface BulkUploadFormProps {
   user: User & { id: string }
+  mode?: 'recipe' | 'menu'
 }
 
-export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
+export const BulkUploadForm = ({ user, mode }: BulkUploadFormProps) => {
   const { toast } = useToast()
   const form = useForm<BulkRecipeFormValues>({
     resolver: zodResolver(bulkRecipeFormSchema),
@@ -35,11 +37,76 @@ export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
 
   const onFormSubmit = async (data: BulkRecipeFormValues) => {
     setIsUploading(true)
+    if (mode === 'menu') {
+      let json
+      let menus
+
+      // Load the json
+      try {
+        json = JSON.parse(data.json)
+      } catch (err) {
+        toast({
+          title: 'Error',
+          description: 'Invalid JSON',
+          variant: 'destructive',
+        })
+        return
+      }
+
+      // Validate and coerce json into correct format
+      try {
+        menus = bulkMenuJsonSchema.parse(json)
+      } catch (err) {
+        if (err instanceof ZodError) {
+          toast({
+            title: 'Error',
+            description: (
+              <ul>
+                {err.issues.map((issue, idx) => {
+                  return (
+                    <li key={idx}>{`${
+                      issue.message
+                    } at menu number ${issue.path.join(', ')}`}</li>
+                  )
+                })}
+              </ul>
+            ),
+            variant: 'destructive',
+          })
+        }
+        return
+      }
+
+      // Create the menus
+      try {
+        menus.forEach(async (menu, i) => {
+          const withAuthor = {
+            ...menu,
+            authorId: user.id,
+          }
+          await createMenu(withAuthor)
+          const progress = (100 / menus.length) * (i + 1)
+          setProgress(progress)
+        })
+      } catch (err) {
+        console.log(err)
+        toast({
+          title: 'Error',
+          description: 'Error creating menus',
+          variant: 'destructive',
+        })
+        return
+      }
+
+      return
+    }
+
+    // Recipe mode by default
     let json
     let recipes
     // Load the json
     try {
-      json = JSON.parse(data.recipeList)
+      json = JSON.parse(data.json)
     } catch (err) {
       toast({
         title: 'Error',
@@ -109,13 +176,17 @@ export const BulkUploadForm = ({ user }: BulkUploadFormProps) => {
       >
         <FormField
           control={form.control}
-          name="recipeList"
+          name="json"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Recipe List (JSON)</FormLabel>
+              <FormLabel>
+                {mode === 'menu' ? 'Menu' : 'Recipe'} List (JSON)
+              </FormLabel>
               <Textarea
                 {...field}
-                placeholder="Paste your list of recipes in json format here..."
+                placeholder={`Paste your list of ${
+                  mode === 'menu' ? 'menus' : 'recipes'
+                } in json format here...`}
                 className="w-full"
                 rows={25}
               />

@@ -6,9 +6,9 @@ import { timeValueToLabel, isZero } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
 import { Typography } from '@/components/ui/typography'
-import { IngredientsList } from '@/components/IngredientsList'
-import { DeleteRecipeButton } from '@/components/DeleteRecipeButton'
-import { InstructionsList } from '@/components/InstructoinsList'
+import { IngredientsList } from '@/components/recipe/IngredientsList'
+import { DeleteRecipeButton } from '@/components/recipe/DeleteRecipeButton'
+import { InstructionsList } from '@/components/recipe/InstructionsList'
 import { Clock, Users } from 'lucide-react'
 
 interface RecipePageProps {

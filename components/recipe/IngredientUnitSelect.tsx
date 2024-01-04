@@ -7,9 +7,7 @@ import {
   FieldValues,
   useFormContext,
 } from 'react-hook-form'
-import { OptionType } from '@/types'
 import { abbToUnit, fractionToFloat } from '@/lib/utils'
-import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -19,13 +17,6 @@ import {
   CommandInput,
   CommandItem,
 } from '@/components/ui/command'
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form'
 import {
   Popover,
   PopoverContent,

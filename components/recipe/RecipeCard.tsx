@@ -4,10 +4,15 @@ import { useState, useMemo } from 'react'
 import _ from 'lodash'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Recipe } from '@/types'
+import { Menu, MenuWithRecipes, Recipe } from '@/types'
 import { useResizableRef } from '@/hooks/use-resizable-observer'
 import useSearch from '@/app/store/useSearch'
-import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
+import {
+  getInitials,
+  isZero,
+  removeServings,
+  timeValueToLabel,
+} from '@/lib/utils'
 
 import {
   Card,
@@ -26,13 +31,18 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Typography } from '@/components/ui/typography'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
-import { IngredientsList } from '@/components/IngredientsList'
+import { IngredientsList } from '@/components/recipe/IngredientsList'
 import { Clock, Users } from 'lucide-react'
+import { AddRecipeToMenusModal } from '../modals/AddRecipeToMenusModal'
+import { UserAvatar } from '../UserAvatar'
+import { RecipePreviewCard } from './RecipePreviewCard'
 
 interface RecipeCardProps {
   recipe: Recipe
+  menus?: MenuWithRecipes[]
   cardKey: string | number
   onClick?: () => void
+  loggedIn?: boolean
   isOwner?: boolean
   forceUpdate: number
   setForceUpdate: (value: number) => void
@@ -40,8 +50,10 @@ interface RecipeCardProps {
 
 export const RecipeCard = ({
   recipe,
+  menus,
   cardKey,
   onClick,
+  loggedIn,
   isOwner,
   forceUpdate,
   setForceUpdate,
@@ -154,26 +166,14 @@ export const RecipeCard = ({
               <div>
                 <Separator className="mb-4" />
                 <div className="flex flex-row justify-between items-center">
-                  <div className="flex flex-row gap-2 items-center">
-                    {recipe.author.image && (
-                      <img
-                        src={recipe.author.image}
-                        alt={recipe.author.name!}
-                        width={30}
-                        height={30}
-                        className="rounded-full object-cover"
-                      />
-                    )}
-                    <Typography variant="light">
-                      {recipe.author.name}
-                    </Typography>
-                  </div>
+                  <UserAvatar user={recipe.author} />
                   <Typography variant="light">
                     {recipe.creationDate
                       ? new Date(recipe.creationDate).toLocaleDateString()
                       : ''}
                   </Typography>
                 </div>
+                {/* <RecipePreviewCard recipe={recipe} /> */}
               </div>
             </CardContent>
           </Link>
@@ -188,7 +188,11 @@ export const RecipeCard = ({
             <Link href={`/recipe/${recipe.id}/edit`}>Edit Recipe</Link>
           </Button>
         )}
-        <Button size="sm">Add to Menu</Button>
+        {loggedIn && (
+          <AddRecipeToMenusModal recipe={recipe} menus={menus}>
+            <Button size="sm">Add to Menu</Button>
+          </AddRecipeToMenusModal>
+        )}
       </CardFooter>
     </Card>
   )

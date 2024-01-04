@@ -1,11 +1,11 @@
 import * as z from 'zod'
 
 export type BulkRecipeFormValues = {
-  recipeList: string
+  json: string
 }
 
 export const bulkRecipeFormSchema = z.object({
-  recipeList: z.string(),
+  json: z.string(),
 })
 
 export const bulkRecipeJsonSchema = z.array(
@@ -25,5 +25,13 @@ export const bulkRecipeJsonSchema = z.array(
         unit: z.string(),
       })
     ),
+  })
+)
+
+export const bulkMenuJsonSchema = z.array(
+  z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    recipes: z.optional(z.array(z.number()).nullable()),
   })
 )

@@ -27,7 +27,6 @@ export const AddUnitModal = ({
   const [unit, setUnit] = useState('')
 
   const onUnitSave = () => {
-    console.log('unit', unit)
     addCustomUnit(_.capitalize(unit))
     setUnit('')
   }

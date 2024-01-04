@@ -15,7 +15,7 @@ export const menus = mysqlTable(
     id: int('id').autoincrement().notNull(),
     title: varchar('title', { length: 255 }).notNull(),
     description: text('description'),
-    recipes: json('recipes').$type<string[]>().default([]), // json list of recipe ids
+    recipes: json('recipes').$type<number[] | undefined>(), // json list of recipe ids
     creationDate: timestamp('creation_date', { mode: 'string' }).defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
     authorId: varchar('author_id', { length: 255 }).notNull(),

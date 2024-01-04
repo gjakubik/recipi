@@ -9,9 +9,21 @@ export const defaultNavConfig: NavConfig = {
       href: '/',
     },
     {
-      title: 'My Recipes',
-      href: '/my-recipes',
-      authenticated: true,
+      title: 'My Stuff',
+      href: '/my-stuff',
+      minWidth: 120,
+      items: [
+        {
+          title: 'Recipes',
+          href: '/my-recipes',
+          authenticated: true,
+        },
+        {
+          title: 'Menus',
+          href: '/my-menus',
+          authenticated: true,
+        },
+      ],
     },
     {
       title: 'Admin',

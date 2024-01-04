@@ -15,7 +15,7 @@ export default async function CreateRecipePage() {
   return (
     <>
       <Typography variant="h2">Tools</Typography>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-4">
         {TOOL_LIST.map((tool) => (
           <Link href={tool.href} key={tool.name}>
             <div className="flex flex-row gap-2 items-baseline dashed-border-hover">
