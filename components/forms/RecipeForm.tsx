@@ -54,14 +54,12 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { TimePicker } from '@/components/ui/time-picker'
 import { EditPreviewTabs } from '@/components/EditPreviewTabs'
 import { FormInput } from '@/components/FormInput'
-import { DeleteRecipeButton } from '@/components/DeleteRecipeButton'
-import { EditIngredientItem } from '@/components/EditIngredientItem'
-import { IngredientsList } from '@/components/IngredientsList'
-import { EditInstructionItem } from '@/components/EditInstructionItem'
+import { DeleteRecipeButton } from '@/components/recipe/DeleteRecipeButton'
+import { EditIngredientItem } from '@/components/recipe/EditIngredientItem'
+import { IngredientsList } from '@/components/recipe/IngredientsList'
+import { EditInstructionItem } from '@/components/recipe/EditInstructionItem'
 import { AIUploadModal } from '@/components/modals/AIUploadModal'
-import { InstructionsList } from '../InstructoinsList'
-import { FancyBox } from '@/components/FancyBox'
-import { FancyMultiSelect } from '@/components/FancyMultiSelect'
+import { InstructionsList } from '../recipe/InstructionsList'
 import { PlusIcon } from '@radix-ui/react-icons'
 
 interface RecipeFormProps {
@@ -488,7 +486,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
             <Button variant="ghost" type="reset">
               {initialValues ? 'Reset' : 'Clear'}
             </Button>
-            <Button type="submit">{initialValues ? 'Save' : 'Submit'}</Button>
+            <Button type="submit">{initialValues ? 'Save' : 'Create'}</Button>
           </div>
           {initialValues && <DeleteRecipeButton recipeId={initialValues.id!} />}
         </div>

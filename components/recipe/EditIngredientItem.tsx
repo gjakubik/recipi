@@ -5,7 +5,6 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
 import { RecipeFormValues } from '@/lib/validations/recipe'
-import { OptionType } from '@/types'
 
 import { Button } from '@/components/ui/button'
 import { FormField, FormItem, FormLabel } from '@/components/ui/form'

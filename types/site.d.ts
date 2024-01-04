@@ -6,8 +6,15 @@ export type NavItem = {
   admin?: boolean
 }
 
-export type NavConfig = {
+export type NavGroup = {
+  title: string
+  href: string
+  minWidth: string | number
   items: NavItem[]
+}
+
+export type NavConfig = {
+  items: Array<NavItem | NavGroup>
   searchVisible?: boolean
   createVisible?: boolean
 }

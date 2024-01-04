@@ -3,7 +3,7 @@ import { getCurrentUser } from '@/lib/session'
 import { Typography } from '@/components/ui/typography'
 import { BulkUploadForm } from '@/components/forms/BulkUploadForm'
 
-export default async function CreateRecipePage() {
+export default async function BulkMenuUpload() {
   const user = await getCurrentUser()
 
   //redirect to home if not logged in
@@ -13,8 +13,8 @@ export default async function CreateRecipePage() {
 
   return (
     <>
-      <Typography variant="h2">Bulk Recipe Upload</Typography>
-      <BulkUploadForm user={user} />
+      <Typography variant="h2">Bulk Menu Upload</Typography>
+      <BulkUploadForm user={user} mode="menu" />
     </>
   )
 }

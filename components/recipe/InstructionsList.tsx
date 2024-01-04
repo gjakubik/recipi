@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge'
 
-import { Typography } from './ui/typography'
+import { Typography } from '../ui/typography'
 
 interface InstructionsListProps {
   instructions: string[] | null

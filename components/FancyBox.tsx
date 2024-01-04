@@ -1,13 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import {
-  CheckIcon as Check,
-  CaretSortIcon as ChevronsUpDown,
-  Pencil1Icon as Edit2,
-} from '@radix-ui/react-icons'
-
 import { cn } from '@/lib/utils'
+
 import {
   Accordion,
   AccordionContent,
@@ -50,6 +45,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { DialogClose } from '@radix-ui/react-dialog'
+import {
+  CheckIcon as Check,
+  CaretSortIcon as ChevronsUpDown,
+  Pencil1Icon as Edit2,
+} from '@radix-ui/react-icons'
 
 // FIXME: https://twitter.com/lemcii/status/1659649371162419202?s=46&t=gqNnMIjMWXiG2Rbrr5gT6g
 // Removing states would help maybe?

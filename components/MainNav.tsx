@@ -6,7 +6,7 @@ import { User } from 'next-auth'
 import { usePathname } from 'next/navigation'
 import { signIn, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
-import { NavConfig } from '@/types'
+import { NavConfig, NavGroup, NavItem } from '@/types'
 
 import { Separator } from '@/components/ui/separator'
 import { Typography } from '@/components/ui/typography'
@@ -23,6 +23,7 @@ import {
   DropdownMenuPortal,
   DropdownMenuSubContent,
 } from '@/components/ui/dropdown-menu'
+import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
 import { Search } from '@/components/Search'
 import { MobileNav } from '@/components/MobileNav'
 import {
@@ -43,6 +44,27 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
   const pathname = usePathname()
   const [isLoading, setIsLoading] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [groupHoverState, setGroupHoverState] = useState(
+    config.items.map(() => false)
+  )
+
+  const handleMouseEnter = (index: number) => {
+    const state = [...groupHoverState]
+    state[index] = true
+    setGroupHoverState(state)
+  }
+
+  const handleMouseLeave = (index: number) => {
+    const state = [...groupHoverState]
+    state[index] = false
+    setGroupHoverState(state)
+  }
+
+  const handleOpenChange = (open: boolean, index: number) => {
+    const state = [...groupHoverState]
+    state[index] = open
+    setGroupHoverState(state)
+  }
 
   const handleSignIn = (provider: string) => {
     setIsLoading(true)
@@ -54,9 +76,9 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
 
   return (
     <header>
-      <div className="flex flex-row justify-between gap-4 items-center px-4 sm:px-12 py-4">
+      <div className="flex flex-row justify-between gap-4 items-center h-[90px] sm:mr-4">
         <Link href="/">
-          <div className="hidden md:flex justify-center items-center gap-4">
+          <div className="hidden md:flex justify-center items-center gap-4 px-4 sm:pl-12 py-4">
             <ActivityLogIcon className="h-6 w-6" />
             <Typography variant="h3">Recipi</Typography>
           </div>
@@ -64,7 +86,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
 
         <div
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="flex md:hidden justify-center items-center gap-1 hover:cursor-pointer"
+          className="grow flex md:hidden justify-start items-center gap-1 hover:cursor-pointer px-4 sm:pl-6 py-4"
         >
           <div className="flex justify-center items-center gap-3">
             {isDropdownOpen ? (
@@ -85,19 +107,95 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
             {children}
           </MobileNav>
         )}
-        <div className="hidden md:flex flex-row space-x-8 justify-start grow ml-4">
-          {config.items.map((item) => {
-            if (item.admin && user?.role !== 'admin') return null
-            if (item.authenticated && !user) return null
-            return (
-              <Link key={item.href} href={item.href}>
-                <Typography
-                  className={pathname === item.href ? 'font-semibold' : ''}
+        <div className="hidden md:flex flex-row space-x-8 justify-self-stretch grow ml-4 h-full">
+          {config.items.map((item, ix) => {
+            //test if item is of type NavGroup
+            if ((item as NavGroup).items) {
+              const group = item as NavGroup
+              return (
+                <Popover
+                  open={groupHoverState[ix]}
+                  onOpenChange={(open) => handleOpenChange(open, ix)}
+                  key={group.href}
                 >
-                  {item.title}
-                </Typography>
-              </Link>
-            )
+                  <Link
+                    href={group.href}
+                    className={`h-full m-auto self-stretch flex flex-row items-center justify-between ${
+                      groupHoverState[ix]
+                        ? 'bg-neutral-100 dark:hover:bg-cyan-500 shadow-lg'
+                        : ''
+                    }`}
+                  >
+                    <PopoverAnchor
+                      className={`w-full h-full flex flex-row items-center gap-2`}
+                      onMouseEnter={() => handleMouseEnter(ix)}
+                      onMouseLeave={() => handleMouseLeave(ix)}
+                    >
+                      <div className="flex flex-row items-center gap-2 px-4">
+                        <Typography
+                          className={`dashed-border-hover font-medium
+                          ${pathname === group.href ? 'font-semibold' : ''}`}
+                        >
+                          {group.title}
+                        </Typography>
+                        {groupHoverState[ix] ? (
+                          <ChevronDownIcon />
+                        ) : (
+                          <ChevronRightIcon />
+                        )}
+                      </div>
+                    </PopoverAnchor>
+                  </Link>
+                  <PopoverContent
+                    id="test-popover-id"
+                    sideOffset={-0.5}
+                    align="start"
+                    onMouseEnter={() => handleMouseEnter(ix)}
+                    onMouseLeave={() => handleMouseLeave(ix)}
+                    className={`w-[${group.minWidth}px] rounded-none border-none shadow-lg px-4 pt-0 flex flex-col gap-2 bg-neutral-100 dark:bg-cyan-500`}
+                  >
+                    <div
+                      className={`w-full flex flex-col space-y-2 items-stretch`}
+                    >
+                      {group.items.map((link) => (
+                        <Link
+                          href={link.href}
+                          key={link.href}
+                          className="dashed-border-hover"
+                        >
+                          <Typography
+                            className={
+                              pathname === link.href ? 'font-semibold' : ''
+                            }
+                          >
+                            {link.title}
+                          </Typography>
+                        </Link>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              )
+            } else {
+              const link = item as NavItem
+              if (link.admin && user?.role !== 'admin') return null
+              if (link.authenticated && !user) return null
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex flex-row items-center gap-2"
+                >
+                  <Typography
+                    className={`m-auto dashed-border-hover ${
+                      pathname === link.href ? 'font-semibold' : ''
+                    }`}
+                  >
+                    {link.title}
+                  </Typography>
+                </Link>
+              )
+            }
           })}
         </div>
         <div className="flex flex-row space-x-4">
@@ -114,7 +212,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost">
+              <Button variant="ghost" className="px-4 py-4">
                 <HamburgerMenuIcon />
               </Button>
             </DropdownMenuTrigger>

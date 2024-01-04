@@ -1,17 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { Recipe } from '@/types'
+import { Recipe, Menu, MenuWithRecipes } from '@/types'
 import useSearch from '@/app/store/useSearch'
 
-import { RecipeCard } from '@/components/RecipeCard'
+import { RecipeCard } from '@/components/recipe/RecipeCard'
 
 interface RecipeListProps {
   recipes: Recipe[]
   userId?: string
+  menus?: MenuWithRecipes[]
 }
 
-export function RecipeList({ recipes, userId }: RecipeListProps) {
+export function RecipeList({ menus, recipes, userId }: RecipeListProps) {
   const { search } = useSearch()
   const [forceUpdate, setForceUpdate] = useState(0)
 
@@ -34,6 +35,8 @@ export function RecipeList({ recipes, userId }: RecipeListProps) {
           key={recipe.id}
           cardKey={recipe.id}
           recipe={recipe}
+          menus={menus}
+          loggedIn={!!userId}
           isOwner={userId === recipe.authorId}
           forceUpdate={forceUpdate}
           setForceUpdate={setForceUpdate}

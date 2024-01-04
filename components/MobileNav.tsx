@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { User } from 'next-auth'
 import { cn } from '@/lib/utils'
 import { useLockBody } from '@/hooks/use-lock-body'
-import { NavConfig } from '@/types'
+import { NavConfig, NavGroup, NavItem } from '@/types'
 
 import { Typography } from './ui/typography'
 import { ActivityLogIcon } from '@radix-ui/react-icons'
@@ -33,19 +33,41 @@ export function MobileNav({
           <ActivityLogIcon className="h-6 w-6" />
           <Typography variant="h3">Recipi</Typography>
         </Link>
-        <nav className="grid grid-flow-row auto-rows-max text-sm gap-4 text-muted-foreground">
+        <nav className="grid grid-flow-row auto-rows-max text-sm gap-3 text-muted-foreground">
           {config.items.map((item) => {
-            if (item.admin && user?.role !== 'admin') return null
-            if (item.authenticated && !user) return null
+            if ((item as NavGroup).items) {
+              const group = item as NavGroup
+              return (
+                <div key={group.title}>
+                  <Link href={group.href}>
+                    <Typography variant="bold">{group.title}</Typography>
+                  </Link>
+                  <div className="grid grid-flow-row auto-rows-max">
+                    {group.items.map((item) => {
+                      if (item.admin && user?.role !== 'admin') return null
+                      if (item.authenticated && !user) return null
+                      return (
+                        <Link key={item.href} href={item.href}>
+                          <Typography>{item.title}</Typography>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            }
+            const navItem = item as NavItem
+            if (navItem.admin && user?.role !== 'admin') return null
+            if (navItem.authenticated && !user) return null
             return (
-              <Link key={item.href} href={item.href}>
-                <Typography>{item.title}</Typography>
+              <Link key={navItem.href} href={item.href}>
+                <Typography variant="bold">{navItem.title}</Typography>
               </Link>
             )
           })}
           {!!user && pathname !== '/create' && config.createVisible && (
             <Link href="/create">
-              <Typography>Create Recipe</Typography>
+              <Typography variant="bold">Create Recipe</Typography>
             </Link>
           )}
         </nav>

@@ -2,9 +2,29 @@ import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import _ from 'lodash'
 import { ABBREVIATION_TO_UNIT } from './constants'
+import { MenuListQueryParams } from '@/types/url-params'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export const getMenuQueryString = (params: MenuListQueryParams) => {
+  const { page, limit, sort, sortBy } = params
+
+  const queryParams = new URLSearchParams()
+  if (page) queryParams.append('page', page)
+  if (limit) queryParams.append('limit', limit)
+  if (sort) queryParams.append('sort', sort)
+  if (sortBy) queryParams.append('sortBy', sortBy)
+
+  return queryParams.toString()
+}
+
+// Handle names like "Mark John Doe", "Mark Doe", "Mark"
+export const getInitials = (name: string) => {
+  const names = name.split(' ')
+  const initials = names.map((n) => n[0])
+  return initials.join('').toUpperCase()
 }
 
 export const abbToUnit = (abb: string) => {
