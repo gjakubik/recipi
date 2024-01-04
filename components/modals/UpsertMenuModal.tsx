@@ -97,8 +97,6 @@ export const UpsertMenuModal = ({
     setSubmitted(false)
   }
 
-  console.log('errors', form.formState.errors)
-
   return (
     <Dialog
       modal

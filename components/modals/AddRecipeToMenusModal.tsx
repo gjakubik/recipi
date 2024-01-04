@@ -61,12 +61,6 @@ export const AddRecipeToMenusModal = ({
   }, [isSmallScreen])
 
   const onSave = async () => {
-    console.log('save')
-    console.log(selectedMenuIds)
-    console.log(menus)
-    console.log(recipe)
-    setIsSubmitting(true)
-
     selectedMenuIds?.forEach(async (menuId) => {
       const menu = menus?.find((menu) => menu.id === menuId)
       if (menu) {

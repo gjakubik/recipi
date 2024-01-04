@@ -19,8 +19,6 @@ export default async function RecipePage({ params }: RecipePageProps) {
   const user = await getCurrentUser()
   const recipe = await getRecipe(parseInt(params.recipeID))
 
-  console.log(recipe)
-
   if (!recipe) {
     redirect('/')
   }

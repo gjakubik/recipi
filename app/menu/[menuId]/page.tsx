@@ -19,7 +19,6 @@ export default async function MenuDetailsPage({
       </div>
     )
   }
-  console.log(menu)
   return (
     <div className="flex flex-col gap-4">
       <Typography variant="h2">{menu.title}</Typography>

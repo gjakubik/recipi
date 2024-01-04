@@ -219,17 +219,19 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         onSubmit={form.handleSubmit(onFormSubmit)}
         className="flex-col space-y-8"
       >
-        <Alert>
-          <AlertTitle>AI Upload</AlertTitle>
-          <AlertDescription className="flex flex-row justify-between items-center gap-4 w-full">
-            <Typography>
-              Use ChatGPT to prefill your recipe from an image or text
-            </Typography>
-            <AIUploadModal>
-              <Button>AI Upload</Button>
-            </AIUploadModal>
-          </AlertDescription>
-        </Alert>
+        {!initialValues && (
+          <Alert>
+            <AlertTitle>AI Upload</AlertTitle>
+            <AlertDescription className="flex flex-row justify-between items-center gap-4 w-full">
+              <Typography>
+                Use ChatGPT to prefill your recipe from an image or text
+              </Typography>
+              <AIUploadModal>
+                <Button>AI Upload</Button>
+              </AIUploadModal>
+            </AlertDescription>
+          </Alert>
+        )}
         <div className="flex flex-col gap-2">
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
             <div className="flex flex-col gap-2 flex-grow">
