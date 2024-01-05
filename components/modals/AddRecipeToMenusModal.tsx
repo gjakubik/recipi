@@ -32,15 +32,18 @@ import {
 import { Button } from '@/components/ui/button'
 import { ClientMenuList } from '../menu/ClientMenuList'
 import { revalidatePath } from 'next/cache'
+import { UpsertMenuModal } from './UpsertMenuModal'
 
 interface AddRecipeToMenusModalProps extends PropsWithChildren {
   recipe: Recipe
   menus?: MenuWithRecipes[]
+  user: User
 }
 
 export const AddRecipeToMenusModal = ({
   recipe,
   menus,
+  user,
   children,
 }: AddRecipeToMenusModalProps) => {
   const router = useRouter()
@@ -142,9 +145,14 @@ export const AddRecipeToMenusModal = ({
           setSelectedMenuIds={setSelectedMenuIds}
         />
         <DialogFooter>
-          <Button onClick={onSave}>
-            {isSubmitting ? 'Saving...' : 'Save'}
-          </Button>
+          <div className="w-full flex flex-row items-center justify-end gap-4">
+            <UpsertMenuModal user={user}>
+              <Button variant="ghost">Create Menu</Button>
+            </UpsertMenuModal>
+            <Button onClick={onSave}>
+              {isSubmitting ? 'Saving...' : 'Save'}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

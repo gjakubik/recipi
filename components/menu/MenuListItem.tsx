@@ -137,7 +137,7 @@ export const MenuListItem = ({
     return (
       <Link href={`/menu/${menu.id}`} key={index}>
         <div className="flex flex-col gap-2 dashed-border-hover ">
-          <div className="w-full flex flex-row sm:grid sm:grid-cols-[auto_auto] gap-4 items-center hover:cursor-pointer ">
+          <div className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 items-center hover:cursor-pointer ">
             <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-4">
               <div className="flex flex-col">
                 <Typography variant="h5">{menu.title}</Typography>

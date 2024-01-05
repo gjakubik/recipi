@@ -85,11 +85,11 @@ export const UpsertMenuModal = ({
       title: 'Success',
       description: 'Menu saved successfully',
     })
+    router.refresh()
     setIsSaving(false)
     setSubmitted(true)
     setOpen(false)
     // clear cache at 'my-menus' page
-    router.refresh()
   }
 
   const closeDialog = () => {

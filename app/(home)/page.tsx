@@ -16,7 +16,7 @@ const HomePage = async () => {
         <Search className="w-full" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <RecipeList recipes={recipes} userId={user?.id} menus={menus} />
+        <RecipeList recipes={recipes} user={user} menus={menus} />
       </div>
     </>
   )
