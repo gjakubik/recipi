@@ -74,6 +74,7 @@ export const MenuListItem = ({
           <div
             className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 justify-between items-center hover:cursor-pointer "
             onClick={() => setIsOpen(!isOpen)}
+            onTouchEnd={() => setIsOpen(!isOpen)}
           >
             <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] sm:gap-4">
               <div className="flex flex-col">
