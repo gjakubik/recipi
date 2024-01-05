@@ -4,15 +4,10 @@ import { useState, useMemo } from 'react'
 import _ from 'lodash'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, MenuWithRecipes, Recipe } from '@/types'
+import { MenuWithRecipes, Recipe } from '@/types'
 import { useResizableRef } from '@/hooks/use-resizable-observer'
 import useSearch from '@/app/store/useSearch'
-import {
-  getInitials,
-  isZero,
-  removeServings,
-  timeValueToLabel,
-} from '@/lib/utils'
+import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
 
 import {
   Card,
@@ -33,9 +28,8 @@ import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
 import { Clock, Users } from 'lucide-react'
-import { AddRecipeToMenusModal } from '../modals/AddRecipeToMenusModal'
-import { UserAvatar } from '../UserAvatar'
-import { RecipePreviewCard } from './RecipePreviewCard'
+import { AddRecipeToMenusModal } from '@/components/modals/AddRecipeToMenusModal'
+import { UserAvatar } from '@/components/UserAvatar'
 import { User } from 'next-auth'
 
 interface RecipeCardProps {

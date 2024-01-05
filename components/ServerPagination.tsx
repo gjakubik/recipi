@@ -1,5 +1,5 @@
 'use server'
-import { useRouter } from 'next/navigation'
+import Router from 'next/router'
 import { getMenuQueryString } from '@/lib/utils'
 
 import {
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/pagination'
 import { Typography } from '@/components/ui/typography'
 import { Separator } from '@/components/ui/separator'
+import { PaginationLimitInput } from '@/components/PaginationLimitInput'
 
 interface ServerPaginationProps {
   basePath: string
@@ -42,7 +43,7 @@ export const ServerPagination = ({
           {page * limit}-{Math.min(page * limit + limit, count)} of {count}
         </Typography>
         <Separator orientation="vertical" />
-        <Typography variant="pn">Placeholder</Typography>
+        <PaginationLimitInput limit={limit} mode="server" basePath={basePath} />
       </div>
       <Pagination className="w-fit mx-0">
         <PaginationContent>

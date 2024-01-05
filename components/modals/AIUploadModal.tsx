@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { Typography } from '../ui/typography'
+import { Typography } from '@/components/ui/typography'
 import { Ingredient } from '@/types'
 
 export const AIUploadModal = ({ children }: PropsWithChildren) => {

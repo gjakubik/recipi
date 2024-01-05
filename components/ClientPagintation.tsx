@@ -1,6 +1,4 @@
 'use client'
-import useMenuParams from '@/app/store/useMenuParams'
-import { getMenuQueryString } from '@/lib/utils'
 
 import {
   Pagination,
@@ -12,22 +10,21 @@ import {
 } from '@/components/ui/pagination'
 import { Typography } from '@/components/ui/typography'
 import { Separator } from '@/components/ui/separator'
+import { PaginationLimitInput } from '@/components/PaginationLimitInput'
 
 interface ClientPaginationProps {
   page: number
   limit: number
-  sort: 'asc' | 'desc' | undefined
-  sortBy: 'title' | 'creationDate' | 'updatedAt' | undefined
   setPage: (page: number) => void
+  setLimit: (limit: number) => void
   count: number
 }
 
 export const ClientPagination = ({
   page,
   limit,
-  sort,
-  sortBy,
   setPage,
+  setLimit,
   count,
 }: ClientPaginationProps) => {
   //find if the next page and the page in 2 exist
@@ -42,7 +39,7 @@ export const ClientPagination = ({
           {page * limit}-{Math.min(page * limit + limit, count)} of {count}
         </Typography>
         <Separator orientation="vertical" />
-        <Typography variant="pn">Placeholder</Typography>
+        <PaginationLimitInput limit={limit} mode="client" setLimit={setLimit} />
       </div>
       <Pagination className="w-fit mx-0">
         <PaginationContent>

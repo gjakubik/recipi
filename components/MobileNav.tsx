@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { useLockBody } from '@/hooks/use-lock-body'
 import { NavConfig, NavGroup, NavItem } from '@/types'
 
-import { Typography } from './ui/typography'
+import { Typography } from '@/components/ui/typography'
 import { ActivityLogIcon } from '@radix-ui/react-icons'
 
 interface MobileNavProps {

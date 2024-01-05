@@ -59,7 +59,7 @@ import { EditIngredientItem } from '@/components/recipe/EditIngredientItem'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
 import { EditInstructionItem } from '@/components/recipe/EditInstructionItem'
 import { AIUploadModal } from '@/components/modals/AIUploadModal'
-import { InstructionsList } from '../recipe/InstructionsList'
+import { InstructionsList } from '@/components/recipe/InstructionsList'
 import { PlusIcon } from '@radix-ui/react-icons'
 
 interface RecipeFormProps {

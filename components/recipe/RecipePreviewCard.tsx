@@ -1,14 +1,13 @@
-import { cn } from '@/lib/utils'
 import { Recipe } from '@/types'
 
 import { Typography } from '@/components/ui/typography'
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card'
+// import {
+//   HoverCard,
+//   HoverCardContent,
+//   HoverCardTrigger,
+// } from '@/components/ui/hover-card'
 import { Card, CardContent } from '@/components/ui/card'
-import { UserAvatar } from '../UserAvatar'
+import { UserAvatar } from '@/components/UserAvatar'
 
 interface RecipePreviewCardProps {
   recipe: Recipe

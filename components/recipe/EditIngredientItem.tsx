@@ -16,7 +16,7 @@ import {
   Cross1Icon,
   Pencil1Icon,
 } from '@radix-ui/react-icons'
-import { IngredientUnitSelect } from './IngredientUnitSelect'
+import { IngredientUnitSelect } from '@/components/recipe/IngredientUnitSelect'
 
 interface EditIngredientItemProps {
   id: string

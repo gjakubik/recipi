@@ -3,7 +3,7 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { User } from 'next-auth'
-import { Recipe, Menu, MenuWithRecipes } from '@/types'
+import { Recipe, MenuWithRecipes } from '@/types'
 import { updateMenu } from '@/lib/db/api'
 import useMenuParams from '@/app/store/useMenuParams'
 import { useMediaQuery } from '@/hooks/use-media-query'
@@ -17,7 +17,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog'
 import {
   Drawer,
@@ -30,9 +29,8 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { Button } from '@/components/ui/button'
-import { ClientMenuList } from '../menu/ClientMenuList'
-import { revalidatePath } from 'next/cache'
-import { UpsertMenuModal } from './UpsertMenuModal'
+import { ClientMenuList } from '@/components/menu/ClientMenuList'
+import { UpsertMenuModal } from '@/components/modals/UpsertMenuModal'
 
 interface AddRecipeToMenusModalProps extends PropsWithChildren {
   recipe: Recipe
@@ -111,7 +109,7 @@ export const AddRecipeToMenusModal = ({
             menus={menus}
             recipe={recipe}
             count={menus?.length || 0}
-            params={{ limit, page, sort, sortBy, setPage }}
+            params={{ limit, page, sort, sortBy, setPage, setLimit }}
             selectedMenuIds={selectedMenuIds}
             setSelectedMenuIds={setSelectedMenuIds}
           />
@@ -140,7 +138,7 @@ export const AddRecipeToMenusModal = ({
           menus={menus}
           recipe={recipe}
           count={menus?.length || 0}
-          params={{ limit, page, sort, sortBy, setPage }}
+          params={{ limit, page, sort, sortBy, setPage, setLimit }}
           selectedMenuIds={selectedMenuIds}
           setSelectedMenuIds={setSelectedMenuIds}
         />

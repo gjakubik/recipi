@@ -1,13 +1,6 @@
-import { User } from 'next-auth'
-import { getMenus } from '@/lib/db/api'
-
-import { Typography } from '@/components/ui/typography'
-
-import { Separator } from '@/components/ui/separator'
-import { ServerPagination } from '../ServerPagination'
-import { Menu, MenuWithRecipes } from '@/types'
-import { ClientPagination } from '../ClientPagintation'
-import { MenuListItem } from './MenuListItem'
+import { ServerPagination } from '@/components/ServerPagination'
+import { MenuWithRecipes } from '@/types'
+import { MenuListItem } from '@/components/menu/MenuListItem'
 
 interface ServerMenuListProps {
   menus?: MenuWithRecipes[]

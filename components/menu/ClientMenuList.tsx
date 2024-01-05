@@ -1,11 +1,9 @@
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import { cn } from '@/lib/utils'
-import { Menu, MenuWithRecipes, Recipe } from '@/types'
+import { MenuWithRecipes, Recipe } from '@/types'
 
-import { Typography } from '@/components/ui/typography'
-import { Separator } from '@/components/ui/separator'
-import { ClientPagination } from '../ClientPagintation'
-import { MenuListItem } from './MenuListItem'
+import { ClientPagination } from '@/components/ClientPagintation'
+import { MenuListItem } from '@/components/menu/MenuListItem'
 
 interface ClientMenuListProps {
   menus?: MenuWithRecipes[]
@@ -19,6 +17,7 @@ interface ClientMenuListProps {
     sort: 'asc' | 'desc' | undefined
     sortBy: 'title' | 'creationDate' | 'updatedAt' | undefined
     setPage: (value: number) => void
+    setLimit: (value: number) => void
   }
   className?: string
 }
@@ -29,9 +28,10 @@ export const ClientMenuList = ({
   selectedMenuIds,
   setSelectedMenuIds,
   count,
-  params: { page, limit, sort, sortBy, setPage },
+  params,
   className,
 }: ClientMenuListProps) => {
+  const { page, limit } = params
   //TODO: Add message for if there are no menus, and have a button to create one
   const shownMenus = useMemo(
     () => menus?.slice(page * limit, page * limit + limit) || menus,
@@ -59,14 +59,7 @@ export const ClientMenuList = ({
           setSelectedMenuIds={setSelectedMenuIds}
         />
       ))}
-      <ClientPagination
-        page={page}
-        limit={limit}
-        sort={sort}
-        sortBy={sortBy}
-        setPage={setPage}
-        count={count}
-      />
+      <ClientPagination {...params} count={count} />
     </div>
   )
 }
