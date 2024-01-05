@@ -92,11 +92,21 @@ export const MenuListItem = ({
                 </Typography>
               </div>
             </div>
-            {isOpen ? (
-              <EyeIcon width={16} className="min-w-[16px]" />
-            ) : (
-              <EyeOffIcon width={16} className="min-w-[16px]" />
-            )}
+            <div className="flex items-center justify-center">
+              <Button
+                variant="ghost"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setIsOpen(!isOpen)
+                }}
+              >
+                {isOpen ? (
+                  <EyeIcon width={16} className="min-w-[16px]" />
+                ) : (
+                  <EyeOffIcon width={16} className="min-w-[16px]" />
+                )}
+              </Button>
+            </div>
           </div>
         </div>
         <motion.div
