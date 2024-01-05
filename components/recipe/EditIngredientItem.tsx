@@ -5,18 +5,19 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
 import { RecipeFormValues } from '@/lib/validations/recipe'
+import { useMediaQuery } from '@/hooks/use-media-query'
 
 import { Button } from '@/components/ui/button'
 import { FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { AddNoteModal } from '@/components/modals/AddNoteModal'
 import { FormInput } from '@/components/FormInput'
+import { IngredientUnitSelect } from '@/components/recipe/IngredientUnitSelect'
 import {
   HamburgerMenuIcon,
   PlusIcon,
   Cross1Icon,
   Pencil1Icon,
 } from '@radix-ui/react-icons'
-import { IngredientUnitSelect } from '@/components/recipe/IngredientUnitSelect'
 
 interface EditIngredientItemProps {
   id: string
@@ -40,6 +41,8 @@ export const EditIngredientItem = ({
   const form = useFormContext()
   const { attributes, listeners, node, setNodeRef, transform, transition } =
     useSortable({ id })
+
+  const isTinyScreen = useMediaQuery(475)
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -71,8 +74,8 @@ export const EditIngredientItem = ({
           <div className="flex flex-row gap-2 items-end w-full">
             <FormInput
               name={`ingredients.${index}.amount`}
-              className="w-[60px]"
-              label="Amount"
+              className="w-[40px] xs:w-[60px]"
+              label={isTinyScreen ? 'Qty' : 'Amount'}
               labelClassName={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
               onBlur={() => {
                 updateIngredient(index, {
