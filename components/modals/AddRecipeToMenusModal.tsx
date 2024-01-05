@@ -114,9 +114,14 @@ export const AddRecipeToMenusModal = ({
             setSelectedMenuIds={setSelectedMenuIds}
           />
           <DrawerFooter>
-            <Button onClick={onSave}>
-              {isSubmitting ? 'Saving...' : 'Save'}
-            </Button>
+            <div className="w-full flex flex-row items-center justify-end gap-4">
+              <UpsertMenuModal user={user}>
+                <Button variant="ghost">Create Menu</Button>
+              </UpsertMenuModal>
+              <Button onClick={onSave}>
+                {isSubmitting ? 'Saving...' : 'Save'}
+              </Button>
+            </div>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
