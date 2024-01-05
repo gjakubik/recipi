@@ -92,12 +92,11 @@ export const MenuListItem = ({
                 </Typography>
               </div>
             </div>
-            <div className="flex items-center justify-center">
-                {isOpen ? (
-                  <EyeIcon width={16} className="min-w-[16px]" />
-                ) : (
-                  <EyeOffIcon width={16} className="min-w-[16px]" />
-                )}
+            {isOpen ? (
+              <EyeIcon width={16} className="min-w-[16px]" />
+            ) : (
+              <EyeOffIcon width={16} className="min-w-[16px]" />
+            )}
           </div>
         </div>
         <motion.div
