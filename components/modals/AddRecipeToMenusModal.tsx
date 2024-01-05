@@ -53,7 +53,7 @@ export const AddRecipeToMenusModal = ({
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isSmallScreen = useMediaQuery(700)
+  const isSmallScreen = useMediaQuery(840)
 
   useEffect(() => {
     if (isSmallScreen) {
@@ -136,7 +136,7 @@ export const AddRecipeToMenusModal = ({
           Select a menu to add your recipe to
         </DialogDescription>
         <ClientMenuList
-          className="w-full md:min-w-[800px] px-6 md:px-12 py-4"
+          className="w-full px-6 md:px-12 py-4"
           menus={menus}
           recipe={recipe}
           count={menus?.length || 0}

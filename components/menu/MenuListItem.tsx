@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { MenuWithRecipes, Recipe } from '@/types'
 import { motion } from 'framer-motion'
+import { useToast } from '@/components/ui/use-toast'
 
 import {
   Carousel,
@@ -34,15 +35,21 @@ export const MenuListItem = ({
   selectedMenuIds,
   setSelectedMenuIds,
 }: MenuListItemProps) => {
+  const { toast } = useToast()
   const [isOpen, setIsOpen] = useState(false)
-  const [checked, setChecked] = useState(
-    menu.recipes?.some((id) => id === recipe?.id)
-  )
+  const [checked, setChecked] = useState(false)
 
   const isSelecting = setSelectedMenuIds !== undefined
 
   const handleCheckedChange = (checked: boolean) => {
     if (checked) {
+      if (menu.recipes?.some((id) => id === recipe?.id)) {
+        toast({
+          title: 'Recipe already in menu',
+          description: 'This recipe is already in this menu',
+        })
+        return
+      }
       !selectedMenuIds?.includes(menu.id) &&
         setSelectedMenuIds?.(
           selectedMenuIds ? [menu.id, ...selectedMenuIds] : [menu.id]
@@ -55,19 +62,15 @@ export const MenuListItem = ({
 
   if (isSelecting) {
     return (
-      <div className="flex flex-col dashed-border-hover " key={index}>
+      <div className="flex flex-col w-full" key={index}>
         <div className="w-full flex flex-row gap-4 items-center">
-          {isSelecting && (
-            <Checkbox
-              checked={checked}
-              onCheckedChange={(checked) =>
-                handleCheckedChange(
-                  checked === 'indeterminate' ? false : checked
-                )
-              }
-              className="hover:cursor-pointer"
-            />
-          )}
+          <Checkbox
+            checked={checked}
+            onCheckedChange={(checked) =>
+              handleCheckedChange(checked === 'indeterminate' ? false : checked)
+            }
+            className="hover:cursor-pointer"
+          />
           <div
             className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 justify-between items-center hover:cursor-pointer "
             onClick={() => setIsOpen(!isOpen)}
@@ -104,7 +107,7 @@ export const MenuListItem = ({
         >
           {isOpen && (
             <div
-              className="w-full px-12"
+              className="w-[720px] lg:w-[750px] px-12"
               // onClick={() => setIsOpen(!isOpen)}
             >
               <Carousel
@@ -117,7 +120,7 @@ export const MenuListItem = ({
                   {menu.recipeInfo?.map((recipe, index) => (
                     <CarouselItem
                       key={index}
-                      className="basis-1/2 lg:basis-1/3"
+                      className="basis-1/2 md:basis-1/3"
                     >
                       <div className="p-1">
                         <RecipePreviewCard recipe={recipe} />
