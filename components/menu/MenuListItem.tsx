@@ -97,6 +97,7 @@ export const MenuListItem = ({
                 variant="ghost"
                 onClick={(e) => {
                   e.preventDefault()
+                  e.stopPropagation()
                   setIsOpen(!isOpen)
                 }}
               >
