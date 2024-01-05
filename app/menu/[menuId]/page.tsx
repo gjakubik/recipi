@@ -1,3 +1,4 @@
+import { getCurrentUser } from '@/lib/session'
 import { getMenu } from '@/lib/db/api'
 import { Typography } from '@/components/ui/typography'
 import { UserAvatar } from '@/components/UserAvatar'
@@ -10,6 +11,7 @@ interface MenuDetailsPageProps {
 export default async function MenuDetailsPage({
   params: { menuId },
 }: MenuDetailsPageProps) {
+  const user = await getCurrentUser()
   const menu = await getMenu(parseInt(menuId))
 
   if (!menu) {
@@ -19,7 +21,6 @@ export default async function MenuDetailsPage({
       </div>
     )
   }
-  console.log(menu)
   return (
     <div className="flex flex-col gap-4">
       <Typography variant="h2">{menu.title}</Typography>
@@ -29,8 +30,11 @@ export default async function MenuDetailsPage({
         <Typography>No Menus Here. Add some!</Typography>
       ) : (
         <div className="grid grid-cols-1 xs:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-x-4 md:gap-x-8">
-          {/* @ts-ignore */}
-          <RecipeList recipes={menu.recipeInfo.filter((r) => !!r)} />
+          <RecipeList
+            user={user}
+            // @ts-ignore
+            recipes={menu.recipeInfo.filter((r) => !!r)}
+          />
         </div>
       )}
     </div>

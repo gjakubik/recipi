@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { signIn, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 import { NavConfig, NavGroup, NavItem } from '@/types'
+import { cn } from '@/lib/utils'
 
 import { Separator } from '@/components/ui/separator'
 import { Typography } from '@/components/ui/typography'
@@ -152,7 +153,12 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
                     align="start"
                     onMouseEnter={() => handleMouseEnter(ix)}
                     onMouseLeave={() => handleMouseLeave(ix)}
-                    className={`w-[${group.minWidth}px] rounded-none border-none shadow-lg px-4 pt-0 flex flex-col gap-2 bg-neutral-100 dark:bg-cyan-500`}
+                    className={cn(
+                      `rounded-none border-none shadow-lg px-4 pt-0 flex flex-col gap-2 bg-neutral-100 dark:bg-cyan-500`,
+                      {
+                        'w-[120px]': group.minWidth === 'small',
+                      }
+                    )}
                   >
                     <div
                       className={`w-full flex flex-col space-y-2 items-stretch`}

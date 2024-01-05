@@ -9,7 +9,7 @@ export type NavItem = {
 export type NavGroup = {
   title: string
   href: string
-  minWidth: string | number
+  minWidth: 'small' | 'medium' | 'large'
   items: NavItem[]
 }
 

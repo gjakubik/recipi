@@ -32,7 +32,6 @@ export const AIUploadModal = ({ children }: PropsWithChildren) => {
   const onSave = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     setIsSaving(true)
-    console.log(inputJSON)
     let data
     try {
       data = JSON.parse(inputJSON)

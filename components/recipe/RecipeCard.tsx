@@ -36,14 +36,14 @@ import { Clock, Users } from 'lucide-react'
 import { AddRecipeToMenusModal } from '../modals/AddRecipeToMenusModal'
 import { UserAvatar } from '../UserAvatar'
 import { RecipePreviewCard } from './RecipePreviewCard'
+import { User } from 'next-auth'
 
 interface RecipeCardProps {
   recipe: Recipe
   menus?: MenuWithRecipes[]
   cardKey: string | number
   onClick?: () => void
-  loggedIn?: boolean
-  isOwner?: boolean
+  user?: User
   forceUpdate: number
   setForceUpdate: (value: number) => void
 }
@@ -53,8 +53,7 @@ export const RecipeCard = ({
   menus,
   cardKey,
   onClick,
-  loggedIn,
-  isOwner,
+  user,
   forceUpdate,
   setForceUpdate,
 }: RecipeCardProps) => {
@@ -71,6 +70,9 @@ export const RecipeCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dimensions.height, recipe.ingredients, showAllIngredients, forceUpdate]
   )
+
+  const loggedIn = !!user
+  const isOwner = user?.id === recipe.authorId
 
   return (
     <Card
@@ -189,7 +191,7 @@ export const RecipeCard = ({
           </Button>
         )}
         {loggedIn && (
-          <AddRecipeToMenusModal recipe={recipe} menus={menus}>
+          <AddRecipeToMenusModal user={user} recipe={recipe} menus={menus}>
             <Button size="sm">Add to Menu</Button>
           </AddRecipeToMenusModal>
         )}

@@ -26,6 +26,7 @@ import { Form, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { Typography } from '@/components/ui/typography'
 import { FormInput } from '@/components/FormInput'
+import serverRevalidatePath from '@/app/_actions/revalidateAction'
 
 interface UpsertMenuModalProps extends PropsWithChildren {
   existingMenu?: MenuFormValues
@@ -85,19 +86,17 @@ export const UpsertMenuModal = ({
       title: 'Success',
       description: 'Menu saved successfully',
     })
+    serverRevalidatePath(window.location.pathname)
     setIsSaving(false)
     setSubmitted(true)
     setOpen(false)
     // clear cache at 'my-menus' page
-    router.refresh()
   }
 
   const closeDialog = () => {
     setOpen(false)
     setSubmitted(false)
   }
-
-  console.log('errors', form.formState.errors)
 
   return (
     <Dialog

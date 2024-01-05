@@ -33,7 +33,7 @@ A step-by-step series of examples that tell you how to get a development environ
 1. Clone the repository:
 
 ```bash
-git clone [URL to the repository]
+git clone https://github.com/gjakubik/recipi.git
 ```
 
 2. Navigate to the project directory:

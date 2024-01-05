@@ -35,7 +35,7 @@ export const ClientMenuList = ({
   //TODO: Add message for if there are no menus, and have a button to create one
   const shownMenus = useMemo(
     () => menus?.slice(page * limit, page * limit + limit) || menus,
-    [page, limit]
+    [page, limit, menus]
   )
 
   return (
