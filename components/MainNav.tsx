@@ -134,7 +134,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
                     >
                       <div className="flex flex-row items-center gap-2 px-4">
                         <Typography
-                          className={`dashed-border-hover font-medium
+                          className={`dashed-border-hover
                           ${pathname === group.href ? 'font-semibold' : ''}`}
                         >
                           {group.title}

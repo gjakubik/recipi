@@ -59,7 +59,7 @@ import { EditIngredientItem } from '@/components/recipe/EditIngredientItem'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
 import { EditInstructionItem } from '@/components/recipe/EditInstructionItem'
 import { AIUploadModal } from '@/components/modals/AIUploadModal'
-import { InstructionsList } from '../recipe/InstructionsList'
+import { InstructionsList } from '@/components/recipe/InstructionsList'
 import { PlusIcon } from '@radix-ui/react-icons'
 
 interface RecipeFormProps {
@@ -222,12 +222,12 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         {!initialValues && (
           <Alert>
             <AlertTitle>AI Upload</AlertTitle>
-            <AlertDescription className="flex flex-row justify-between items-center gap-4 w-full">
+            <AlertDescription className="flex flex-col xs:flex-row justify-between items-center gap-4 w-full">
               <Typography>
                 Use ChatGPT to prefill your recipe from an image or text
               </Typography>
               <AIUploadModal>
-                <Button>AI Upload</Button>
+                <Button className="min-w-[100px]">AI Upload</Button>
               </AIUploadModal>
             </AlertDescription>
           </Alert>

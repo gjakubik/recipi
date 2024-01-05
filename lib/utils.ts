@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import _ from 'lodash'
-import { ABBREVIATION_TO_UNIT } from './constants'
+import { ABBREVIATION_TO_UNIT, MENU_QUERY } from './constants'
 import { MenuListQueryParams } from '@/types/url-params'
 
 export function cn(...inputs: ClassValue[]) {
@@ -12,10 +12,13 @@ export const getMenuQueryString = (params: MenuListQueryParams) => {
   const { page, limit, sort, sortBy } = params
 
   const queryParams = new URLSearchParams()
-  if (page) queryParams.append('page', page)
-  if (limit) queryParams.append('limit', limit)
-  if (sort) queryParams.append('sort', sort)
-  if (sortBy) queryParams.append('sortBy', sortBy)
+  if (page && page !== MENU_QUERY.PAGE.toString())
+    queryParams.append('page', page)
+  if (limit && limit !== MENU_QUERY.LIMIT.toString())
+    queryParams.append('limit', limit)
+  if (sort && sort !== MENU_QUERY.SORT) queryParams.append('sort', sort)
+  if (sortBy && sortBy !== MENU_QUERY.SORT_BY)
+    queryParams.append('sortBy', sortBy)
 
   return queryParams.toString()
 }

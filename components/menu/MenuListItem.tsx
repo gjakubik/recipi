@@ -62,7 +62,7 @@ export const MenuListItem = ({
 
   if (isSelecting) {
     return (
-      <div className="flex flex-col w-full" key={index}>
+      <div className="flex flex-col w-full dashed-border-hover" key={index}>
         <div className="w-full flex flex-row gap-4 items-center">
           <Checkbox
             checked={checked}
@@ -72,10 +72,10 @@ export const MenuListItem = ({
             className="hover:cursor-pointer"
           />
           <div
-            className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 justify-between items-center hover:cursor-pointer "
+            className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 justify-between items-center hover:cursor-pointer"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-4">
+            <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] sm:gap-4">
               <div className="flex flex-col">
                 <Typography variant="h5">{menu.title}</Typography>
                 <Typography variant="pn" className="line-clamp-2">
@@ -107,30 +107,36 @@ export const MenuListItem = ({
         >
           {isOpen && (
             <div
-              className="w-[720px] lg:w-[750px] px-12"
+              className="w-full md:w-[720px] lg:w-[750px] px-10"
               // onClick={() => setIsOpen(!isOpen)}
             >
-              <Carousel
-                opts={{
-                  align: 'start',
-                }}
-                className="w-full"
-              >
-                <CarouselContent>
-                  {menu.recipeInfo?.map((recipe, index) => (
-                    <CarouselItem
-                      key={index}
-                      className="basis-1/2 md:basis-1/3"
-                    >
-                      <div className="p-1">
-                        <RecipePreviewCard recipe={recipe} />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
+              {menu.recipeInfo && menu.recipeInfo.length !== 0 ? (
+                <Carousel
+                  opts={{
+                    align: 'start',
+                  }}
+                  className="w-full"
+                >
+                  <CarouselContent className="-ml-1 md:-ml-2">
+                    {menu.recipeInfo.map((recipe, index) => (
+                      <CarouselItem
+                        key={index}
+                        className="pl-1 md:pl-2 basis-1/2 sm:basis-1/3"
+                      >
+                        <div className="p-1">
+                          <RecipePreviewCard recipe={recipe} />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="-left-10" />
+                  <CarouselNext className="-right-10" />
+                </Carousel>
+              ) : (
+                <Typography className="text-center">
+                  No recipes in this menu
+                </Typography>
+              )}
             </div>
           )}
         </motion.div>
@@ -140,7 +146,7 @@ export const MenuListItem = ({
     return (
       <Link href={`/menu/${menu.id}`} key={index}>
         <div className="flex flex-col gap-2 dashed-border-hover ">
-          <div className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 items-center hover:cursor-pointer ">
+          <div className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 items-center justify-between hover:cursor-pointer ">
             <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-4">
               <div className="flex flex-col">
                 <Typography variant="h5">{menu.title}</Typography>
@@ -185,30 +191,36 @@ export const MenuListItem = ({
           >
             {isOpen && (
               <div
-                className="w-full px-12"
+                className="w-full px-10"
                 // onClick={() => setIsOpen(!isOpen)}
               >
-                <Carousel
-                  opts={{
-                    align: 'start',
-                  }}
-                  className="w-full"
-                >
-                  <CarouselContent>
-                    {menu.recipeInfo?.map((recipe, index) => (
-                      <CarouselItem
-                        key={index}
-                        className="md:basis-1/2 lg:basis-1/3"
-                      >
-                        <div className="p-1">
-                          <RecipePreviewCard recipe={recipe} />
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </Carousel>
+                {menu.recipeInfo && menu.recipeInfo.length !== 0 ? (
+                  <Carousel
+                    opts={{
+                      align: 'start',
+                    }}
+                    className="w-full"
+                  >
+                    <CarouselContent className="-ml-1 md:-ml-2">
+                      {menu.recipeInfo.map((recipe, index) => (
+                        <CarouselItem
+                          key={index}
+                          className="pl-1 md:pl-2 basis-1/2 sm:basis-1/3"
+                        >
+                          <div className="p-1">
+                            <RecipePreviewCard recipe={recipe} />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="-left-10" />
+                    <CarouselNext className="-right-10" />
+                  </Carousel>
+                ) : (
+                  <Typography className="text-center">
+                    No recipes in this menu
+                  </Typography>
+                )}
               </div>
             )}
           </motion.div>
