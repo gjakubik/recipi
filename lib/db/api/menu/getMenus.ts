@@ -3,7 +3,7 @@
 import { db } from '@/lib/db'
 import { menus, users } from '@/lib/db/schema'
 import { getRecipe } from '@/lib/db/api/'
-import { Menu, MenuWithRecipes } from '@/types'
+import { GetMenusResult } from '@/types'
 import { eq, sql, ilike, or, and, asc, desc } from 'drizzle-orm'
 
 interface GetMenus {
@@ -13,11 +13,6 @@ interface GetMenus {
   sort?: 'asc' | 'desc'
   limit?: number
   page?: number
-}
-
-type GetMenusResult = {
-  menus: MenuWithRecipes[]
-  count: number
 }
 
 const getMenus = async ({

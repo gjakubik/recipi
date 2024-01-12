@@ -3,10 +3,11 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { User } from 'next-auth'
-import { Recipe, MenuWithRecipes } from '@/types'
-import { updateMenu } from '@/lib/db/api'
+import { Recipe, GetMenusResult } from '@/types'
+import { getMenu, updateMenu } from '@/lib/db/api'
 import useMenuParams from '@/app/store/useMenuParams'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { MENU_QUERY } from '@/lib/constants'
 
 import { useToast } from '@/components/ui/use-toast'
 import {
@@ -34,36 +35,45 @@ import { UpsertMenuModal } from '@/components/modals/UpsertMenuModal'
 
 interface AddRecipeToMenusModalProps extends PropsWithChildren {
   recipe: Recipe
-  menus?: MenuWithRecipes[]
+  initialMenus: GetMenusResult
   user: User
+  ctlIsOpen?: boolean
+  setCtlIsOpen?: (value: boolean) => void
 }
 
 export const AddRecipeToMenusModal = ({
   recipe,
-  menus,
+  initialMenus,
   user,
+  ctlIsOpen,
+  setCtlIsOpen,
   children,
 }: AddRecipeToMenusModalProps) => {
   const router = useRouter()
   const { toast } = useToast()
-  const { limit, page, sort, sortBy, setPage, setLimit } = useMenuParams()
+  const [menuParams, setMenuParams] = useState({
+    ...MENU_QUERY,
+    authorId: user.id,
+  })
   const [selectedMenuIds, setSelectedMenuIds] = useState<number[] | undefined>()
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isSmallScreen = useMediaQuery(840)
 
+  const isParentControlled = setCtlIsOpen !== undefined
+
   useEffect(() => {
     if (isSmallScreen) {
-      setLimit(3)
+      setMenuParams({ ...menuParams, limit: 3 })
     } else {
-      setLimit(6)
+      setMenuParams({ ...menuParams, limit: 6 })
     }
   }, [isSmallScreen])
 
   const onSave = async () => {
     selectedMenuIds?.forEach(async (menuId) => {
-      const menu = menus?.find((menu) => menu.id === menuId)
+      const menu = await getMenu(menuId)
       if (menu) {
         const updatedMenu = {
           ...menu,
@@ -71,7 +81,16 @@ export const AddRecipeToMenusModal = ({
         }
         console.log(updatedMenu)
         try {
-          await updateMenu(updatedMenu)
+          await updateMenu({
+            id: updatedMenu.id,
+            title: updatedMenu.title,
+            description: updatedMenu.description,
+            authorId: updatedMenu.authorId,
+            recipes: updatedMenu.recipes,
+            creationDate: updatedMenu.creationDate,
+            updatedAt: updatedMenu.updatedAt,
+            author: updatedMenu.author,
+          })
         } catch (error) {
           console.log(error)
           toast({
@@ -87,14 +106,17 @@ export const AddRecipeToMenusModal = ({
       title: 'Success',
       description: `Successfully added recipe ${recipe.title} to menus`,
     })
-    router.refresh()
     setIsSubmitting(false)
-    setIsOpen(false)
+    isParentControlled ? setCtlIsOpen(false) : setIsOpen(false)
   }
 
   if (isSmallScreen) {
     return (
-      <Drawer modal open={isOpen} onOpenChange={setIsOpen}>
+      <Drawer
+        modal
+        open={isParentControlled ? ctlIsOpen : isOpen}
+        onOpenChange={isParentControlled ? setCtlIsOpen : setIsOpen}
+      >
         <DrawerTrigger asChild>{children}</DrawerTrigger>
         <DrawerContent>
           <DrawerClose />
@@ -106,10 +128,18 @@ export const AddRecipeToMenusModal = ({
           </DrawerHeader>
           <ClientMenuList
             className="w-full px-6 md:px-12 py-4"
-            menus={menus}
+            initialData={initialMenus}
             recipe={recipe}
-            count={menus?.length || 0}
-            params={{ limit, page, sort, sortBy, setPage, setLimit }}
+            params={{
+              authorId: menuParams.authorId,
+              limit: menuParams.limit,
+              page: menuParams.page,
+              sort: menuParams.sort,
+              sortBy: menuParams.sortBy,
+              setPage: (value) => setMenuParams({ ...menuParams, page: value }),
+              setLimit: (value) =>
+                setMenuParams({ ...menuParams, limit: value }),
+            }}
             selectedMenuIds={selectedMenuIds}
             setSelectedMenuIds={setSelectedMenuIds}
           />
@@ -129,7 +159,11 @@ export const AddRecipeToMenusModal = ({
   }
 
   return (
-    <Dialog modal open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      modal
+      open={isParentControlled ? ctlIsOpen : isOpen}
+      onOpenChange={isParentControlled ? setCtlIsOpen : setIsOpen}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="w-full max-w-[900px]">
         <DialogHeader>
@@ -140,10 +174,17 @@ export const AddRecipeToMenusModal = ({
         </DialogDescription>
         <ClientMenuList
           className="w-full px-6 md:px-12 py-4"
-          menus={menus}
+          initialData={initialMenus}
           recipe={recipe}
-          count={menus?.length || 0}
-          params={{ limit, page, sort, sortBy, setPage, setLimit }}
+          params={{
+            authorId: menuParams.authorId,
+            limit: menuParams.limit,
+            page: menuParams.page,
+            sort: menuParams.sort,
+            sortBy: menuParams.sortBy,
+            setPage: (value) => setMenuParams({ ...menuParams, page: value }),
+            setLimit: (value) => setMenuParams({ ...menuParams, limit: value }),
+          }}
           selectedMenuIds={selectedMenuIds}
           setSelectedMenuIds={setSelectedMenuIds}
         />

@@ -1,5 +1,6 @@
 export { default as createRecipe } from './recipe/createRecipe'
 export { default as getRecipe } from './recipe/getRecipe'
+export { default as getRecipes } from './recipe/getRecipes'
 export { default as getAllRecipes } from './recipe/getAllRecipes'
 export { default as getAuthorRecipes } from './recipe/getAuthorRecipes'
 export { default as updateRecipe } from './recipe/updateRecipe'

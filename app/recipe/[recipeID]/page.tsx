@@ -1,15 +1,16 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { getRecipe } from '@/lib/db/api'
+import { getRecipe, getMenus } from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
 import { timeValueToLabel, isZero } from '@/lib/utils'
+import { MENU_QUERY } from '@/lib/constants'
 
-import { Button } from '@/components/ui/button'
 import { Typography } from '@/components/ui/typography'
+
 import { IngredientsList } from '@/components/recipe/IngredientsList'
-import { DeleteRecipeButton } from '@/components/recipe/DeleteRecipeButton'
 import { InstructionsList } from '@/components/recipe/InstructionsList'
 import { Clock, Users } from 'lucide-react'
+import { RecipeActionsDropdown } from './RecipeActionsDropdown'
 
 interface RecipePageProps {
   params: { recipeID: string }
@@ -18,6 +19,7 @@ interface RecipePageProps {
 export default async function RecipePage({ params }: RecipePageProps) {
   const user = await getCurrentUser()
   const recipe = await getRecipe(parseInt(params.recipeID))
+  const initialMenus = await getMenus({ authorId: user?.id, ...MENU_QUERY })
 
   if (!recipe) {
     redirect('/')
@@ -27,7 +29,12 @@ export default async function RecipePage({ params }: RecipePageProps) {
     <>
       <div className="flex flex-row justify-between justify-items-center w-full">
         <Typography variant="h3">{recipe.title}</Typography>
-        <div className="flex flex-row gap-4">
+        <RecipeActionsDropdown
+          user={user}
+          recipe={recipe}
+          initialMenus={initialMenus}
+        />
+        {/* <div className="flex flex-row gap-4">
           {user?.id === recipe.authorId && (
             <>
               <Button asChild>
@@ -36,7 +43,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
               <DeleteRecipeButton recipeId={recipe.id} />
             </>
           )}
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col gap-0">
         {!isZero(recipe.preparationTime) && (

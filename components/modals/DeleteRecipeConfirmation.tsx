@@ -13,14 +13,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 
-interface DeleteRecipeButtonProps {
+interface DeleteRecipeButtonProps extends React.PropsWithChildren {
   recipeId: number
+  open?: boolean
+  setOpen?: (value: boolean) => void
 }
 
-export const DeleteRecipeButton = ({ recipeId }: DeleteRecipeButtonProps) => {
+export const DeleteRecipeConfirmation = ({
+  recipeId,
+  open,
+  setOpen,
+  children,
+}: DeleteRecipeButtonProps) => {
   const router = useRouter()
   const { toast } = useToast()
   const handleDelete = async () => {
@@ -40,11 +46,32 @@ export const DeleteRecipeButton = ({ recipeId }: DeleteRecipeButtonProps) => {
     }
   }
 
+  // Controlled modal
+  if (setOpen !== undefined) {
+    return (
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              recipe.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    )
+  }
+
   return (
     <AlertDialog>
-      <Button variant="destructive" asChild>
-        <AlertDialogTrigger>Delete</AlertDialogTrigger>
-      </Button>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

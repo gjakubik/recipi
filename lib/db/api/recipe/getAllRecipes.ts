@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { recipes, users } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm'
 
 const getAllRecipes = async () => {
   const allRecipes = await db
@@ -31,6 +31,7 @@ const getAllRecipes = async () => {
       },
     })
     .from(recipes)
+    .orderBy(desc(recipes.creationDate))
     .innerJoin(users, eq(recipes.authorId, users.id))
 
   return allRecipes
