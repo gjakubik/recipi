@@ -54,7 +54,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { TimePicker } from '@/components/ui/time-picker'
 import { EditPreviewTabs } from '@/components/EditPreviewTabs'
 import { FormInput } from '@/components/FormInput'
-import { DeleteRecipeButton } from '@/components/recipe/DeleteRecipeButton'
+import { DeleteRecipeConfirmation } from '@/components/modals/DeleteRecipeConfirmation'
 import { EditIngredientItem } from '@/components/recipe/EditIngredientItem'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
 import { EditInstructionItem } from '@/components/recipe/EditInstructionItem'
@@ -490,7 +490,11 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
             </Button>
             <Button type="submit">{initialValues ? 'Save' : 'Create'}</Button>
           </div>
-          {initialValues && <DeleteRecipeButton recipeId={initialValues.id!} />}
+          {initialValues?.id && (
+            <DeleteRecipeConfirmation recipeId={initialValues.id}>
+              <Button variant="destructive">Delete</Button>
+            </DeleteRecipeConfirmation>
+          )}
         </div>
       </form>
     </Form>

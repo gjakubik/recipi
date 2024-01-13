@@ -29,17 +29,17 @@ const MyMenusPage = async ({ searchParams }: MyMenuPageProps) => {
   } = searchParams
 
   const page =
-    typeof pageParam === 'string' ? parseInt(pageParam) : MENU_QUERY.PAGE
+    typeof pageParam === 'string' ? parseInt(pageParam) : MENU_QUERY.page
   const limit =
-    typeof limitParam === 'string' ? parseInt(limitParam) : MENU_QUERY.LIMIT
+    typeof limitParam === 'string' ? parseInt(limitParam) : MENU_QUERY.limit
   const sort =
     typeof sortParam === 'string'
       ? (sortParam as 'asc' | 'desc' | undefined)
-      : MENU_QUERY.SORT
+      : MENU_QUERY.sort
   const sortBy =
     typeof sortByParam === 'string'
       ? (sortByParam as 'title' | 'creationDate' | 'updatedAt' | undefined)
-      : MENU_QUERY.SORT_BY
+      : MENU_QUERY.sortBy
 
   const { menus, count } = await getMenus({
     authorId: user.id,

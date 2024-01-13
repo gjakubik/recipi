@@ -1,27 +1,40 @@
 import { create } from 'zustand'
+import { MenuSortBy, SortOptions } from '@/types'
 import { MENU_QUERY } from '@/lib/constants'
 
 interface MenuParamsState {
+  authorId?: string
   limit: number
   page: number
-  sort: 'asc' | 'desc'
-  sortBy: 'title' | 'creationDate' | 'updatedAt'
+  sort: SortOptions
+  sortBy: MenuSortBy
+  setAuthorId: (authorId: string) => void
   setLimit: (limit: number) => void
   setPage: (page: number) => void
-  setSort: (sort: 'asc' | 'desc') => void
-  setSortBy: (sortBy: 'title' | 'creationDate' | 'updatedAt') => void
+  setSort: (sort: SortOptions) => void
+  setSortBy: (sortBy: MenuSortBy) => void
+  reset: () => void
 }
 
 const useMenuParams = create<MenuParamsState>((set) => ({
-  limit: MENU_QUERY.LIMIT,
-  page: MENU_QUERY.PAGE,
-  sort: MENU_QUERY.SORT,
-  sortBy: MENU_QUERY.SORT_BY,
+  auhtorId: undefined,
+  limit: MENU_QUERY.limit,
+  page: MENU_QUERY.page,
+  sort: MENU_QUERY.sort,
+  sortBy: MENU_QUERY.sortBy,
+  setAuthorId: (authorId: string) => set({ authorId }),
   setLimit: (limit: number) => set({ limit }),
   setPage: (page: number) => set({ page }),
-  setSort: (sort: 'asc' | 'desc') => set({ sort }),
-  setSortBy: (sortBy: 'title' | 'creationDate' | 'updatedAt') =>
-    set({ sortBy }),
+  setSort: (sort: SortOptions) => set({ sort }),
+  setSortBy: (sortBy: MenuSortBy) => set({ sortBy }),
+  reset: () =>
+    set({
+      authorId: undefined,
+      limit: MENU_QUERY.limit,
+      page: MENU_QUERY.page,
+      sort: MENU_QUERY.sort,
+      sortBy: MENU_QUERY.sortBy,
+    }),
 }))
 
 export default useMenuParams

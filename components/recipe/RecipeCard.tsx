@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import _ from 'lodash'
 import Link from 'next/link'
 import Image from 'next/image'
-import { MenuWithRecipes, Recipe } from '@/types'
+import { GetMenusResult, Recipe } from '@/types'
 import { useResizableRef } from '@/hooks/use-resizable-observer'
 import useSearch from '@/app/store/useSearch'
 import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
@@ -34,7 +34,7 @@ import { User } from 'next-auth'
 
 interface RecipeCardProps {
   recipe: Recipe
-  menus?: MenuWithRecipes[]
+  initialMenus: GetMenusResult
   cardKey: string | number
   onClick?: () => void
   user?: User
@@ -44,7 +44,7 @@ interface RecipeCardProps {
 
 export const RecipeCard = ({
   recipe,
-  menus,
+  initialMenus,
   cardKey,
   onClick,
   user,
@@ -185,7 +185,11 @@ export const RecipeCard = ({
           </Button>
         )}
         {loggedIn && (
-          <AddRecipeToMenusModal user={user} recipe={recipe} menus={menus}>
+          <AddRecipeToMenusModal
+            user={user}
+            recipe={recipe}
+            initialMenus={initialMenus}
+          >
             <Button size="sm">Add to Menu</Button>
           </AddRecipeToMenusModal>
         )}

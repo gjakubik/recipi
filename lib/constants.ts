@@ -1,15 +1,17 @@
-interface MenuQuery {
-  LIMIT: number
-  PAGE: number
-  SORT: 'asc' | 'desc'
-  SORT_BY: 'title' | 'creationDate' | 'updatedAt'
+import { RecipeQuery, MenuQuery } from '@/types'
+
+export const RECIPE_QUERY: RecipeQuery = {
+  limit: 6,
+  page: 0,
+  sort: 'desc',
+  sortBy: 'updatedAt',
 }
 
 export const MENU_QUERY: MenuQuery = {
-  LIMIT: 5,
-  PAGE: 0,
-  SORT: 'desc',
-  SORT_BY: 'updatedAt',
+  limit: 5,
+  page: 0,
+  sort: 'desc',
+  sortBy: 'updatedAt',
 }
 
 export const DIFFICULTY_OPTIONS = [

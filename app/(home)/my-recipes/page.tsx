@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
-import { getAuthorRecipes } from '@/lib/db/api'
-import { RecipeList } from '@/components/recipe/RecipeList'
+import { getRecipes, getMenus } from '@/lib/db/api'
+import { RECIPE_QUERY, MENU_QUERY } from '@/lib/constants'
+import { RecipeListPaginated } from '@/components/recipe/RecipeListPaginated'
 import { getCurrentUser } from '@/lib/session'
 import { Search } from '@/components/Search'
 
@@ -12,16 +13,26 @@ const HomePage = async () => {
     redirect('/')
   }
 
-  const recipes = await getAuthorRecipes({ userId: user.id })
+  const initialRecipes = await getRecipes({
+    authorId: user.id,
+    ...RECIPE_QUERY,
+  })
+  const initialMenus = await getMenus({
+    authorId: user?.id,
+    ...MENU_QUERY,
+  })
 
   return (
     <>
       <div className="flex sm:hidden w-full pb-6">
         <Search className="w-full" />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <RecipeList recipes={recipes} user={user} />
-      </div>
+      <RecipeListPaginated
+        initialData={initialRecipes}
+        user={user}
+        initialMenus={initialMenus}
+        showUserRecipes
+      />
     </>
   )
 }

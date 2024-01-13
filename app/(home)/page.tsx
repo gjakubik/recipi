@@ -1,23 +1,25 @@
 import * as React from 'react'
-import { getAllRecipes, getMenus } from '@/lib/db/api'
-import { RecipeList } from '@/components/recipe/RecipeList'
+import { getRecipes, getMenus } from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
 import { Search } from '@/components/Search'
-import { Menu } from '@/types'
+import { MENU_QUERY, RECIPE_QUERY } from '@/lib/constants'
+import { RecipeListPaginated } from '@/components/recipe/RecipeListPaginated'
 
 const HomePage = async () => {
   const user = await getCurrentUser()
-  const recipes = await getAllRecipes()
-  const { menus } = await getMenus({ authorId: user?.id, limit: 0 })
+  const initialData = await getRecipes({ ...RECIPE_QUERY })
+  const initialMenus = await getMenus({ authorId: user?.id, ...MENU_QUERY })
 
   return (
     <>
       <div className="flex sm:hidden w-full pb-6">
         <Search className="w-full" />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <RecipeList recipes={recipes} user={user} menus={menus} />
-      </div>
+      <RecipeListPaginated
+        initialData={initialData}
+        user={user}
+        initialMenus={initialMenus}
+      />
     </>
   )
 }
