@@ -6,9 +6,10 @@ import { timeValueToLabel, isZero } from '@/lib/utils'
 import { MENU_QUERY } from '@/lib/constants'
 
 import { Typography } from '@/components/ui/typography'
-
+import { Button } from '@/components/ui/button'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
 import { InstructionsList } from '@/components/recipe/InstructionsList'
+import { AddRecipeToMenusModal } from '@/components/modals/AddRecipeToMenusModal'
 import { Clock, Users } from 'lucide-react'
 import { RecipeActionsDropdown } from './RecipeActionsDropdown'
 
@@ -29,11 +30,20 @@ export default async function RecipePage({ params }: RecipePageProps) {
     <>
       <div className="flex flex-row justify-between justify-items-center w-full">
         <Typography variant="h3">{recipe.title}</Typography>
-        <RecipeActionsDropdown
-          user={user}
-          recipe={recipe}
-          initialMenus={initialMenus}
-        />
+        <div className="flex flex-row gap-4">
+          {!!user && (
+            <AddRecipeToMenusModal
+              user={user}
+              recipe={recipe}
+              initialMenus={initialMenus}
+            >
+              <Button>Add To Menu</Button>
+            </AddRecipeToMenusModal>
+          )}
+          {user?.id === recipe.authorId && (
+            <RecipeActionsDropdown user={user} recipe={recipe} />
+          )}
+        </div>
         {/* <div className="flex flex-row gap-4">
           {user?.id === recipe.authorId && (
             <>

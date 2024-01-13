@@ -18,6 +18,7 @@ import { Typography } from '@/components/ui/typography'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RecipePreviewCard } from '@/components/recipe/RecipePreviewCard'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { Toggle } from '../ui/toggle'
 
 interface MenuListItemProps {
   index: number
@@ -92,11 +93,13 @@ export const MenuListItem = ({
                 </Typography>
               </div>
             </div>
-            {isOpen ? (
-              <EyeIcon width={16} className="min-w-[16px]" />
-            ) : (
-              <EyeOffIcon width={16} className="min-w-[16px]" />
-            )}
+            <Toggle pressed={isOpen}>
+              {isOpen ? (
+                <EyeIcon width={16} className="min-w-[16px]" />
+              ) : (
+                <EyeOffIcon width={16} className="min-w-[16px]" />
+              )}
+            </Toggle>
           </div>
         </div>
         <motion.div
@@ -165,8 +168,8 @@ export const MenuListItem = ({
               </div>
             </div>
             <div className="flex items-center justify-center">
-              <Button
-                variant="ghost"
+              <Toggle
+                pressed={isOpen}
                 onClick={(e) => {
                   e.preventDefault()
                   setIsOpen(!isOpen)
@@ -177,7 +180,7 @@ export const MenuListItem = ({
                 ) : (
                   <EyeOffIcon width={16} className="min-w-[16px]" />
                 )}
-              </Button>
+              </Toggle>
             </div>
           </div>
           <motion.div

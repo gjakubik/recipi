@@ -123,7 +123,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
                     href={group.href}
                     className={`h-full m-auto self-stretch flex flex-row items-center justify-between ${
                       groupHoverState[ix]
-                        ? 'bg-neutral-100 dark:hover:bg-cyan-500 shadow-lg'
+                        ? 'bg-neutral-100 dark:bg-secondary shadow-lg'
                         : ''
                     }`}
                   >
@@ -154,7 +154,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
                     onMouseEnter={() => handleMouseEnter(ix)}
                     onMouseLeave={() => handleMouseLeave(ix)}
                     className={cn(
-                      `rounded-none border-none shadow-lg px-4 pt-0 flex flex-col gap-2 bg-neutral-100 dark:bg-cyan-500`,
+                      `rounded-none border-none shadow-lg px-4 pt-0 flex flex-col gap-2 bg-neutral-100 dark:bg-secondary`,
                       {
                         'w-[120px]': group.minWidth === 'small',
                       }
@@ -207,7 +207,11 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
         <div className="flex flex-row space-x-4">
           {config.searchVisible && <Search className="hidden sm:flex" />}
           {!!user && pathname !== '/create' && config.createVisible && (
-            <Button asChild className="hidden sm:flex min-w-[110px]">
+            <Button
+              asChild
+              variant="secondary"
+              className="hidden sm:flex min-w-[110px]"
+            >
               <Link href="/create">Add Recipe</Link>
             </Button>
           )}

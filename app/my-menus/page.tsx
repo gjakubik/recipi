@@ -9,6 +9,8 @@ import { UpsertMenuModal } from '@/components/modals/UpsertMenuModal'
 import { ServerMenuList } from '@/components/menu/ServerMenuList'
 import { MENU_QUERY } from '@/lib/constants'
 import { Plus } from 'lucide-react'
+import { ClientMenuList } from '@/components/menu/ClientMenuList'
+import { MenuListController } from './MenuListController'
 
 interface MyMenuPageProps {
   searchParams: { [key: string]: string | string[] | undefined }
@@ -34,14 +36,14 @@ const MyMenusPage = async ({ searchParams }: MyMenuPageProps) => {
     typeof limitParam === 'string' ? parseInt(limitParam) : MENU_QUERY.limit
   const sort =
     typeof sortParam === 'string'
-      ? (sortParam as 'asc' | 'desc' | undefined)
+      ? (sortParam as 'asc' | 'desc')
       : MENU_QUERY.sort
   const sortBy =
     typeof sortByParam === 'string'
-      ? (sortByParam as 'title' | 'creationDate' | 'updatedAt' | undefined)
+      ? (sortByParam as 'title' | 'creationDate' | 'updatedAt')
       : MENU_QUERY.sortBy
 
-  const { menus, count } = await getMenus({
+  const initialData = await getMenus({
     authorId: user.id,
     page,
     limit,
@@ -65,11 +67,7 @@ const MyMenusPage = async ({ searchParams }: MyMenuPageProps) => {
         {/* <UpsertMenuModal user={user}>
           <Button>Create Menu</Button>
         </UpsertMenuModal> */}
-        <ServerMenuList
-          menus={menus}
-          count={count}
-          params={{ page, limit, sort, sortBy }}
-        />
+        <MenuListController initialData={initialData} user={user} />
       </div>
     </>
   )
