@@ -10,6 +10,7 @@ export default async function MenuPageLayout({
   children: React.ReactNode
 }) {
   const user = await getCurrentUser()
+
   return (
     <div className="flex flex-col h-min-screen">
       <MainNav user={user} config={defaultNavConfig} />

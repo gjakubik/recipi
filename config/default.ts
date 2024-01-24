@@ -25,10 +25,5 @@ export const defaultNavConfig: NavConfig = {
         },
       ],
     },
-    {
-      title: 'Admin',
-      href: '/admin',
-      admin: true,
-    },
   ],
 }

@@ -1,5 +1,7 @@
 import { RecipeQuery, MenuQuery } from '@/types'
 
+export const FEATURE_FLAG_OPTIONS = ['canSeeGroceryList'] as const
+
 export const RECIPE_QUERY: RecipeQuery = {
   limit: 6,
   page: 0,

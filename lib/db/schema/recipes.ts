@@ -9,6 +9,7 @@ import {
   json,
   index,
   time,
+  boolean,
 } from 'drizzle-orm/mysql-core'
 
 // Recipes Table
@@ -32,6 +33,7 @@ export const recipes = mysqlTable(
       .notNull(),
     instructions: json('instructions').$type<string[]>().default([]).notNull(),
     creationDate: timestamp('creation_date', { mode: 'string' }).defaultNow(),
+    isPrivate: boolean('private').default(false).notNull(),
     updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
     authorId: varchar('author_id', { length: 255 }).notNull(),
   },
@@ -39,6 +41,7 @@ export const recipes = mysqlTable(
     return {
       recipesId: primaryKey(table.id),
       authorIdx: index('author_idx').on(table.authorId),
+      isPrivateIdx: index('is_private_idx').on(table.isPrivate),
     }
   }
 )

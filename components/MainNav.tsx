@@ -248,6 +248,11 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
                   </DropdownMenuSubContent>
                 </DropdownMenuPortal>
               </DropdownMenuSub>
+              {user?.role === 'admin' && (
+                <DropdownMenuItem>
+                  <Link href="/admin">Admin</Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => (!!user ? signOut() : handleSignIn('google'))}

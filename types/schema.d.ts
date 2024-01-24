@@ -10,13 +10,23 @@ import {
   verificationTokens,
   accounts,
   menus,
+  featureFlags,
 } from '../lib/db/schema'
+import { FEATURE_FLAG_OPTIONS } from '../lib/constants'
+
+export type FeatureFlagOtions = (typeof FEATURE_FLAG_OPTIONS)[number]
+
+export type FeatureFlags = Record<FeatureFlagOtions, boolean>
+
+export type FeatureFlag = InferModel<typeof featureFlags>
+
+export type InsertFeatureFlag = InferModel<typeof featureFlags, 'insert'>
 
 export type Menu = InferModel<typeof menus>
 
 export type MenuWithRecipes = Menu & {
   author: User
-  recipeInfo?: Recipe[]
+  recipeInfo?: (Recipe | undefined)[]
 }
 
 export type InsertMenu = InferModel<typeof menus, 'insert'>
@@ -31,6 +41,15 @@ export type Ingredient = {
   amount?: string
   unit?: string
 }
+
+export type CombinedIngredient = Ingredient &
+  (
+    | {
+        combined: true
+        ingredients: Ingredient[]
+      }
+    | { combined: false }
+  )
 
 export type IngredientForm = {
   id?: string | number
