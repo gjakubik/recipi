@@ -23,9 +23,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // get next env info, turn off analytics if in dev mode
   const isDev = process.env.NODE_ENV === 'development'
-  console.log('isDev', isDev)
 
   const user = await getCurrentUser()
   const featureFlags = await getFeatureFlags()
