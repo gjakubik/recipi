@@ -127,7 +127,7 @@ export const MenuListItem = ({
                         className="pl-1 md:pl-2 basis-1/2 sm:basis-1/3"
                       >
                         <div className="p-1">
-                          <RecipePreviewCard recipe={recipe} />
+                          {recipe && <RecipePreviewCard recipe={recipe} />}
                         </div>
                       </CarouselItem>
                     ))}
@@ -211,7 +211,7 @@ export const MenuListItem = ({
                           className="pl-1 md:pl-2 basis-1/2 sm:basis-1/3"
                         >
                           <div className="p-1">
-                            <RecipePreviewCard recipe={recipe} />
+                            {recipe && <RecipePreviewCard recipe={recipe} />}
                           </div>
                         </CarouselItem>
                       ))}
