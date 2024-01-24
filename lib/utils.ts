@@ -42,6 +42,24 @@ export const abbToUnit = (abb: string) => {
   }
 }
 
+// eg 1 1/2 + 1 2/3 = 3 1/6
+export const addFractions = (a: string, b: string) => {
+  const [aWhole, aNumerator, aDenominator] = a.split(' ')
+  const [bWhole, bNumerator, bDenominator] = b.split(' ')
+
+  let whole = parseInt(aWhole) + parseInt(bWhole)
+  let numerator = parseInt(aNumerator) * parseInt(bDenominator)
+  numerator += parseInt(bNumerator) * parseInt(aDenominator)
+  let denominator = parseInt(aDenominator) * parseInt(bDenominator)
+
+  if (numerator >= denominator) {
+    whole += Math.floor(numerator / denominator)
+    numerator = numerator % denominator
+  }
+
+  return `${whole} ${numerator}/${denominator}`
+}
+
 export const fractionToFloat = (str: string) => {
   // Split the string into parts using space as a delimiter
   const parts = _.split(str, ' ')
@@ -64,6 +82,37 @@ export const fractionToFloat = (str: string) => {
   })
 
   return result
+}
+
+// default to partials where the whole number is in front
+export const floatToFraction = (value: number) => {
+  //if it is not a float, return the integer
+  if (value % 1 === 0) return value.toString()
+  const tolerance = 1.0e-6
+  let h1 = 1
+  let h2 = 0
+  let k1 = 0
+  let k2 = 1
+  let b = value
+  do {
+    const a = Math.floor(b)
+    let aux = h1
+    h1 = a * h1 + h2
+    h2 = aux
+    aux = k1
+    k1 = a * k1 + k2
+    k2 = aux
+    b = 1 / (b - a)
+  } while (Math.abs(value - h1 / k1) > value * tolerance)
+
+  // Extract the whole number part if it exists
+  const wholePart = Math.floor(h1 / k1)
+  const fractionPartNumerator = h1 % k1
+
+  // Format the output
+  return wholePart > 0
+    ? `${wholePart} ${fractionPartNumerator}/${k1}`
+    : `${fractionPartNumerator}/${k1}`
 }
 
 export const removeServings = (s: string) => {

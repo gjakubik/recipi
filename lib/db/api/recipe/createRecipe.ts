@@ -17,6 +17,7 @@ const createRecipe = async (recipe: RecipeForm) => {
     difficultyLevel: recipe.difficultyLevel,
     ingredients: recipe.ingredients,
     instructions: recipe.instructions,
+    isPrivate: recipe.isPrivate,
     authorId: recipe.authorId,
   })
 

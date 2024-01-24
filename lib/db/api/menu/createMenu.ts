@@ -2,7 +2,6 @@
 
 import { db } from '@/lib/db'
 import { menus } from '@/lib/db/schema'
-import { sql } from 'drizzle-orm'
 import { InsertMenu } from '@/types'
 import getMenu from './getMenu'
 

@@ -12,5 +12,9 @@ export const adminNavConfig: NavConfig = {
       title: 'Tools',
       href: '/admin/tools',
     },
+    {
+      title: 'Feature Flags',
+      href: '/admin/feature-flags',
+    },
   ],
 }

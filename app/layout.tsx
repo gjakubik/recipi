@@ -7,6 +7,9 @@ import { Toaster } from '@/components/ui/toaster'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { QueryProvider } from '@/providers/QueryProvider'
+import { getFeatureFlags } from '@/lib/db/api'
+import { FeatureFlagProvider } from '@/providers/FeatureFlagProvider'
+import { getCurrentUser } from '@/lib/session'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,11 +18,14 @@ export const metadata: Metadata = {
   description: 'Simple recipe database',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const user = await getCurrentUser()
+  const featureFlags = await getFeatureFlags()
+
   return (
     // <html lang="en" className="h-screen">
     <html lang="en" suppressHydrationWarning>
@@ -31,7 +37,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            <TooltipProvider delayDuration={1200}>{children}</TooltipProvider>
+            <TooltipProvider delayDuration={1200}>
+              <FeatureFlagProvider user={user} featureFlags={featureFlags}>
+                {children}
+              </FeatureFlagProvider>
+            </TooltipProvider>
             <Toaster />
             <Analytics />
             <SpeedInsights />

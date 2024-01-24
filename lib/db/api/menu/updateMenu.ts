@@ -2,10 +2,10 @@
 
 import { db } from '@/lib/db'
 import { menus } from '@/lib/db/schema'
-import { SQL, eq, sql } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import getMenu from './getMenu'
 import { MenuFormValues } from '@/lib/validations/menu'
-import { Menu, MenuWithRecipes } from '@/types'
+import { MenuWithRecipes } from '@/types'
 
 const updateMenu = async (menu: MenuFormValues | MenuWithRecipes) => {
   if (!menu.id) {

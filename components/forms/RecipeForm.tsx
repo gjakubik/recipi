@@ -172,7 +172,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         }`,
       })
       router.refresh()
-      router.push(`/recipe/${upsertedRecipe.id}`)
+      // Go to previous page
+      router.back()
     } catch (error) {
       toast({
         title: `Error ${initialValues ? 'updating' : 'creating'} recipe`,

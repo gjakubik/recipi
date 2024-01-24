@@ -2,6 +2,7 @@
 
 import { db } from '@/lib/db'
 import { recipes, users } from '@/lib/db/schema'
+import { getCurrentUser } from '@/lib/session'
 import { GetRecipesResult } from '@/types'
 import { eq, sql, ilike, or, and, asc, desc } from 'drizzle-orm'
 
@@ -22,6 +23,7 @@ const getRecipes = async ({
   limit = 10,
   page = 0,
 }: GetRecipes): Promise<GetRecipesResult> => {
+  const user = await getCurrentUser()
   return await db.transaction(async (tx) => {
     const recipeList = await tx
       .select({
@@ -36,6 +38,7 @@ const getRecipes = async ({
         difficultyLevel: recipes.difficultyLevel,
         instructions: recipes.instructions,
         ingredients: recipes.ingredients,
+        isPrivate: recipes.isPrivate,
         creationDate: recipes.creationDate,
         updatedAt: recipes.updatedAt,
         authorId: recipes.authorId,
@@ -58,6 +61,10 @@ const getRecipes = async ({
           or(
             search ? ilike(recipes.title, `%${search}%`) : undefined,
             search ? ilike(recipes.description, `%${search}%`) : undefined
+          ),
+          or(
+            eq(recipes.isPrivate, false),
+            user ? eq(recipes.authorId, user.id) : undefined
           ),
           authorId ? eq(recipes.authorId, authorId) : undefined
         )

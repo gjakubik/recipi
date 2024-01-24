@@ -1,16 +1,23 @@
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { getRecipe, getMenus } from '@/lib/db/api'
+import { getRecipe, getMenus, updateRecipePrivacy } from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
 import { timeValueToLabel, isZero } from '@/lib/utils'
 import { MENU_QUERY } from '@/lib/constants'
 
 import { Typography } from '@/components/ui/typography'
-
+import { Button } from '@/components/ui/button'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
 import { InstructionsList } from '@/components/recipe/InstructionsList'
-import { Clock, Users } from 'lucide-react'
+import { AddRecipeToMenusModal } from '@/components/modals/AddRecipeToMenusModal'
+import { Clock, LockKeyhole, UnlockKeyhole, Users } from 'lucide-react'
 import { RecipeActionsDropdown } from './RecipeActionsDropdown'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { revalidatePath } from 'next/cache'
+import { RecipePrivacyButton } from './RecipePrivacyButton'
 
 interface RecipePageProps {
   params: { recipeID: string }
@@ -28,22 +35,35 @@ export default async function RecipePage({ params }: RecipePageProps) {
   return (
     <>
       <div className="flex flex-row justify-between justify-items-center w-full">
-        <Typography variant="h3">{recipe.title}</Typography>
-        <RecipeActionsDropdown
-          user={user}
-          recipe={recipe}
-          initialMenus={initialMenus}
-        />
-        {/* <div className="flex flex-row gap-4">
-          {user?.id === recipe.authorId && (
-            <>
-              <Button asChild>
-                <Link href={`/recipe/${recipe.id}/edit`}>Edit</Link>
-              </Button>
-              <DeleteRecipeButton recipeId={recipe.id} />
-            </>
+        <div className="flex flex-col">
+          <Typography variant="extralight" className="">
+            {recipe.isPrivate ? 'Secret' : 'Public'}
+          </Typography>
+          <Typography variant="h3">{recipe.title}</Typography>
+          <Typography variant="light">By {recipe.author.name}</Typography>
+          {recipe.updatedAt && (
+            <Typography variant="light">
+              Updated: {new Date(recipe.updatedAt).toLocaleDateString()}
+            </Typography>
           )}
-        </div> */}
+        </div>
+        <div className="flex flex-row gap-4">
+          {!!user && (
+            <AddRecipeToMenusModal
+              user={user}
+              recipe={recipe}
+              initialMenus={initialMenus}
+            >
+              <Button className="min-w-[121px]">Add To Menu</Button>
+            </AddRecipeToMenusModal>
+          )}
+          {user?.id === recipe.authorId && (
+            <div className="flex flex-row">
+              <RecipePrivacyButton recipe={recipe} />
+              <RecipeActionsDropdown user={user} recipe={recipe} />
+            </div>
+          )}
+        </div>
       </div>
       <div className="flex flex-col gap-0">
         {!isZero(recipe.preparationTime) && (

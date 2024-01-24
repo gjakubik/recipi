@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { GetMenusResult, Recipe } from '@/types'
+import { Recipe } from '@/types'
 import { User } from 'next-auth'
 
 import {
@@ -10,11 +10,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { AddRecipeToMenusModal } from '@/components/modals/AddRecipeToMenusModal'
 import { DeleteRecipeConfirmation } from '@/components/modals/DeleteRecipeConfirmation'
 
 import { MoreHorizontal } from 'lucide-react'
@@ -22,15 +20,12 @@ import { MoreHorizontal } from 'lucide-react'
 interface RecipeActionsDropdownProps {
   user?: User
   recipe: Recipe
-  initialMenus: GetMenusResult
 }
 
 export const RecipeActionsDropdown = ({
   user,
   recipe,
-  initialMenus,
 }: RecipeActionsDropdownProps) => {
-  const [addToMenuOpen, setAddToMenuOpen] = useState(false)
   const [deleteConfOpen, setDeleteConfOpen] = useState(false)
 
   return (
@@ -43,14 +38,8 @@ export const RecipeActionsDropdown = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          {!!user && (
-            <DropdownMenuItem onClick={() => setAddToMenuOpen(true)}>
-              Add to menu
-            </DropdownMenuItem>
-          )}
           {user?.id === recipe.author.id && (
             <>
-              <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <Link href={`/recipe/${recipe.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
@@ -66,15 +55,6 @@ export const RecipeActionsDropdown = ({
         open={deleteConfOpen}
         setOpen={setDeleteConfOpen}
       />
-      {!!user && (
-        <AddRecipeToMenusModal
-          ctlIsOpen={addToMenuOpen}
-          setCtlIsOpen={setAddToMenuOpen}
-          user={user}
-          recipe={recipe}
-          initialMenus={initialMenus}
-        />
-      )}
     </>
   )
 }

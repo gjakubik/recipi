@@ -1,12 +1,14 @@
 import { db } from '@/lib/db'
 import { recipes, users } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { getCurrentUser } from '@/lib/session'
+import { eq, and, or } from 'drizzle-orm'
 
 interface GetAuthorRecipes {
   userId: string
 }
 
 const getAuthorRecipes = async ({ userId }: GetAuthorRecipes) => {
+  const user = await getCurrentUser()
   const allRecipes = await db
     .select({
       id: recipes.id,
@@ -20,6 +22,7 @@ const getAuthorRecipes = async ({ userId }: GetAuthorRecipes) => {
       difficultyLevel: recipes.difficultyLevel,
       ingredients: recipes.ingredients,
       instructions: recipes.instructions,
+      isPrivate: recipes.isPrivate,
       creationDate: recipes.creationDate,
       updatedAt: recipes.updatedAt,
       authorId: recipes.authorId,
@@ -35,7 +38,15 @@ const getAuthorRecipes = async ({ userId }: GetAuthorRecipes) => {
       },
     })
     .from(recipes)
-    .where(eq(recipes.authorId, userId))
+    .where(
+      and(
+        eq(recipes.authorId, userId),
+        or(
+          eq(recipes.isPrivate, false),
+          user ? eq(recipes.authorId, user.id) : undefined
+        )
+      )
+    )
     .innerJoin(users, eq(recipes.authorId, users.id))
 
   return allRecipes

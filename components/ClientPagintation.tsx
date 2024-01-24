@@ -27,10 +27,10 @@ export const ClientPagination = ({
   setLimit,
   count,
 }: ClientPaginationProps) => {
-  //find if the next page and the page in 2 exist
-  //if they do, display the ellipsis
-  const showNext = (page + 1) * limit < count
-  const showEllipsis = (page + 2) * limit < count
+  const totalPages = Math.ceil(count / limit)
+  const showPreviousEllipsis = page > 1
+  const showNextEllipsis = page < totalPages - 2
+  const showNext = page < totalPages - 1
 
   return (
     <div className="w-full flex flex-col-reverse sm:flex-row justify-between gap-4 mt-4">
@@ -48,25 +48,30 @@ export const ClientPagination = ({
             onClick={() => setPage(page - 1)}
           />
 
-          {page > 1 && <PaginationEllipsis />}
-
-          {page > 0 && (
-            <ClientPaginationButton onClick={() => setPage(page - 1)}>
-              {page - 1}
+          {/* First page */}
+          {page !== 0 && (
+            <ClientPaginationButton onClick={() => setPage(0)}>
+              0
             </ClientPaginationButton>
           )}
 
+          {/* Ellipsis after first page */}
+          {showPreviousEllipsis && <PaginationEllipsis />}
+
+          {/* Current and adjacent pages */}
           <ClientPaginationButton onClick={() => setPage(page)} isActive>
             {page}
           </ClientPaginationButton>
 
-          {showNext && (
-            <ClientPaginationButton onClick={() => setPage(page + 1)}>
-              {page + 1}
+          {/* Ellipsis before last page */}
+          {showNextEllipsis && <PaginationEllipsis />}
+
+          {/* Last page */}
+          {page !== totalPages - 1 && (
+            <ClientPaginationButton onClick={() => setPage(totalPages - 1)}>
+              {totalPages - 1}
             </ClientPaginationButton>
           )}
-
-          {showEllipsis && <PaginationEllipsis />}
 
           <ClientPaginationNext
             disabled={!showNext}

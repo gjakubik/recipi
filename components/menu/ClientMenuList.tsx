@@ -1,3 +1,5 @@
+'use client'
+
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { GetMenusResult, MenuWithRecipes, Recipe } from '@/types'
@@ -8,7 +10,7 @@ import { useMenuQuery } from '@/hooks/use-menu-query'
 
 interface ClientMenuListProps {
   initialData: GetMenusResult
-  recipe: Recipe
+  recipe?: Recipe
   selectedMenuIds?: number[]
   setSelectedMenuIds?: Dispatch<SetStateAction<number[] | undefined>>
   params: {
@@ -44,7 +46,7 @@ export const ClientMenuList = ({
           index={i}
           recipe={recipe}
           menu={
-            selectedMenuIds?.includes(menu.id)
+            recipe && selectedMenuIds?.includes(menu.id)
               ? {
                   ...menu,
                   recipeInfo: menu.recipeInfo

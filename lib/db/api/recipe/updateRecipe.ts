@@ -23,6 +23,7 @@ const updateRecipe = async (recipe: RecipeForm) => {
       servings: recipe.servings,
       difficultyLevel: recipe.difficultyLevel,
       ingredients: recipe.ingredients,
+      isPrivate: recipe.isPrivate,
       instructions: recipe.instructions,
       authorId: recipe.authorId,
     })

@@ -4,10 +4,11 @@ import { PropsWithChildren, useState } from 'react'
 import { User } from 'next-auth'
 import { useRouter } from 'next/navigation'
 import _ from 'lodash'
-import { useForm, UseFormSetValue } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { MenuFormValues, menuFormSchema } from '@/lib/validations/menu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createMenu, updateMenu } from '@/lib/db/api'
+import { Recipe } from '@/types'
 
 import {
   Dialog,
@@ -16,11 +17,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Recipe } from '@/types'
 import { useToast } from '@/components/ui/use-toast'
 import { Form, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
@@ -81,6 +79,8 @@ export const UpsertMenuModal = ({
         description: 'Something went wrong',
         variant: 'destructive',
       })
+      setIsSaving(false)
+      return
     }
     toast({
       title: 'Success',
