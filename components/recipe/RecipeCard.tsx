@@ -94,7 +94,9 @@ export const RecipeCard = ({
                   />
                 </AspectRatio>
               )}
-              <CardDescription>{recipe.description}</CardDescription>
+              <CardDescription className="line-clamp-3">
+                {recipe.description}
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-2 justify-between grow">
               <div className="flex flex-col gap-1">
