@@ -113,7 +113,6 @@ export const IngredientsList = ({
               {ingredient.note}
             </Typography>
           </div>
-          <div className="col-span-3 border-1 border-b long-dashed-border border-gray-700 mt-[-1px] pt-0 mb-4" />
         </React.Fragment>
       ))}
     </div>

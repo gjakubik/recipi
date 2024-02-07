@@ -23,6 +23,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const isDev = process.env.NODE_ENV === 'development'
+
   const user = await getCurrentUser()
   const featureFlags = await getFeatureFlags()
 
@@ -43,8 +45,8 @@ export default async function RootLayout({
               </FeatureFlagProvider>
             </TooltipProvider>
             <Toaster />
-            <Analytics />
-            <SpeedInsights />
+            {!isDev && <Analytics />}
+            {!isDev && <SpeedInsights />}
           </QueryProvider>
         </ThemeProvider>
       </body>

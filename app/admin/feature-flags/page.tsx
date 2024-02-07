@@ -12,15 +12,24 @@ export default async function FeatureFlagPage() {
   const featureFlags = await getFeatureFlags()
 
   //redirect to home if not logged in
-  if (!user) {
-    return <Typography>Please log in to create a recipe</Typography>
+  if (user?.role !== 'admin') {
+    return <Typography>Please log in to edit feature flags</Typography>
   }
 
   return (
     <>
       <Typography variant="h2">Feature Flags</Typography>
       {featureFlags.length !== 0 ? (
-        <FeatureFlagList featureFlags={featureFlags} />
+        <>
+          <FeatureFlagList featureFlags={featureFlags} />
+          <div className="flex justify-end">
+            <UpsertFeatureFlagModal>
+              <Button className="flex gap-2">
+                <Plus width={16} /> Feature Flag
+              </Button>
+            </UpsertFeatureFlagModal>
+          </div>
+        </>
       ) : (
         <div className="h-72 flex flex-col gap-2 items-center justify-center">
           {/* Add modal that allows for upload of Feature Flag */}

@@ -9,4 +9,9 @@ export const TOOL_LIST = [
     description: 'Upload a JSON list of menus',
     href: '/admin/tools/bulk-menu-upload',
   },
+  {
+    name: 'Parse Tester',
+    description: 'Test arbitrary parsing logic on any input text',
+    href: '/admin/tools/parse-tester',
+  },
 ]

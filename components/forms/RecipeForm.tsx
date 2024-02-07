@@ -26,6 +26,7 @@ import { createRecipe, updateRecipe } from '@/lib/db/api'
 import { RecipeFormValues, recipeFormSchema } from '@/lib/validations/recipe'
 import { UNITS } from '@/lib/constants'
 import { abbToUnit } from '@/lib/utils'
+import { useFeatureFlags } from '@/hooks/use-feature-flags'
 
 import {
   Form,
@@ -58,6 +59,7 @@ import { DeleteRecipeConfirmation } from '@/components/modals/DeleteRecipeConfir
 import { EditIngredientItem } from '@/components/recipe/EditIngredientItem'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
 import { EditInstructionItem } from '@/components/recipe/EditInstructionItem'
+import { AIUploadModalNew } from '@/components/modals/AIUploadModalNew'
 import { AIUploadModal } from '@/components/modals/AIUploadModal'
 import { InstructionsList } from '@/components/recipe/InstructionsList'
 import { PlusIcon } from '@radix-ui/react-icons'
@@ -70,6 +72,7 @@ interface RecipeFormProps {
 export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
   const router = useRouter()
   const { toast } = useToast()
+  const { canSeeNewAIRecipeUpload } = useFeatureFlags()
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeFormSchema),
     defaultValues: !!initialValues
@@ -227,9 +230,15 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
               <Typography>
                 Use ChatGPT to prefill your recipe from an image or text
               </Typography>
-              <AIUploadModal>
-                <Button className="min-w-[100px]">AI Upload</Button>
-              </AIUploadModal>
+              {canSeeNewAIRecipeUpload ? (
+                <AIUploadModalNew>
+                  <Button className="min-w-[100px]">AI Upload</Button>
+                </AIUploadModalNew>
+              ) : (
+                <AIUploadModal>
+                  <Button className="min-w-[100px]">AI Upload</Button>
+                </AIUploadModal>
+              )}
             </AlertDescription>
           </Alert>
         )}
