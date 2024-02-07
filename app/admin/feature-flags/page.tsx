@@ -12,8 +12,8 @@ export default async function FeatureFlagPage() {
   const featureFlags = await getFeatureFlags()
 
   //redirect to home if not logged in
-  if (!user) {
-    return <Typography>Please log in to create a recipe</Typography>
+  if (user?.role !== 'admin') {
+    return <Typography>Please log in to edit feature flags</Typography>
   }
 
   return (
