@@ -17,6 +17,10 @@ Rusty Recipi is a Rust backend for Recipi, a recipe management application that 
 
 Here are some getting started steps
 
+### Rust Resources
+[Rust Docs](https://doc.rust-lang.org/book/)
+[Async Rust](https://rust-lang.github.io/async-book/)
+
 ### Prerequisites
 
 Some prereqs for software I will need
@@ -28,7 +32,7 @@ Install instructions
 ## Built With
 
 - [Rust](https://www.rust-lang.org/)
-- [Rocket](https://rocket.rs/)
+- [axum](https://docs.rs/axum/latest/axum/)
 - [Drizzle Studio](https://drizzle.studio/)
 
 ## Authors
