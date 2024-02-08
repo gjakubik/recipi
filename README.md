@@ -1,90 +1,51 @@
-# Recipi
+# Recipi Project Overview
 
-Welcome to Recipi, a Next.js project that harnesses the power of Next.js 13 app router along with a suite of modern development tools.
+This document serves as a comprehensive guide to the Recipi project, encapsulating both the frontend and backend components. The Recipi application is a recipe management tool designed to streamline the process of creating, storing, and sharing recipes, utilizing cutting-edge technology stacks for both web and server-side development.
 
 ## Table of Contents
 
-- [About](#about)
+- [Introduction](#introduction)
 - [Getting Started](#getting-started)
-- [Built With](#built-with)
-- [Drizzle Studio](#drizzle-studio)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgments)
+- [Technology Stack](#technology-stack)
+- [Development Setup](#development-setup)
+- [Contributors](#contributors)
+- [Further Development](#further-development)
 
-## About
+## Introduction
 
-Recipi is a recipe management application that allows users to create, store, and share recipes. The application is built using Next.js 13, a React framework for production, and Tailwind CSS, a utility-first CSS framework for rapid UI development. The application is powered by a MySQL database hosted on Planetscale, a scalable MySQL platform for developers. The application also uses Next Auth for authentication and React Hook Form for form management.
+Recipi leverages the power of Next.js 13 and Rust, providing a robust and scalable solution for recipe management. The application integrates modern development practices and tools, offering an intuitive user experience and efficient backend processing for hardware-intensive tasks.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+To contribute to the Recipi project, you will need to set up both the frontend and backend development environments. Specific instructions for each component are detailed in their respective directories.
 
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
+Ensure you have Node.js (LTS version), npm, and Rust installed on your local machine.
 
-- Node.js (LTS version recommended)
-- npm (comes with Node.js)
+## Technology Stack
 
-### Installing
+- **Frontend:**
+  - **Framework:** Next.js 13
+  - **Styling:** Tailwind CSS
+  - **Component Library:** shadcn/ui
+  - **Authentication:** Next Auth
+  - **Form Management:** React Hook Form
+  - **Database:** MySQL with Planetscale
+- **Backend:**
+  - **Language:** Rust
+  - **Framework:** Rocket
+  - **Tooling:** Drizzle Studio for ORM
 
-A step-by-step series of examples that tell you how to get a development environment running:
+## Development Setup
 
-1. Clone the repository:
+Follow the setup instructions in each subfolder to prepare your development environment for both the frontend and backend components of the project. This includes installing dependencies, setting up environment variables, and starting development servers.
 
-```bash
-git clone https://github.com/gjakubik/recipi.git
-```
+## Contributors
 
-2. Navigate to the project directory:
+- **Frontend:** Gavin Jakubik - [gjakubik](https://github.com/gjakubik)
+- **Backend:** Michael Lee - [michaeldlee1](https://github.com/michaeldlee1)
 
-```bash
-cd recipi
-```
+## Further Development
 
-3. Install dependencies:
-
-```bash
-npm install
-```
-
-4. Set up environment variables
-
-```bash
-cp .env.example .env
-# then edit .env with your specific configurations
-```
-
-5. Start the development server
-
-```bash
-npm run dev
-```
-
-### Built With
-
-This project is built using several key technologies:
-
-- [Next.js](https://nextjs.org/) - The React framework for production
-- [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework for rapid UI development
-- [shadcn/ui](https://ui.shadcn.com/) - A React component library for building modern applications
-- [Drizzle ORM](https://github.com/drizzle-orm/drizzle) - Object Relational Mapping library for managing database state
-- [Next Auth](https://next-auth.js.org/) - Authentication for Next.js applications
-- [Planetscale](https://planetscale.com/) - Scalable MySQL platform for developers
-- [React Hook Form](https://react-hook-form.com/) - Performant, flexible and extensible forms with easy-to-use validation
-
-## Drizzle Studio
-
-To run Drizzle Studio, run the following command:
-
-```bash
-npx drizzle-kit studio
-```
-
-## Authors
-
-- Gavin Jakubik - [gjakubik](https://github.com/gjakubik)
-
-## Acknowlegments
-
-- [shadcn-ui/taxonomy](https://github.com/shadcn-ui/taxonomy): Design and architecture inspiration
+As Recipi continues to evolve, further details regarding development practices, project structure, and contribution guidelines will be added. Stay tuned for updates and enhancements to both the frontend and backend components.
