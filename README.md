@@ -49,5 +49,3 @@ Follow the setup instructions in each subfolder to prepare your development envi
 ## Further Development
 
 As Recipi continues to evolve, further details regarding development practices, project structure, and contribution guidelines will be added. Stay tuned for updates and enhancements to both the frontend and backend components.
-
-Test change for deploy
