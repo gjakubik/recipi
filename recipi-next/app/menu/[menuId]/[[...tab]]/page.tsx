@@ -1,12 +1,7 @@
 import { getCurrentUser } from '@/lib/session'
-import Link from 'next/link'
 import { getMenu } from '@/lib/db/api'
 import { Typography } from '@/components/ui/typography'
 import { UserAvatar } from '@/components/UserAvatar'
-import { RecipeList } from '@/components/recipe/RecipeList'
-import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
-import { GroceryList } from '@/components/menu/GroceryList'
 import { redirect } from 'next/navigation'
 import { RoutedMenuTabs } from './RoutedMenuTabs'
 
@@ -24,8 +19,6 @@ export default async function MenuDetailsPage({
     //redirect to recipes tab
     redirect(`/menu/${menuId}/recipes`)
   }
-
-  const trueTab = tab[0]
 
   if (!menu) {
     return (

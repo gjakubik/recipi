@@ -1,0 +1,67 @@
+# Meeting Memo: Enhancing Ingredient Management in Recipi
+
+### Overview
+
+During our recent discussion, we focused on strategies to enhance the
+normalization of ingredient usage within Recipi. Our primary objective is to
+establish a master list of ingredients that ensures consistency and accuracy
+across the platform. This memo outlines the key points discussed and the actions
+we intend to take.
+
+### Master Ingredient List Development
+
+**Objective**: Create a centralized master list of ingredients to normalize
+usage across all recipes.
+
+- **Moderation Process**:
+
+  - It was agreed that there needs to be a moderation mechanism to ensure the
+    quality and relevance of ingredients added to the master list.
+  - **Action Item**: Research and decide on a moderation process.
+
+- **Minimum Quota for Inclusion**:
+
+  - Ingredients will only be added to the master list once they hit a certain
+    usage threshold (x instances).
+  - **Action Item**: Determine the exact quota for ingredient inclusion.
+
+- **Enhanced Ingredient Data**:
+
+  - Beyond the ingredient name, we aim to include additional information such as
+    calorie data.
+  - **Action Item**: Explore methods for aggregating nutritional information for
+    each ingredient.
+
+- **Metric Use**:
+
+  - Implementation of a backend metric to assist in the moderation and inclusion
+    process.
+  - **Action Item**: Further discussion needed on specific metrics and
+    implementation strategies.
+
+- **AI Moderation Consideration**:
+  - The possibility of using AI for ingredient moderation was discussed, though
+    concerns about cost were raised.
+  - **Action Item**: Conduct a cost-benefit analysis of AI moderation.
+
+### Additional Features and Considerations
+
+- **Calorie Count Feature**:
+
+  - Introduction of an opt-in calorie count at both the recipe and user level.
+  - **Action Item**: Develop UI/UX design for calorie count feature, ensuring it
+    is intuitive and user-friendly.
+
+- **Substitution Recommendations**:
+  - Implement AI or graph algorithm-based substitution recommendations,
+    acknowledging that some margin of error is acceptable.
+  - **Action Item**: Research and prototype substitution recommendation
+    algorithms.
+
+### Unknowns
+
+- The scalability of the `knownIngredients` list is a point of concern.
+  - **Action Item**: Conduct analysis on expected growth and scalability
+    challenges of the ingredient list.
+
+---
