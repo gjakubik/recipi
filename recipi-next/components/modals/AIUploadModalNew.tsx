@@ -1,6 +1,7 @@
 'use client'
 
 import { PropsWithChildren, useState } from 'react'
+import { Variants, motion } from 'framer-motion'
 import { useFormContext } from 'react-hook-form'
 import _ from 'lodash'
 import { useToast } from '@/components/ui/use-toast'
@@ -27,7 +28,21 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Typography } from '@/components/ui/typography'
-import { RoutedTabs, Tab } from '@/components/RoutedTabs'
+import { Bot } from 'lucide-react'
+
+const robotVariants: Variants = {
+  animate: {
+    scale: [1, 1.2, 1, 1.2, 1, 1.2, 1, 1], // Three pulses
+    rotate: [0, 0, 0, 0, 0, 0, 0, 360], // Spin after pulses
+    transition: {
+      duration: 4, // Total duration of the entire sequence
+      ease: 'easeInOut', // Easing function for the scaling
+      times: [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 1], // Timing for each transformation
+      repeat: Infinity, // Repeat the sequence indefinitely
+      repeatType: 'loop', // Ensures the animation loops from the start
+    },
+  },
+}
 
 export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
   const form = useFormContext()
@@ -249,33 +264,74 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
             </div>
           )}
           {activeTab === 'image' && (
-            <div className="flex flex-col gap-2 ">
+            <div className="flex flex-col gap-2 relative">
               <Typography variant="p">Upload the recipe image here:</Typography>
-              <UploadDropzone<UploadThingFileRouter>
-                className="drop-shadow-md h-[300px]"
-                endpoint="titleImage"
-                onClientUploadComplete={(res) => {
-                  if (!res) {
+              {!image && (
+                <UploadDropzone<UploadThingFileRouter>
+                  className="drop-shadow-md h-[300px]"
+                  endpoint="titleImage"
+                  onClientUploadComplete={(res) => {
+                    if (!res) {
+                      toast({
+                        title: 'Error uploading image',
+                        description: 'Something went wrong',
+                      })
+                      return
+                    }
+                    setImage(res[0])
+                    toast({
+                      title: 'Image uploaded',
+                      description: 'Image uploaded successfully',
+                    })
+                  }}
+                  onUploadError={(err: Error) => {
+                    console.log(err.message)
                     toast({
                       title: 'Error uploading image',
-                      description: 'Something went wrong',
+                      description: err.message,
                     })
-                    return
-                  }
-                  setImage(res[0])
-                  toast({
-                    title: 'Image uploaded',
-                    description: 'Image uploaded successfully',
-                  })
-                }}
-                onUploadError={(err: Error) => {
-                  console.log(err.message)
-                  toast({
-                    title: 'Error uploading image',
-                    description: err.message,
-                  })
-                }}
-              />
+                  }}
+                />
+              )}
+              {image && (
+                <img
+                  src={image.url}
+                  alt="Recipe"
+                  className={`w-full h-[300px] object-cover rounded-md ${
+                    isSaving ? 'grayscale brightness-50' : ''
+                  }`}
+                />
+              )}
+              {isSaving && (
+                <motion.div
+                  className="absolute inset-0 flex justify-center items-center"
+                  variants={robotVariants}
+                  initial={{ scale: 1, rotate: 0 }} // Start from a non-scaled, non-rotated state
+                  animate="animate" // Reference to the animate variant
+                >
+                  <Bot size={48} className="text-white" />
+                </motion.div>
+              )}
+              {/* {image && (
+                <div
+                  className={`flex items-center justify-center w-full h-[300px] rounded-md ${
+                    true ? 'grayscale brightness-50' : ''
+                  }`}
+                  style={{
+                    backgroundImage: `url(${image.url})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <motion.div
+                    variants={robotVariants}
+                    initial={{ scale: 1, rotate: 0 }} // Start from a non-scaled, non-rotated state
+                    animate="animate" // Reference to the animate variant
+                  >
+                    <Bot size={48} className="text-white" />
+                  </motion.div>
+                </div>
+              )} */}
             </div>
           )}
         </div>

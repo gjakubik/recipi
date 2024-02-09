@@ -145,90 +145,89 @@ export const MenuListItem = ({
         </motion.div>
       </div>
     )
-  } else {
-    return (
-      <Link href={`/menu/${menu.id}`} key={index}>
-        <div className="flex flex-col gap-2 dashed-border-hover ">
-          <div className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 items-center justify-between hover:cursor-pointer ">
-            <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-4">
-              <div className="flex flex-col">
-                <Typography variant="h5">{menu.title}</Typography>
-                <Typography variant="pn" className="line-clamp-2">
-                  {menu.description}
-                </Typography>
-              </div>
-              <div className="grid grid-cols-[140px_90px] items-center">
-                <Typography variant="light">
-                  Updated {menu.updatedAt?.toLocaleDateString()}
-                </Typography>
-                <Typography variant="pn">
-                  {menu.recipes ? menu.recipes.length : '0'} recipe
-                  {(menu.recipes?.length !== 1 || !menu.recipes) && 's'}
-                </Typography>
-              </div>
+  }
+  return (
+    <Link href={`/menu/${menu.id}`} key={index}>
+      <div className="flex flex-col gap-2 dashed-border-hover ">
+        <div className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 items-center justify-between hover:cursor-pointer ">
+          <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-4">
+            <div className="flex flex-col">
+              <Typography variant="h5">{menu.title}</Typography>
+              <Typography variant="pn" className="line-clamp-2">
+                {menu.description}
+              </Typography>
             </div>
-            <div className="flex items-center justify-center">
-              <Toggle
-                pressed={isOpen}
-                onClick={(e) => {
-                  e.preventDefault()
-                  setIsOpen(!isOpen)
-                }}
-              >
-                {isOpen ? (
-                  <EyeIcon width={16} className="min-w-[16px]" />
-                ) : (
-                  <EyeOffIcon width={16} className="min-w-[16px]" />
-                )}
-              </Toggle>
+            <div className="grid grid-cols-[140px_90px] items-center">
+              <Typography variant="light">
+                Updated {menu.updatedAt?.toLocaleDateString()}
+              </Typography>
+              <Typography variant="pn">
+                {menu.recipes ? menu.recipes.length : '0'} recipe
+                {(menu.recipes?.length !== 1 || !menu.recipes) && 's'}
+              </Typography>
             </div>
           </div>
-          <motion.div
-            initial={false}
-            animate={{
-              height: isOpen ? 120 : 0,
-              opacity: isOpen ? 1 : 0,
-            }}
-            transition={{ duration: 0.5 }}
-            className="w-full flex flex-col justify-center items-center overflow-hidden"
-          >
-            {isOpen && (
-              <div
-                className="w-full px-10"
-                // onClick={() => setIsOpen(!isOpen)}
-              >
-                {menu.recipeInfo && menu.recipeInfo.length !== 0 ? (
-                  <Carousel
-                    opts={{
-                      align: 'start',
-                    }}
-                    className="w-full"
-                  >
-                    <CarouselContent className="-ml-1 md:-ml-2">
-                      {menu.recipeInfo.map((recipe, index) => (
-                        <CarouselItem
-                          key={index}
-                          className="pl-1 md:pl-2 basis-1/2 sm:basis-1/3"
-                        >
-                          <div className="p-1">
-                            {recipe && <RecipePreviewCard recipe={recipe} />}
-                          </div>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    <CarouselPrevious className="-left-10" />
-                    <CarouselNext className="-right-10" />
-                  </Carousel>
-                ) : (
-                  <Typography className="text-center">
-                    No recipes in this menu
-                  </Typography>
-                )}
-              </div>
-            )}
-          </motion.div>
+          <div className="flex items-center justify-center">
+            <Toggle
+              pressed={isOpen}
+              onClick={(e) => {
+                e.preventDefault()
+                setIsOpen(!isOpen)
+              }}
+            >
+              {isOpen ? (
+                <EyeIcon width={16} className="min-w-[16px]" />
+              ) : (
+                <EyeOffIcon width={16} className="min-w-[16px]" />
+              )}
+            </Toggle>
+          </div>
         </div>
-      </Link>
-    )
-  }
+        <motion.div
+          initial={false}
+          animate={{
+            height: isOpen ? 120 : 0,
+            opacity: isOpen ? 1 : 0,
+          }}
+          transition={{ duration: 0.5 }}
+          className="w-full flex flex-col justify-center items-center overflow-hidden"
+        >
+          {isOpen && (
+            <div
+              className="w-full px-10"
+              // onClick={() => setIsOpen(!isOpen)}
+            >
+              {menu.recipeInfo && menu.recipeInfo.length !== 0 ? (
+                <Carousel
+                  opts={{
+                    align: 'start',
+                  }}
+                  className="w-full"
+                >
+                  <CarouselContent className="-ml-1 md:-ml-2">
+                    {menu.recipeInfo.map((recipe, index) => (
+                      <CarouselItem
+                        key={index}
+                        className="pl-1 md:pl-2 basis-1/2 sm:basis-1/3"
+                      >
+                        <div className="p-1">
+                          {recipe && <RecipePreviewCard recipe={recipe} />}
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="-left-10" />
+                  <CarouselNext className="-right-10" />
+                </Carousel>
+              ) : (
+                <Typography className="text-center">
+                  No recipes in this menu
+                </Typography>
+              )}
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </Link>
+  )
 }
