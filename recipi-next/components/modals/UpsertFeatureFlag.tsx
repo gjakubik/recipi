@@ -76,6 +76,7 @@ export const UpsertFeatureFlagModal = ({
       setIsSaving(false)
       return
     }
+    form.reset()
     router.refresh()
     setIsSaving(false)
     setOpen(false)
