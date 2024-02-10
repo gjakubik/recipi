@@ -1,4 +1,12 @@
 export const docs = {
+  '4-8-24-meeting-notes': {
+    slug: '4-8-24-meeting-notes',
+    title: '4/8/24 Meeting Notes',
+    description: 'Meeting notes from the 4/8/24 meeting',
+    created: '2024-02-08',
+    updated: '2024-02-08',
+    published: true,
+  },
   'possible-features': {
     slug: 'possible-features',
     title: 'Possible Features',
