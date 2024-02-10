@@ -37,7 +37,7 @@ export const RecipePrivacyButton = ({ recipe }: RecipePrivacyButtonProps) => {
         <AlertDialogTrigger asChild>
           <TooltipTrigger asChild>
             <Button variant="ghost">
-              {recipe.isPrivate ? <UnlockKeyhole /> : <LockKeyhole />}
+              {recipe.isPrivate ? <LockKeyhole /> : <UnlockKeyhole />}
             </Button>
           </TooltipTrigger>
         </AlertDialogTrigger>

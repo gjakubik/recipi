@@ -30,7 +30,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { Button } from '@/components/ui/button'
-import { ClientMenuList } from '@/components/menu/ClientMenuList'
+import { SelectingClientMenuList } from '@/components/menu/ClientMenuList'
 import { UpsertMenuModal } from '@/components/modals/UpsertMenuModal'
 
 interface AddRecipeToMenusModalProps extends PropsWithChildren {
@@ -126,7 +126,7 @@ export const AddRecipeToMenusModal = ({
               Select a menu to add your recipe to
             </DrawerDescription>
           </DrawerHeader>
-          <ClientMenuList
+          <SelectingClientMenuList
             className="w-full px-6 md:px-12 py-4"
             initialData={initialMenus}
             recipe={recipe}
@@ -172,7 +172,7 @@ export const AddRecipeToMenusModal = ({
         <DialogDescription>
           Select a menu to add your recipe to
         </DialogDescription>
-        <ClientMenuList
+        <SelectingClientMenuList
           className="w-full px-6 md:px-12 py-4"
           initialData={initialMenus}
           recipe={recipe}

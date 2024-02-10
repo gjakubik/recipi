@@ -275,7 +275,14 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                   <>
                     {!field.value ? (
                       <UploadDropzone<UploadThingFileRouter>
-                        className="drop-shadow-md h-max-content"
+                        className="drop-shadow-md h-[246px]"
+                        appearance={{
+                          container: 'rounded-3xl',
+                          label: 'text-primary hover:text-slate-500',
+                          allowedContent: 'text-slate-400',
+                          button:
+                            'bg-primary text-primary-foreground shadow hover:bg-primary/90 rounded-md px-3 text-sm',
+                        }}
                         endpoint="titleImage"
                         onClientUploadComplete={(res) => {
                           if (!res) {
