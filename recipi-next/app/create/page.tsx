@@ -3,6 +3,8 @@ import { getCurrentUser } from '@/lib/session'
 import { Typography } from '@/components/ui/typography'
 import { RecipeForm } from '@/components/forms/RecipeForm'
 
+export const maxDuration = 90
+
 export default async function CreateRecipePage() {
   const user = await getCurrentUser()
 

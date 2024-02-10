@@ -19,7 +19,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     pre: (props) => <pre {...props} className="text-base" />,
     code: (props) => {
-      console.log(props)
       if (!props.className) {
         return (
           <code

@@ -1,11 +1,19 @@
 'use client'
 
 import { PropsWithChildren, useState } from 'react'
+import { Variants, motion } from 'framer-motion'
 import { useFormContext } from 'react-hook-form'
 import _ from 'lodash'
 import { useToast } from '@/components/ui/use-toast'
 import { abbToUnit } from '@/lib/utils'
-import { recipeAIUploadText } from '@/app/_actions/recipeAIUpload'
+import {
+  recipeAIUploadText,
+  recipeAIUploadImage,
+} from '@/app/_actions/recipeAIUpload'
+import { Ingredient } from '@/types'
+import { UploadDropzone } from '@uploadthing/react'
+import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
+import { UploadFileResponse } from 'uploadthing/client'
 
 import {
   Dialog,
@@ -20,22 +28,40 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Typography } from '@/components/ui/typography'
-import { Ingredient } from '@/types'
+import { Bot } from 'lucide-react'
+
+const robotVariants: Variants = {
+  animate: {
+    scale: [1, 1.2, 1, 1.2, 1, 1.2, 1, 1], // Three pulses
+    rotate: [0, 0, 0, 0, 0, 0, 0, 360], // Spin after pulses
+    transition: {
+      duration: 4, // Total duration of the entire sequence
+      ease: 'easeInOut', // Easing function for the scaling
+      times: [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 1], // Timing for each transformation
+      repeat: Infinity, // Repeat the sequence indefinitely
+      repeatType: 'loop', // Ensures the animation loops from the start
+    },
+  },
+}
 
 export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
   const form = useFormContext()
   const { toast } = useToast()
   const [open, setOpen] = useState(false)
-  const [input, setInput] = useState('')
+  const [textInput, setTextInput] = useState('')
+  const [image, setImage] = useState<UploadFileResponse | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [activeTab, setActiveTab] = useState('text')
 
-  const onSave = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onSaveText = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault()
     setIsSaving(true)
     let data
     try {
-      const res = await recipeAIUploadText(input)
+      const res = await recipeAIUploadText(textInput)
       if (!res) {
         toast({
           title: 'AI Upload Error',
@@ -72,7 +98,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
           data.ingredients.map((ing: Ingredient, i: number) => {
             //if we are able to parse the amount, use that, otherwise leave it empty. If the unit is empty, then set it to the amount
             const validAmount = parseFloat(ing.amount || '') > 0
-            const amount = validAmount ? parseFloat(ing.amount || '') : ''
+            const amount = validAmount ? ing.amount : ''
             // if the amount is invalid and there is no unit, then set the unit to amount
             const unit = abbToUnit(
               _.trimEnd(!validAmount && !ing.unit ? ing.amount : ing.unit, 's')
@@ -105,7 +131,87 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
     }
 
     setIsSaving(false)
-    setSuccess(true)
+    setOpen(false)
+  }
+
+  const onSaveImage = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (!image) return
+    e.preventDefault()
+    setIsSaving(true)
+    let data
+    try {
+      const res = await recipeAIUploadImage(image)
+      if (!res) {
+        toast({
+          title: 'AI Upload Error',
+          description:
+            'There was an error processing your recipe, try again or enter manually',
+        })
+        setIsSaving(false)
+        return
+      }
+      data = JSON.parse(res)
+    } catch (err) {
+      console.log(err)
+      toast({
+        title: 'Error',
+        description: 'Invalid JSON',
+        variant: 'destructive',
+      })
+      setIsSaving(false)
+      return
+    }
+
+    try {
+      data.title && form.setValue('title', data.title)
+      data.description && form.setValue('description', data.description)
+      data.difficultyLevel &&
+        form.setValue('difficultyLevel', _.lowerCase(data.difficultyLevel))
+      data.servings && form.setValue('servings', data.servings)
+      data.preparationTime &&
+        form.setValue('preparationTime', data.preparationTime)
+      data.cookingTime && form.setValue('cookingTime', data.cookingTime)
+      data.ingredients &&
+        form.setValue(
+          'ingredients',
+          data.ingredients.map((ing: Ingredient, i: number) => {
+            //if we are able to parse the amount, use that, otherwise leave it empty. If the unit is empty, then set it to the amount
+            const validAmount = parseFloat(ing.amount || '') > 0
+            const amount = validAmount ? ing.amount : ''
+            // if the amount is invalid and there is no unit, then set the unit to amount
+            const unit = abbToUnit(
+              _.trimEnd(!validAmount && !ing.unit ? ing.amount : ing.unit, 's')
+            )
+            return {
+              ...ing,
+              id: i,
+              amount,
+              unit,
+            }
+          })
+        )
+      data.instructions &&
+        form.setValue(
+          'instructions',
+          data.instructions.map((ins: string, i: number) => ({
+            id: i,
+            instruction: ins,
+          }))
+        )
+    } catch (err) {
+      console.log(err)
+      toast({
+        title: 'Error',
+        description: 'Invalid JSON',
+        variant: 'destructive',
+      })
+      setIsSaving(false)
+      return
+    }
+
+    setIsSaving(false)
     setOpen(false)
   }
 
@@ -117,33 +223,138 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
           <DialogTitle>AI Upload</DialogTitle>
         </DialogHeader>
         <DialogDescription>
-          Use AI to prefill your recipe from an image or text
+          Use AI to prefill your recipe from an image or text.
         </DialogDescription>
-        <div className="flex flex-col gap-2">
-          <Typography variant="p">Paste the recipe text here:</Typography>
-          <Textarea
-            placeholder="Recipe text goes here... (messy formatting is ok)"
-            className="w-full"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            rows={15}
-          />
+        <div className="flex flex-row items-end gap-4">
+          <Button
+            onClick={() => setActiveTab('text')}
+            variant="text"
+            className={`px-2 pb-3 hover:cursor ${
+              activeTab === 'text'
+                ? 'font-bold long-dashed-border'
+                : 'dashed-border-hover'
+            } transition duration-150 ease-in-out`}
+          >
+            Text
+          </Button>
+          <Button
+            onClick={() => setActiveTab('image')}
+            variant="text"
+            className={`px-2 pb-3 hover:cursor ${
+              activeTab === 'image'
+                ? 'font-bold long-dashed-border'
+                : 'dashed-border-hover'
+            } transition duration-150 ease-in-out`}
+          >
+            Image
+          </Button>
+        </div>
+        <div className="min-h-[350px] w-full max-w-[500px] m-auto">
+          {activeTab === 'text' && (
+            <div className="flex flex-col gap-2">
+              <Typography variant="p">Paste the recipe text here:</Typography>
+              <Textarea
+                placeholder="Recipe text goes here... (messy formatting is ok)"
+                className="w-full"
+                value={textInput}
+                onChange={(e) => setTextInput(e.target.value)}
+                rows={15}
+              />
+              <div></div>
+            </div>
+          )}
+          {activeTab === 'image' && (
+            <div className="flex flex-col gap-2 relative">
+              <Typography variant="p">Upload the recipe image here:</Typography>
+              {!image && (
+                <UploadDropzone<UploadThingFileRouter>
+                  className="drop-shadow-md h-[300px]"
+                  endpoint="titleImage"
+                  onClientUploadComplete={(res) => {
+                    if (!res) {
+                      toast({
+                        title: 'Error uploading image',
+                        description: 'Something went wrong',
+                      })
+                      return
+                    }
+                    setImage(res[0])
+                    toast({
+                      title: 'Image uploaded',
+                      description: 'Image uploaded successfully',
+                    })
+                  }}
+                  onUploadError={(err: Error) => {
+                    console.log(err.message)
+                    toast({
+                      title: 'Error uploading image',
+                      description: err.message,
+                    })
+                  }}
+                />
+              )}
+              {image && (
+                <img
+                  src={image.url}
+                  alt="Recipe"
+                  className={`w-full h-[300px] object-cover rounded-md ${
+                    isSaving ? 'grayscale brightness-50' : ''
+                  }`}
+                />
+              )}
+              {isSaving && (
+                <motion.div
+                  className="absolute inset-0 flex justify-center items-center"
+                  variants={robotVariants}
+                  initial={{ scale: 1, rotate: 0 }} // Start from a non-scaled, non-rotated state
+                  animate="animate" // Reference to the animate variant
+                >
+                  <Bot size={48} className="text-white" />
+                </motion.div>
+              )}
+              {/* {image && (
+                <div
+                  className={`flex items-center justify-center w-full h-[300px] rounded-md ${
+                    true ? 'grayscale brightness-50' : ''
+                  }`}
+                  style={{
+                    backgroundImage: `url(${image.url})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <motion.div
+                    variants={robotVariants}
+                    initial={{ scale: 1, rotate: 0 }} // Start from a non-scaled, non-rotated state
+                    animate="animate" // Reference to the animate variant
+                  >
+                    <Bot size={48} className="text-white" />
+                  </motion.div>
+                </div>
+              )} */}
+            </div>
+          )}
         </div>
         <DialogFooter>
+          {activeTab === 'text' && (
+            <Button
+              onClick={onSaveText}
+              disabled={isSaving || !textInput || success}
+            >
+              {isSaving ? 'Analyzing...' : 'AI Upload'}
+            </Button>
+          )}
+          {activeTab === 'image' && (
+            <Button
+              onClick={onSaveImage}
+              disabled={isSaving || !image || success}
+            >
+              {isSaving ? 'Analyzing...' : 'AI Upload'}
+            </Button>
+          )}
           <DialogClose asChild>
             <Button variant="ghost">Cancel</Button>
           </DialogClose>
-          <Button
-            onClick={onSave}
-            disabled={isSaving || !input || success}
-            className={
-              isSaving
-                ? 'opacity-50 cursor-not-allowed'
-                : 'hover:bg-primary-700'
-            }
-          >
-            {isSaving ? 'Saving...' : 'Save'}
-          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
