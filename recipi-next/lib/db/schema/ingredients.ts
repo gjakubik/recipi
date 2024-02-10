@@ -14,7 +14,7 @@ export const ingredients = mysqlTable(
   {
     id: int('id').autoincrement().notNull(), // Autoincremented IDs are prob bad - we can look to migrate off of them
     name: varchar('name', { length: 255 }),
-    calories: float('calories'),
+    calories: int('calories'),
     createdAt: timestamp('created_at').defaultNow(), // This col in other tables is a string, I want to move them to this format
     updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
   },
