@@ -3,6 +3,7 @@ use color_eyre::eyre;
 use sqlx::{types, FromRow, Pool, mysql::MySql, Row, Error, mysql::MySqlPool};
 use std::env;
 use sqlx::*;
+use tokio::*;
 
 #[derive(FromRow, Debug)]
 struct Ingredient {
