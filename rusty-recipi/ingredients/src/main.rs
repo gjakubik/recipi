@@ -1,6 +1,6 @@
 // imports 
 use color_eyre::eyre;
-use sqlx::{FromRow, Pool, mysql::MySql, Row, Error, mysql::MySqlPool};
+use sqlx::{types, FromRow, Pool, mysql::MySql, Row, Error, mysql::MySqlPool};
 use std::env;
 use sqlx::*;
 use tokio::*;
@@ -10,12 +10,13 @@ struct Ingredient {
     id: i32,
     name: String,
     calories: i32,
+    created_at: Option<chrono::NaiveDateTime>,
+    updated_at: Option<chrono::NaiveDateTime>,
 }
 
 #[tokio::main]
 async fn main() -> eyre::Result<()>{
-    // let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let database_url = String::from("mysql://3nno90jgzv2q4cuttol5:pscale_pw_SaVvwHjXm5WpR6AIVvK8KA7vHeQUxA9LfNsAeGuKMws@aws.connect.psdb.cloud/recipi");
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let pool = sqlx::MySqlPool::connect(&database_url)
     .await?;
 
@@ -29,18 +30,20 @@ async fn main() -> eyre::Result<()>{
 
 async fn add_one<MySql: sqlx::Database>(pool: sqlx::Pool<sqlx::MySql>) -> bool {
     let ingredient = Ingredient {
-        id: 1,
+        id: 2,
         name: "Egg".to_string(),
         calories: 72,
+        created_at: None,
+        updated_at: None,
     };
 
-    return add_ingredient(&pool, ingredient, "ingredients").await;
+    return add_ingredient(&pool, ingredient, "ingredients_table").await;
 
 }
 
 async fn add_ingredient(pool: &sqlx::Pool<MySql>, ingredient: Ingredient, table: &str) -> bool {
     let res = sqlx::query(
-        "INSERT INTO ingredients_test (
+        "INSERT INTO ingredients (
             id,
             name,
             calories)
@@ -65,15 +68,26 @@ async fn add_ingredient(pool: &sqlx::Pool<MySql>, ingredient: Ingredient, table:
 
 async fn get_ingredient(pool: &sqlx::Pool<MySql>, name: &str) {
     let result = sqlx::query(
-        "SELECT * FROM ingredients_test WHERE name = ?"
+        "SELECT * FROM ingredients WHERE name = ?"
     )
     .bind(name)
-    .fetch_all(pool)
-    .await;
+    .map(|row: sqlx::mysql::MySqlRow| {
+        Ingredient {
+            id: row.get(0),
+            name: row.get(1),
+            calories: row.get(2),
+            created_at: row.get(3),
+            updated_at: row.get(4),
+        }
+    })
+    .fetch_all(pool).await;
 
     match result {
         Ok(query_out) => {
-            println!("Found ingredient: {:?}", query_out);
+            for ingredient in query_out.iter() {
+                println!("Found ingredient: id: {:?}, name: {:?}, calories: {:?}, created_at: {:?}, updated_at: {:?}", 
+                ingredient.id, ingredient.name, ingredient.calories, ingredient.created_at, ingredient.updated_at);
+            }
         }
         Err(e) => {
             println!("Error getting ingredient: {:?}", e);
