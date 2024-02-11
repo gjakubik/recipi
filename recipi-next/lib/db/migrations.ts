@@ -1,3 +1,10 @@
+/*
+ * This file is not used, we use npm run db:push to put it in dev DB and use the planetscale console to push it to prod
+ * We are keeping it in case we want to customize/automate our flow more in the future.
+ * An idea would be to check for the latest migration, and if there is a column alteraton, we can run some arbitrary script we have to pull down the old data, modify it, and them push up the changes after the migration has been applied.
+ * This would require more orchestration in terms of backing up the data and then having a safe failure state. This also would give us some data downtime, whereas our current system of doing alteratoins as a two step add and delete is zero downtime.
+ */
+
 import { migrate } from 'drizzle-orm/planetscale-serverless/migrator'
 import { connect } from '@planetscale/database'
 import { drizzle } from 'drizzle-orm/planetscale-serverless'
