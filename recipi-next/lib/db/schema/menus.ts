@@ -4,7 +4,6 @@ import {
   varchar,
   text,
   int,
-  primaryKey,
   json,
   index,
 } from 'drizzle-orm/mysql-core'
@@ -12,7 +11,7 @@ import {
 export const menus = mysqlTable(
   'menus',
   {
-    id: int('id').autoincrement().notNull(),
+    id: int('id').autoincrement().primaryKey().notNull(),
     title: varchar('title', { length: 255 }).notNull(),
     description: text('description'),
     recipes: json('recipes').$type<number[] | undefined>(), // json list of recipe ids
@@ -22,7 +21,6 @@ export const menus = mysqlTable(
   },
   (table) => {
     return {
-      menusId: primaryKey(table.id),
       authorIdx: index('author_idx').on(table.authorId),
     }
   }

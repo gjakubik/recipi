@@ -16,7 +16,7 @@ import {
 export const recipes = mysqlTable(
   'recipes',
   {
-    id: int('id').autoincrement().notNull(),
+    id: int('id').autoincrement().primaryKey().notNull(),
     title: varchar('title', { length: 255 }).notNull(),
     titleImage: json('title_image').$type<StoredFile | null>().default(null),
     helperImages: json('helper_images')
@@ -39,7 +39,6 @@ export const recipes = mysqlTable(
   },
   (table) => {
     return {
-      recipesId: primaryKey(table.id),
       authorIdx: index('author_idx').on(table.authorId),
       isPrivateIdx: index('is_private_idx').on(table.isPrivate),
     }
