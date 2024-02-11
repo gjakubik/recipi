@@ -1,0 +1,4 @@
+ingredients/target/*
+Cargo.lock
+
+.env
