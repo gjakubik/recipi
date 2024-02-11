@@ -50,6 +50,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
   const [open, setOpen] = useState(false)
   const [textInput, setTextInput] = useState('')
   const [image, setImage] = useState<UploadFileResponse | null>(null)
+  const [inputJSON, setInputJSON] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const [success, setSuccess] = useState(false)
   const [activeTab, setActiveTab] = useState('text')
@@ -215,6 +216,69 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
     setOpen(false)
   }
 
+  const onSavePersonal = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault()
+    setIsSaving(true)
+    let data
+    try {
+      data = JSON.parse(inputJSON)
+    } catch (err) {
+      console.log(err)
+      toast({
+        title: 'Error',
+        description: 'Invalid JSON',
+        variant: 'destructive',
+      })
+      setIsSaving(false)
+      return
+    }
+
+    try {
+      data.title && form.setValue('title', data.title)
+      data.description && form.setValue('description', data.description)
+      data.difficultyLevel &&
+        form.setValue('difficultyLevel', _.lowerCase(data.difficultyLevel))
+      data.servings && form.setValue('servings', data.servings)
+      data.preparationTime &&
+        form.setValue('preparationTime', data.preparationTime)
+      data.cookingTime && form.setValue('cookingTime', data.cookingTime)
+      data.ingredients &&
+        form.setValue(
+          'ingredients',
+          data.ingredients.map((ing: Ingredient, i: number) => {
+            return {
+              ...ing,
+              id: i,
+              unit: abbToUnit(_.trimEnd(ing.unit, 's')),
+            }
+          })
+        )
+      data.instructions &&
+        form.setValue(
+          'instructions',
+          data.instructions.map((ins: string, i: number) => ({
+            id: i,
+            instruction: ins,
+          }))
+        )
+    } catch (err) {
+      console.log(err)
+      toast({
+        title: 'Error',
+        description: 'Invalid JSON',
+        variant: 'destructive',
+      })
+      setIsSaving(false)
+      return
+    }
+
+    setIsSaving(false)
+    setSuccess(true)
+    setOpen(false)
+  }
+
   return (
     <Dialog modal open={open} onOpenChange={setOpen} defaultOpen={false}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -248,8 +312,19 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
           >
             Image
           </Button>
+          <Button
+            onClick={() => setActiveTab('recipe-converter')}
+            variant="text"
+            className={`px-2 pb-3 hover:cursor ${
+              activeTab === 'recipe-converter'
+                ? 'font-bold long-dashed-border'
+                : 'dashed-border-hover'
+            } transition duration-150 ease-in-out`}
+          >
+            ChatGPT
+          </Button>
         </div>
-        <div className="min-h-[350px] w-full max-w-[500px] m-auto">
+        <div className="min-h-[450px] w-full max-w-[500px] m-auto">
           {activeTab === 'text' && (
             <div className="flex flex-col gap-2">
               <Typography variant="p">Paste the recipe text here:</Typography>
@@ -258,7 +333,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
                 className="w-full"
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
-                rows={15}
+                rows={19}
               />
               <div></div>
             </div>
@@ -268,7 +343,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
               <Typography variant="p">Upload the recipe image here:</Typography>
               {!image && (
                 <UploadDropzone<UploadThingFileRouter>
-                  className="drop-shadow-md h-[300px]"
+                  className="drop-shadow-md h-[400px]"
                   endpoint="titleImage"
                   onClientUploadComplete={(res) => {
                     if (!res) {
@@ -297,7 +372,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
                 <img
                   src={image.url}
                   alt="Recipe"
-                  className={`w-full h-[300px] object-cover rounded-md ${
+                  className={`w-full h-[400px] object-cover rounded-md ${
                     isSaving ? 'grayscale brightness-50' : ''
                   }`}
                 />
@@ -312,26 +387,33 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
                   <Bot size={48} className="text-white" />
                 </motion.div>
               )}
-              {/* {image && (
-                <div
-                  className={`flex items-center justify-center w-full h-[300px] rounded-md ${
-                    true ? 'grayscale brightness-50' : ''
-                  }`}
-                  style={{
-                    backgroundImage: `url(${image.url})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                >
-                  <motion.div
-                    variants={robotVariants}
-                    initial={{ scale: 1, rotate: 0 }} // Start from a non-scaled, non-rotated state
-                    animate="animate" // Reference to the animate variant
-                  >
-                    <Bot size={48} className="text-white" />
-                  </motion.div>
-                </div>
-              )} */}
+            </div>
+          )}
+          {activeTab === 'recipe-converter' && (
+            <div className="flex flex-col min-h-[450px]">
+              <Typography variant="bold">
+                Use your own ChatGPT plus account (free)
+              </Typography>
+              <Typography variant="pn">
+                Upload an image or text to the <i>Recipe Converter GPT</i> here:
+              </Typography>
+              <a
+                href="https://chat.openai.com/g/g-0y8Fagkla-recipe-converter-gpt"
+                target="_blank"
+                className="text-primary-500 hover:underline"
+              >
+                https://chat.openai.com/g/g-0y8Fagkla-recipe-converter-gpt
+              </a>
+              <Typography>
+                Copy the JSON block generated by the AI and paste it here:
+              </Typography>
+              <Textarea
+                placeholder="Paste AI generated JSON here..."
+                className="w-full"
+                value={inputJSON}
+                onChange={(e) => setInputJSON(e.target.value)}
+                rows={15}
+              />
             </div>
           )}
         </div>
@@ -341,7 +423,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
               onClick={onSaveText}
               disabled={isSaving || !textInput || success}
             >
-              {isSaving ? 'Analyzing...' : 'AI Upload'}
+              {isSaving ? 'Analyzing text...' : 'AI Upload'}
             </Button>
           )}
           {activeTab === 'image' && (
@@ -349,7 +431,15 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
               onClick={onSaveImage}
               disabled={isSaving || !image || success}
             >
-              {isSaving ? 'Analyzing...' : 'AI Upload'}
+              {isSaving ? 'Analyzing image...' : 'AI Upload'}
+            </Button>
+          )}
+          {activeTab === 'recipe-converter' && (
+            <Button
+              onClick={onSavePersonal}
+              disabled={isSaving || !inputJSON || success}
+            >
+              {isSaving ? 'Processing Text...' : 'Save Recipe'}
             </Button>
           )}
           <DialogClose asChild>
