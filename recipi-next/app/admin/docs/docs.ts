@@ -1,4 +1,12 @@
 export const docs = {
+  'schema-changes': {
+    slug: 'schema-changes',
+    title: 'Schema Changes',
+    description: 'An outline of our approach to schema changes',
+    created: '2024-02-11',
+    updated: '2024-02-11',
+    published: true,
+  },
   '4-8-24-meeting-notes': {
     slug: '4-8-24-meeting-notes',
     title: '4/8/24 Meeting Notes',

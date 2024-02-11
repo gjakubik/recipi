@@ -1,0 +1,60 @@
+# DB Schema change strategy
+
+TLDR: ALTER statements are not supported in Planetscale. We need to add a new
+column, run some script/code to populate that column based on the old one, and
+then deploy a new schema change deleting the old column. This will maintain all
+the data and keep it conformed to the schema.
+
+Check this page:
+[Planetscale Docs on why alter isnt supported](https://planetscale.com/docs/learn/handling-table-and-column-renames)
+
+What this means is that we will need a structured way to handle schema changes
+and migration scripts.
+
+## Schema change workflow outline
+
+1. Make schema change in codebase (add new column/table, remove old column)
+2. Apply the migration manually to the dev database branch `npm run db:push`
+3. Test the migration in the dev database (see if the column exists or is
+   deleted)
+4. If the new column exists and needs to be populated, create a script in the
+   `migration-scripts` folder that populates the new column based on an old
+   column
+5. Check that the new column was populated correctly for different types of data
+   (if applicable)
+6. Create DB schema merge request to production DB in planetscale console
+7. Run the migration script to populate a new column against the production
+   database (if applicable)
+
+## Notes
+
+We probaly want to have all of our migration scripts in one place and in one
+language to make things easier long term. We can decide if this means Rust or
+TS.
+
+Overall, this actually becomes a simple process if we imagine it as an add and a
+delete that happen separately rather than an alteration taking place all at
+once. Once this shift in mindset is clear, it becomes obvious how we would
+arbitrarily change a column by just creating a new one, running some function on
+each record to populate it once it is there, and then deleting the old one.
+
+**Small caviat** - This process is only simple if we are not dealing with a
+column that is a foreign key. If we are dealing with a foreign key, we will need
+to be very careful about the order in which we do things. We will need to make
+sure that the new column is populated before we delete the old one, and we will
+need to make sure that the foreign key is not violated in the process. This is a
+more complex process that will require more thought and care. The good part is
+we have no real DB constraints here so missing references would not break the DB
+altogether, althought they would then need to be dealt with in the UI which is
+not ideal in the slightest.
+
+## Best Practices
+
+- Always add defautls to new columns and mark them as `NOT NULL` if possible
+  (this makes the UI easier to reason about as this is transferred directly into
+  the types being used to render stuff, so its nice to know it will be there)
+- Always add indexes to new columns if they are going to be used in queries
+  (this is a performance thing and good habit to be in)
+- Always add a migration script to populate the new column if it is based on an
+  old column (this makes it clear what is happening and why, and it also makes
+  it easy to reason about the data and the changes that are happening to it)
