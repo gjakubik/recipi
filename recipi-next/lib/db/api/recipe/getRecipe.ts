@@ -1,8 +1,9 @@
 import { db } from '@/lib/db'
 import { recipes, users } from '@/lib/db/schema'
+import { Recipe } from '@/types'
 import { eq } from 'drizzle-orm'
 
-const getRecipe = async (recipeID: number) => {
+const getRecipe = async (recipeID: number): Promise<Recipe | undefined> => {
   try {
     const recipe = await db
       .select({
