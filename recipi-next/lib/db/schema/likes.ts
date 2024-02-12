@@ -14,7 +14,7 @@ export const likes = mysqlTable(
     id: int('id').autoincrement().primaryKey().notNull(),
     userId: varchar('user_id', { length: 255 }).notNull(),
     recipeId: varchar('recipe_id', { length: 255 }).notNull(),
-    createdAt: timestamp('created_at').defaultNow(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
   },
   (table) => {
     return {

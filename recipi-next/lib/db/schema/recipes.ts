@@ -32,9 +32,14 @@ export const recipes = mysqlTable(
       .default([])
       .notNull(),
     instructions: json('instructions').$type<string[]>().default([]).notNull(),
-    creationDate: timestamp('creation_date', { mode: 'string' }).defaultNow(),
+    creationDate: timestamp('creation_date', { mode: 'date' })
+      .defaultNow()
+      .notNull(),
     isPrivate: boolean('private').default(false).notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' })
+      .defaultNow()
+      .onUpdateNow()
+      .notNull(),
     authorId: varchar('author_id', { length: 255 }).notNull(),
   },
   (table) => {

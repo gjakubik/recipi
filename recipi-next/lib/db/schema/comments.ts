@@ -16,8 +16,10 @@ export const comments = mysqlTable(
     userId: varchar('user_id', { length: 255 }),
     recipeId: varchar('recipe_id', { length: 255 }),
     text: text('text'),
-    postedAt: timestamp('posted_at').defaultNow(),
-    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+    postedAt: timestamp('posted_at', { mode: 'date' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' })
+      .defaultNow()
+      .onUpdateNow(),
   },
   (table) => {
     return {

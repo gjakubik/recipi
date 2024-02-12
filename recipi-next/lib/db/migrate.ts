@@ -5,13 +5,13 @@
  * This would require more orchestration in terms of backing up the data and then having a safe failure state. This also would give us some data downtime, whereas our current system of doing alteratoins as a two step add and delete is zero downtime.
  */
 
-import { migrate } from 'drizzle-orm/planetscale-serverless/migrator'
 import { connect } from '@planetscale/database'
 import { drizzle } from 'drizzle-orm/planetscale-serverless'
 
 import { fetch } from 'undici'
 
 import 'dotenv/config'
+// import { populateCreatedAt } from './migrations/createdAt-update'
 
 // inspired by Raphael Moreau @rphlmr for Postgres, extended for Planetscale
 const runMigrate = async () => {
@@ -30,8 +30,9 @@ const runMigrate = async () => {
   console.log('⏳ Running migrations...')
 
   const start = Date.now()
-
-  await migrate(db, { migrationsFolder: 'src/lib/db/migrations' })
+  // import and use migration script here
+  // In the future, use fs.readdir and cli args to define which script to run
+  // await populateCreatedAt(db)
 
   const end = Date.now()
 
