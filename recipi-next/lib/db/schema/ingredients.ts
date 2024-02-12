@@ -4,7 +4,6 @@ import {
   int,
   varchar,
   index,
-  float,
 } from 'drizzle-orm/mysql-core'
 
 // Define a table
