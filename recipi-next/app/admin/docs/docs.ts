@@ -1,4 +1,12 @@
 export const docs = {
+  'recipi-value-prop': {
+    slug: 'recipi-value-prop',
+    title: 'Recipi Value Proposition',
+    description: 'A document outlining the value proposition of Recipi',
+    created: '2024-02-07',
+    updated: '2024-02-07',
+    published: true,
+  },
   'schema-changes': {
     slug: 'schema-changes',
     title: 'Schema Changes',
