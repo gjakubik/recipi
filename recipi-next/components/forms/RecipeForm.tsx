@@ -502,7 +502,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         <FancyMultiSelect /> */}
         <div className="flex flex-row w-full justify-between">
           <div className="flex flex-row gap-4">
-            <Button variant="ghost" type="reset">
+            <Button variant="ghost" type="reset" onClick={() => form.reset()}>
               {initialValues ? 'Reset' : 'Clear'}
             </Button>
             <Button type="submit">{initialValues ? 'Save' : 'Create'}</Button>
