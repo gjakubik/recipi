@@ -16,7 +16,6 @@ use serde::{Deserialize, Serialize};
 use std::{env, vec};
 use sqlx::*;
 use tokio::*;
-use tracing;
 use crate::data_access::*;
 
 pub mod data_access;
