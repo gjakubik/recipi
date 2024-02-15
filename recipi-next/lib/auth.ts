@@ -9,9 +9,6 @@ export const authOptions: NextAuthOptions = {
   // eslint-disable-next-line @typescript-eslint/ts-ignore
   // @ts-ignore
   adapter: DrizzleAdapter(db),
-  session: {
-    strategy: 'jwt',
-  },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
@@ -20,41 +17,22 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ token, session }) {
-      if (session.user) {
-        session.user.id = token.id
-        session.user.name = token.name
-        session.user.email = token.email
-        session.user.image = token.picture
-        session.user.role = token.role
-      }
-
-      return session
-    },
-    // eslint-disable-next-line @typescript-eslint/ts-ignore
-    // @ts-ignore
-    async jwt({ token, user }) {
+    async session({ session, user }) {
       const [dbUser] = await db
         .select()
         .from(users)
-        .where(eq(users.email, token.email || ''))
+        .where(eq(users.id, user.id || ''))
         .limit(1)
 
-      if (!dbUser) {
-        if (user) {
-          token.id = user.id
-          token.role = user.role
-        }
-        return token
+      if (session.user) {
+        session.user.id = user.id
+        session.user.name = user.name
+        session.user.email = user.email
+        session.user.image = user.image
+        session.user.role = dbUser.role || 'basic'
       }
 
-      return {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        role: dbUser.role,
-        picture: dbUser.image,
-      }
+      return session
     },
   },
 }

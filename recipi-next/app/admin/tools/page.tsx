@@ -4,7 +4,7 @@ import { TOOL_LIST } from './toolList'
 
 import { Typography } from '@/components/ui/typography'
 
-export default async function CreateRecipePage() {
+export default async function ToolsPage() {
   const user = await getCurrentUser()
 
   //redirect to home if not logged in

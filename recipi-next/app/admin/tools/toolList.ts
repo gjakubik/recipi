@@ -14,4 +14,9 @@ export const TOOL_LIST = [
     description: 'Test arbitrary parsing logic on any input text',
     href: '/admin/tools/parse-tester',
   },
+  {
+    name: 'Rust Auth Test',
+    description: 'Test the Rust auth API',
+    href: '/admin/tools/rust-auth-test',
+  },
 ]
