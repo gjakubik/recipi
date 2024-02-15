@@ -11,6 +11,7 @@ export type NavGroup = {
   href: string
   minWidth: 'small' | 'medium' | 'large'
   items: NavItem[]
+  authenticated?: boolean
 }
 
 export type NavConfig = {

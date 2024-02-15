@@ -40,8 +40,6 @@ export const sessions = mysqlTable(
     sessionToken: varchar('sessionToken', { length: 255 }).notNull(),
     userId: varchar('userId', { length: 255 }).notNull(),
     expires: datetime('expires').notNull(),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow().onUpdateNow(),
   },
   (session) => ({
     sessionTokenIndex: uniqueIndex('sessions__sessionToken__idx').on(

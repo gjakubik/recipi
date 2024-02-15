@@ -12,6 +12,7 @@ export const defaultNavConfig: NavConfig = {
       title: 'My Stuff',
       href: '/my-stuff',
       minWidth: 'small',
+      authenticated: true,
       items: [
         {
           title: 'Recipes',

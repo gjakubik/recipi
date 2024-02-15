@@ -111,6 +111,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
         <div className="hidden md:flex flex-row space-x-8 justify-self-stretch grow ml-4 h-full">
           {config.items.map((item, ix) => {
             //test if item is of type NavGroup
+            if (item.authenticated && !user) return null
             if ((item as NavGroup).items) {
               const group = item as NavGroup
               return (
