@@ -1,4 +1,5 @@
 import { getCurrentUser } from '@/lib/session'
+import { redirect } from 'next/navigation'
 
 import { Container } from '@/components/ui/container'
 import { MainNav } from '@/components/MainNav'
@@ -10,6 +11,7 @@ export default async function CreateLayout({
   children: React.ReactNode
 }) {
   const user = await getCurrentUser()
+  if (!user) return redirect('/')
   return (
     <div className="flex flex-col h-screen">
       <MainNav user={user} config={adminNavConfig} />

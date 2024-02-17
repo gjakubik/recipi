@@ -1,20 +1,23 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { getMenuQueryString } from '@/lib/utils'
+import { getMenuQueryString, getRecipeQueryString } from '@/lib/utils'
 
 import { Input } from '@/components/ui/input'
 import { Typography } from '@/components/ui/typography'
 
 interface PaginationLimitInputProps {
-  mode?: 'client' | 'server'
+  mode?: 'client' | 'server-recipe' | 'server-menu'
   basePath?: string
+  page: number
   limit: number
   setLimit?: (value: number) => void
 }
 
 export const PaginationLimitInput = ({
+  mode,
   basePath = '/',
+  page,
   limit,
   setLimit,
 }: PaginationLimitInputProps) => {
@@ -28,9 +31,19 @@ export const PaginationLimitInput = ({
   }
 
   const handleSetLimit = () => {
-    if (!setLimit) {
+    // find the page that the middle element of the current page is on
+    const middlePage = Math.floor((page * limit) / inputLimit)
+    if (mode === 'server-recipe') {
+      router.push(
+        `${basePath}?${getRecipeQueryString({
+          page: middlePage.toString(),
+          limit: inputLimit.toString(),
+        })}`
+      )
+    } else if (mode === 'server-menu') {
       router.push(
         `${basePath}?${getMenuQueryString({
+          page: middlePage.toString(),
           limit: inputLimit.toString(),
         })}`
       )

@@ -3,8 +3,8 @@ export const docs = {
     slug: 'recipi-value-prop',
     title: 'Recipi Value Proposition',
     description: 'A document outlining the value proposition of Recipi',
-    created: '2024-02-07',
-    updated: '2024-02-07',
+    created: '2024-02-13',
+    updated: '2024-02-13',
     published: true,
   },
   'schema-changes': {
