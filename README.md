@@ -15,6 +15,17 @@ This document serves as a comprehensive guide to the Recipi project, encapsulati
 
 Recipi leverages the power of Next.js 13 and Rust, providing a robust and scalable solution for recipe management. The application integrates modern development practices and tools, offering an intuitive user experience and efficient backend processing for hardware-intensive tasks.
 
+## Release Process
+
+The repository has two main important branches:
+
+- `main`: This branch is the main branch and is used for production releases. It is always stable and contains the latest stable release.
+- `staging`: This branch is used for staging releases. It is used to test and develop the latest features and bug fixes before they are merged into the main branch. This is to be kept semi-stable and should be used for testing purposes.
+
+To develop new features, create a feature branch `my-feature-branch` from the `staging` branch. Once the feature is complete, create a pull request to merge the feature branch into the `staging` branch. This PR will create a preview environment in vercel, which will give you a link in the PR comments to go view the app with your change live. Once the feature is tested and ready to be integrated with other new features being tested for production, merge the PR from `my-feature-branch` to `staging` using the **Squash and Merge** method.
+
+When we are ready to do a production release, then we will create a new pull request to merge the `staging` branch into the `main` branch. Once we are ready to officially release, we will merge the PR from `staging` to `main` using the **Create a Merge Commit** method. This will trigger a production deployment in vercel, and the new release will be live. It will also preserve all of the commits from staging to main, keeping them in sync and git up to date. This is what we want as each commit should theoretically map to a feature or bug fix.
+
 ## Getting Started
 
 To contribute to the Recipi project, you will need to set up both the frontend and backend development environments. Specific instructions for each component are detailed in their respective directories.
