@@ -1,6 +1,7 @@
 import { ServerPagination } from '@/components/ServerPagination'
 import { MenuWithRecipes } from '@/types'
 import { MenuListItem } from '@/components/menu/MenuListItem'
+import { getMenuQueryString } from '@/lib/utils'
 
 interface ServerMenuListProps {
   menus?: MenuWithRecipes[]
@@ -22,16 +23,29 @@ export const ServerMenuList = async ({
 
   return (
     <div className="flex flex-col gap-2">
-      {menus?.map((menu, i) => (
-        <MenuListItem key={i} index={i} menu={menu} />
-      ))}
       <ServerPagination
+        mode="menu"
         basePath="/my-menus"
         page={page}
         limit={limit}
         sort={sort}
         sortBy={sortBy}
         count={count}
+        getQueryString={getMenuQueryString}
+      />
+      {menus?.map((menu, i) => (
+        <MenuListItem key={i} index={i} menu={menu} />
+      ))}
+      <ServerPagination
+        mode="menu"
+        basePath="/my-menus"
+        page={page}
+        limit={limit}
+        sort={sort}
+        sortBy={sortBy}
+        count={count}
+        getQueryString={getMenuQueryString}
+        withPageInfo
       />
     </div>
   )

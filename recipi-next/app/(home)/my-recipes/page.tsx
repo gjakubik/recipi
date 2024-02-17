@@ -3,38 +3,40 @@ import { redirect } from 'next/navigation'
 import { getRecipes, getMenus } from '@/lib/db/api'
 import { RECIPE_QUERY, MENU_QUERY } from '@/lib/constants'
 import { RecipeListPaginated } from '@/components/recipe/RecipeListPaginated'
+import { Typography } from '@/components/ui/typography'
 import { getCurrentUser } from '@/lib/session'
 import { Search } from '@/components/Search'
+import { ServerRecipeList } from '@/components/recipe/ServerRecipeList'
+import { ServerRecipeListLoader } from '@/components/recipe/ServerRecipeListLoader'
 
-const HomePage = async () => {
+interface MyRecipesServerPageProps {
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+const MyRecipesServerPage = async ({
+  searchParams,
+}: MyRecipesServerPageProps) => {
   const user = await getCurrentUser()
 
   if (!user) {
     redirect('/')
   }
 
-  const initialRecipes = await getRecipes({
-    authorId: user.id,
-    ...RECIPE_QUERY,
-  })
-  const initialMenus = await getMenus({
-    authorId: user?.id,
-    ...MENU_QUERY,
-  })
-
   return (
     <>
+      <Typography variant="h2" className="mb-4">
+        My Recipes
+      </Typography>
       <div className="flex sm:hidden w-full pb-6">
         <Search className="w-full" />
       </div>
-      <RecipeListPaginated
-        initialData={initialRecipes}
+      <ServerRecipeListLoader
+        pagePath="/my-recipes"
         user={user}
-        initialMenus={initialMenus}
-        showUserRecipes
+        searchParams={searchParams}
       />
     </>
   )
 }
 
-export default HomePage
+export default MyRecipesServerPage

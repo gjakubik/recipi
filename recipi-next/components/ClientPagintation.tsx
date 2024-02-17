@@ -39,7 +39,12 @@ export const ClientPagination = ({
           {page * limit}-{Math.min(page * limit + limit, count)} of {count}
         </Typography>
         <Separator orientation="vertical" />
-        <PaginationLimitInput limit={limit} mode="client" setLimit={setLimit} />
+        <PaginationLimitInput
+          page={page}
+          limit={limit}
+          mode="client"
+          setLimit={setLimit}
+        />
       </div>
       <Pagination className="w-fit mx-0">
         <PaginationContent>

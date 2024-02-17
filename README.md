@@ -34,8 +34,9 @@ Ensure you have Node.js (LTS version), npm, and Rust installed on your local mac
   - **Database:** MySQL with Planetscale
 - **Backend:**
   - **Language:** Rust
-  - **Framework:** Rocket
-  - **Tooling:** Drizzle Studio for ORM
+  - **Framework:** Axum
+  - **DB Connection Pool:** sqlx
+  - **Database:** MySQL with Planetscale
 
 ## Development Setup
 
