@@ -24,10 +24,10 @@ const MyMenusPage = async ({ searchParams }: MyMenuPageProps) => {
   }
 
   const {
-    page: pageParam,
-    limit: limitParam,
-    sort: sortParam,
-    sortBy: sortByParam,
+    mnu_page: pageParam,
+    mnu_limit: limitParam,
+    mnu_sort: sortParam,
+    mnu_sortBy: sortByParam,
   } = searchParams
 
   const page =
@@ -43,7 +43,7 @@ const MyMenusPage = async ({ searchParams }: MyMenuPageProps) => {
       ? (sortByParam as 'title' | 'creationDate' | 'updatedAt')
       : MENU_QUERY.sortBy
 
-  const initialData = await getMenus({
+  const { menus, count } = await getMenus({
     authorId: user.id,
     page,
     limit,
@@ -67,7 +67,17 @@ const MyMenusPage = async ({ searchParams }: MyMenuPageProps) => {
         {/* <UpsertMenuModal user={user}>
           <Button>Create Menu</Button>
         </UpsertMenuModal> */}
-        <MenuListController initialData={initialData} user={user} />
+        {/* <MenuListController initialData={initialData} user={user} /> */}
+        <ServerMenuList
+          menus={menus}
+          count={count}
+          params={{
+            page,
+            limit,
+            sort,
+            sortBy,
+          }}
+        />
       </div>
     </>
   )

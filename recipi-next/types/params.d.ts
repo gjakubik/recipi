@@ -19,7 +19,7 @@ interface RecipeQuery extends BaseQuery {
   sortBy: RecipeSortBy
 }
 
-export type MenuListQueryParams = {
+export type ListQueryParams = {
   page?: string
   limit?: string
   sort?: string

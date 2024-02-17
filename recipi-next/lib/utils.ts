@@ -1,24 +1,39 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import _ from 'lodash'
-import { ABBREVIATION_TO_UNIT, MENU_QUERY } from './constants'
-import { MenuListQueryParams } from '@/types/params'
+import { ABBREVIATION_TO_UNIT, MENU_QUERY, RECIPE_QUERY } from './constants'
+import { ListQueryParams } from '@/types/params'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const getMenuQueryString = (params: MenuListQueryParams) => {
+export const getRecipeQueryString = (params: ListQueryParams) => {
+  const { page, limit, sort, sortBy } = params
+
+  const queryParams = new URLSearchParams()
+  if (page && page !== RECIPE_QUERY.page.toString())
+    queryParams.append('rcp_page', page)
+  if (limit && limit !== RECIPE_QUERY.limit.toString())
+    queryParams.append('rcp_limit', limit)
+  if (sort && sort !== RECIPE_QUERY.sort) queryParams.append('rcp_sort', sort)
+  if (sortBy && sortBy !== RECIPE_QUERY.sortBy)
+    queryParams.append('rcp_sortBy', sortBy)
+
+  return queryParams.toString()
+}
+
+export const getMenuQueryString = (params: ListQueryParams) => {
   const { page, limit, sort, sortBy } = params
 
   const queryParams = new URLSearchParams()
   if (page && page !== MENU_QUERY.page.toString())
-    queryParams.append('page', page)
+    queryParams.append('mnu_page', page)
   if (limit && limit !== MENU_QUERY.limit.toString())
-    queryParams.append('limit', limit)
-  if (sort && sort !== MENU_QUERY.sort) queryParams.append('sort', sort)
+    queryParams.append('mnu_limit', limit)
+  if (sort && sort !== MENU_QUERY.sort) queryParams.append('mnu_sort', sort)
   if (sortBy && sortBy !== MENU_QUERY.sortBy)
-    queryParams.append('sortBy', sortBy)
+    queryParams.append('mnu_sortBy', sortBy)
 
   return queryParams.toString()
 }
