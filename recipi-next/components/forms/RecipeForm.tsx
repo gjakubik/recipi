@@ -226,7 +226,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         {!initialValues && (
           <Alert>
             <AlertTitle>AI Upload</AlertTitle>
-            <AlertDescription className="flex flex-col xs:flex-row justify-between items-center gap-4 w-full">
+            <AlertDescription className="flex w-full flex-col items-center justify-between gap-4 xs:flex-row">
               <Typography>
                 Use ChatGPT to prefill your recipe from an image or text
               </Typography>
@@ -243,8 +243,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
           </Alert>
         )}
         <div className="flex flex-col gap-2">
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
-            <div className="flex flex-col gap-2 flex-grow">
+          <div className="flex flex-col gap-4 sm:flex-row sm:gap-8">
+            <div className="flex flex-grow flex-col gap-2">
               <FormInput
                 name="title"
                 label="Title"
@@ -275,7 +275,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                   <>
                     {!field.value ? (
                       <UploadDropzone<UploadThingFileRouter>
-                        className="drop-shadow-md h-[246px]"
+                        className="h-[246px] drop-shadow-md"
                         appearance={{
                           container: 'rounded-3xl',
                           label: 'text-primary hover:text-slate-500',
@@ -311,7 +311,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                         <img
                           src={field.value.url || '/images/placeholder.png'}
                           alt="Recipe title image"
-                          className="fill object-cover rounded-md"
+                          className="fill rounded-md object-cover"
                           loading="lazy"
                         />
                       </AspectRatio>
@@ -321,8 +321,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
               />
             </div>
           </div>
-          <div className="flex flex-wrap flex-row gap-4 justify-between items-start mt-2">
-            <div className="flex flex-col sm:flex-row gap-6">
+          <div className="mt-2 flex flex-row flex-wrap items-start justify-between gap-4">
+            <div className="flex flex-col gap-6 sm:flex-row">
               <FormField
                 control={form.control}
                 name="preparationTime"
@@ -350,7 +350,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 )}
               />
             </div>
-            <div className="flex flex-row gap-2 items-start">
+            <div className="flex flex-row items-start gap-2">
               <FormInput
                 name="servings"
                 label="Servings"
@@ -390,7 +390,6 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
             </div>
           </div>
         </div>
-
         <EditPreviewTabs title="Ingredients">
           <TabsContent value="edit" className="pt-4">
             <DndContext
@@ -420,7 +419,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 ))}
               </SortableContext>
             </DndContext>
-            <div className="flex flex-row justify-end w-full max-w-[600px] m-auto">
+            <div className="m-auto flex w-full max-w-[600px] flex-row justify-end">
               <Button
                 variant="default"
                 onClick={handleAddIngredient}
@@ -442,7 +441,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 }))}
               />
             ) : (
-              <Typography className="text-center py-12">
+              <Typography className="py-12 text-center">
                 No ingredients added
               </Typography>
             )}
@@ -459,7 +458,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 items={instructions.map((i) => i.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className=" w-full max-w-[600px] m-auto">
+                <div className=" m-auto w-full max-w-[600px]">
                   {instructions.map((i, index) => (
                     <EditInstructionItem
                       key={i.id}
@@ -476,7 +475,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 </div>
               </SortableContext>
             </DndContext>
-            <div className="flex justify-end w-full max-w-[600px] m-auto">
+            <div className="m-auto flex w-full max-w-[600px] justify-end">
               <Button
                 className="mt-4"
                 onClick={handleAddInstruction}
@@ -492,7 +491,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 instructions={instructions.map((i) => i.instruction)}
               />
             ) : (
-              <Typography className="text-center py-12">
+              <Typography className="py-12 text-center">
                 No instructions added
               </Typography>
             )}
@@ -500,7 +499,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         </EditPreviewTabs>
         {/* <FancyBox />
         <FancyMultiSelect /> */}
-        <div className="flex flex-row w-full justify-between">
+        <div className="flex w-full flex-row justify-between">
           <div className="flex flex-row gap-4">
             <Button variant="ghost" type="reset" onClick={() => form.reset()}>
               {initialValues ? 'Reset' : 'Clear'}
