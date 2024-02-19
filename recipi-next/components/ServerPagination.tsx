@@ -1,6 +1,4 @@
 'use server'
-import Router from 'next/router'
-import { getMenuQueryString } from '@/lib/utils'
 
 import {
   Pagination,
@@ -46,7 +44,7 @@ export const ServerPagination = ({
   const showNext = page < totalPages - 1
 
   return (
-    <div className="w-full flex flex-col-reverse sm:flex-row justify-between gap-4 mt-4">
+    <div className="mt-4 flex w-full flex-col-reverse justify-between gap-4 sm:flex-row">
       {withPageInfo ? (
         <div className="flex flex-row items-center gap-4">
           <Typography variant="pn">
@@ -63,7 +61,7 @@ export const ServerPagination = ({
       ) : (
         <div />
       )}
-      <Pagination className="w-fit mx-0">
+      <Pagination className="mx-0 w-fit">
         <PaginationContent>
           {page !== 0 && (
             <ServerPaginationPrevious
