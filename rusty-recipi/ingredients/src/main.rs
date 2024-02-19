@@ -31,17 +31,6 @@ MAIN
 */
 #[tokio::main]
 async fn main() {
-    println!("-------- FOUNDATION FOODS --------");
-    ingredient::ingest_foundation_foods(); // works lets go
-    println!("-------- SR LEGACY FOODS --------");
-    ingredient::ingest_sr_legacy_foods();
-    println!("-------- FNDDS FOODS --------");
-    ingredient::ingest_fndds_foods();
-    println!("-------- BRANDED FOODS --------");
-    ingredient::ingest_branded_foods();
-
-    return;
-
     // Set up DB connections
     let database_url = env::var("DATABASE_URL_DEV").expect("DATABASE_URL_DEV must be set");
     let pool = sqlx::MySqlPool::connect(&database_url).await;
@@ -53,4 +42,16 @@ async fn main() {
             return;
         }
     };
+
+    println!("-------- FOUNDATION FOODS --------");
+    ingredient::ingest_foundation_foods(&pool).await; // works lets go
+    /* println!("-------- SR LEGACY FOODS --------");
+    ingredient::ingest_sr_legacy_foods(&pool).await;
+    println!("-------- FNDDS FOODS --------");
+    ingredient::ingest_fndds_foods(&pool).await;
+    println!("-------- BRANDED FOODS --------");
+    ingredient::ingest_branded_foods(&pool).await; */
+
+    return;
+
 }

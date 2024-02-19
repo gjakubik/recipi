@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use serde_json;
+use sqlx::pool;
 use std::fmt;
 use std::{env, vec, path::Path as FilePath, fs::File};
 use std::io::BufReader;
@@ -7,20 +8,22 @@ use std::io::BufRead;
 use std::fmt::Display;
 use sqlx::{FromRow, mysql::{MySql}, Row, types::chrono::*};
 
+use crate::data_access;
+
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Ingredient2 {
-    id: i64,
-    description: String,
-    calories: f32, // calories per 100g
-    protein: f32, // protein per 100g
-    fat: f32, // fat per 100g
-    carbs: f32, // carbs per 100g
+pub struct Ingredient {
+    pub id: i64,
+    pub description: String,
+    pub calories: f32, // calories per 100g
+    pub protein: f32, // protein per 100g
+    pub fat: f32, // fat per 100g
+    pub carbs: f32, // carbs per 100g
 }
 
-impl Ingredient2 {
-    pub fn new(id: i64, description: &str, calories: f32, protein: f32, fat: f32, carbs: f32) -> Ingredient2 {
-        Ingredient2 {
+impl Ingredient {
+    pub fn new(id: i64, description: &str, calories: f32, protein: f32, fat: f32, carbs: f32) -> Ingredient {
+        Ingredient {
             id,
             description: description.to_string(),
             calories,
@@ -31,15 +34,14 @@ impl Ingredient2 {
     }
 }
 
-impl fmt::Display for Ingredient2 {
+impl fmt::Display for Ingredient {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Ingredient: id: {}, name: {}, calories/100g: {}, protein/100g: {}, fat/100g: {}, carbs/100g: {}", self.id, self.description, self.calories, self.protein, self.fat, self.carbs)
     }
 }
 
 // ingest from each dataset
-pub fn ingest_foundation_foods() {
-    let mut ings: Vec<Ingredient2> = Vec::new();
+pub async fn ingest_foundation_foods(pool: &sqlx::Pool<MySql>) {
     let path = FilePath::new("C:/Users/micha/recipi/.data/foundation_foods.json");
     let f = File::open(path).unwrap();
     let mut reader = BufReader::new(f);
@@ -57,8 +59,11 @@ pub fn ingest_foundation_foods() {
                 let ingredient = ingredient_from_raw_food(raw_food);
                 match ingredient {
                     Some(i) => {
-                        println!("Ingredient: {}", i);
-                        ings.push(i);
+                        if data_access::add_ingredient(pool, &i).await {
+                            println!("Added ingredient: {}", i);
+                        } else {
+                            println!("Error: Could not add ingredient: {}", i);
+                        }
                     }
                     None => {
                         println!("Error: Could not create ingredient from raw food");
@@ -66,7 +71,6 @@ pub fn ingest_foundation_foods() {
                     }
                 }
                 num += 1;
-                break;
             }
             Err(e) => {
                 println!("Error: {:?}", e);
@@ -78,7 +82,7 @@ pub fn ingest_foundation_foods() {
     println!("Number of foundation foods: {}", num);
 }
 
-pub fn ingest_sr_legacy_foods() {
+pub async fn ingest_sr_legacy_foods(pool: &sqlx::Pool<MySql>) {
     let path = FilePath::new("C:/Users/micha/recipi/.data/sr_legacy_foods.json");
     let f = File::open(path).unwrap();
     let mut reader = BufReader::new(f);
@@ -96,8 +100,11 @@ pub fn ingest_sr_legacy_foods() {
                 let ingredient = ingredient_from_raw_food(raw_food);
                 match ingredient {
                     Some(i) => {
-                        println!("Ingredient: {}", i);
-                        ings.push(i);
+                        if data_access::add_ingredient(pool, &i).await {
+                            println!("Added ingredient: {}", i);
+                        } else {
+                            println!("Error: Could not add ingredient: {}", i);
+                        }
                     }
                     None => {
                         println!("Error: Could not create ingredient from raw food");
@@ -117,7 +124,7 @@ pub fn ingest_sr_legacy_foods() {
     println!("Number of sr legacy foods: {}", num);
 }
 
-pub fn ingest_fndds_foods() {
+pub async fn ingest_fndds_foods(pool: &sqlx::Pool<MySql>) {
     let path = FilePath::new("C:/Users/micha/recipi/.data/fndds_foods.json");
     let f = File::open(path).unwrap();
     let mut reader = BufReader::new(f);
@@ -135,8 +142,11 @@ pub fn ingest_fndds_foods() {
                 let ingredient = ingredient_from_raw_food(raw_food);
                 match ingredient {
                     Some(i) => {
-                        println!("Ingredient: {}", i);
-                        ings.push(i);
+                        if data_access::add_ingredient(pool, &i).await {
+                            println!("Added ingredient: {}", i);
+                        } else {
+                            println!("Error: Could not add ingredient: {}", i);
+                        }
                     }
                     None => {
                         println!("Error: Could not create ingredient from raw food");
@@ -156,8 +166,7 @@ pub fn ingest_fndds_foods() {
     println!("Number of fndds foods: {}", num);
 }
 
-pub fn ingest_branded_foods() {
-    let mut ings: Vec<Ingredient2> = Vec::new();
+pub async fn ingest_branded_foods(pool: &sqlx::Pool<MySql>) {
     let path = FilePath::new("C:/Users/micha/recipi/.data/branded_foods.json");
     let f = File::open(path).unwrap();
     let mut reader = BufReader::new(f);
@@ -175,8 +184,11 @@ pub fn ingest_branded_foods() {
                 let ingredient = ingredient_from_raw_food(raw_food);
                 match ingredient {
                     Some(i) => {
-                        println!("Ingredient: {}", i);
-                        ings.push(i);
+                        if data_access::add_ingredient(pool, &i).await {
+                            println!("Added ingredient: {}", i);
+                        } else {
+                            println!("Error: Could not add ingredient: {}", i);
+                        }
                     }
                     None => {
                         println!("Error: Could not create ingredient from raw food");
@@ -196,7 +208,7 @@ pub fn ingest_branded_foods() {
     println!("Number of branded foods: {}", num);
 }
 
-fn ingredient_from_raw_food(raw_food: Food) -> Option<Ingredient2>
+fn ingredient_from_raw_food(raw_food: Food) -> Option<Ingredient>
 {
     let description = match raw_food.description {
         Some(d) => d,
@@ -227,7 +239,7 @@ fn ingredient_from_raw_food(raw_food: Food) -> Option<Ingredient2>
         None => 0.0,
     };
 
-    Some(Ingredient2::new(raw_food.fdcId.into(), &description, calories, protein, fat, carbs))
+    Some(Ingredient::new(raw_food.fdcId.into(), &description, calories, protein, fat, carbs))
 }
 
 #[derive(Debug, Serialize, Deserialize)]
