@@ -29,9 +29,9 @@ export const MenuListItem = ({ index, menu }: MenuListItemProps) => {
 
   return (
     <Link href={`/menu/${menu.id}`} key={index}>
-      <div className="flex flex-col gap-2 dashed-border-hover ">
-        <div className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 items-center justify-between hover:cursor-pointer ">
-          <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-4">
+      <div className="dashed-border-hover flex flex-col gap-2 ">
+        <div className="flex w-full flex-row items-center justify-between gap-4 hover:cursor-pointer sm:grid sm:grid-cols-[1fr_auto] ">
+          <div className="flex flex-col gap-4 sm:grid sm:grid-cols-[1fr_auto]">
             <div className="flex flex-col">
               <Typography variant="h5">{menu.title}</Typography>
               <Typography variant="pn" className="line-clamp-2">
@@ -39,9 +39,9 @@ export const MenuListItem = ({ index, menu }: MenuListItemProps) => {
               </Typography>
             </div>
             <div className="grid grid-cols-[140px_90px] items-center">
-              {/* <Typography variant="light">
+              <Typography variant="light">
                 Updated {menu.updatedAt?.toLocaleDateString()}
-              </Typography> */}
+              </Typography>
               <Typography variant="pn">
                 {menu.recipes ? menu.recipes.length : '0'} recipe
                 {(menu.recipes?.length !== 1 || !menu.recipes) && 's'}
@@ -71,7 +71,7 @@ export const MenuListItem = ({ index, menu }: MenuListItemProps) => {
             opacity: isOpen ? 1 : 0,
           }}
           transition={{ duration: 0.5 }}
-          className="w-full flex flex-col justify-center items-center overflow-hidden"
+          className="flex w-full flex-col items-center justify-center overflow-hidden"
         >
           {isOpen && (
             <div
@@ -89,7 +89,7 @@ export const MenuListItem = ({ index, menu }: MenuListItemProps) => {
                     {menu.recipeInfo.map((recipe, index) => (
                       <CarouselItem
                         key={index}
-                        className="pl-1 md:pl-2 basis-1/2 sm:basis-1/3"
+                        className="basis-1/2 pl-1 sm:basis-1/3 md:pl-2"
                       >
                         <div className="p-1">
                           {recipe && <RecipePreviewCard recipe={recipe} />}
@@ -154,8 +154,8 @@ export const CheckedMenuListItem = ({
   }
 
   return (
-    <div className="flex flex-col w-full dashed-border-hover" key={index}>
-      <div className="w-full flex flex-row gap-4 items-center">
+    <div className="dashed-border-hover flex w-full flex-col" key={index}>
+      <div className="flex w-full flex-row items-center gap-4">
         <Checkbox
           checked={checked}
           onCheckedChange={(checked) =>
@@ -164,7 +164,7 @@ export const CheckedMenuListItem = ({
           className="hover:cursor-pointer"
         />
         <div
-          className="w-full flex flex-row sm:grid sm:grid-cols-[1fr_auto] gap-4 justify-between items-center hover:cursor-pointer"
+          className="flex w-full flex-row items-center justify-between gap-4 hover:cursor-pointer sm:grid sm:grid-cols-[1fr_auto]"
           onClick={() => setIsOpen(!isOpen)}
         >
           <div className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] sm:gap-4">
@@ -197,11 +197,11 @@ export const CheckedMenuListItem = ({
         initial={false}
         animate={{ height: isOpen ? 120 : 0, opacity: isOpen ? 1 : 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full flex flex-col justify-center items-center overflow-hidden"
+        className="flex w-full flex-col items-center justify-center overflow-hidden"
       >
         {isOpen && (
           <div
-            className="w-full md:w-[720px] lg:w-[750px] px-10"
+            className="w-full px-10 md:w-[720px] lg:w-[750px]"
             // onClick={() => setIsOpen(!isOpen)}
           >
             {menu.recipeInfo && menu.recipeInfo.length !== 0 ? (
@@ -215,7 +215,7 @@ export const CheckedMenuListItem = ({
                   {menu.recipeInfo.map((recipe, index) => (
                     <CarouselItem
                       key={index}
-                      className="pl-1 md:pl-2 basis-1/2 sm:basis-1/3"
+                      className="basis-1/2 pl-1 sm:basis-1/3 md:pl-2"
                     >
                       <div className="p-1">
                         {recipe && <RecipePreviewCard recipe={recipe} />}

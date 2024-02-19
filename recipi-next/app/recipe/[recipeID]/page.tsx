@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getRecipe, getMenus, updateRecipePrivacy } from '@/lib/db/api'
+import { getRecipe, getMenus } from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
 import { timeValueToLabel, isZero } from '@/lib/utils'
 import { MENU_QUERY } from '@/lib/constants'
@@ -9,15 +9,9 @@ import { Button } from '@/components/ui/button'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
 import { InstructionsList } from '@/components/recipe/InstructionsList'
 import { AddRecipeToMenusModal } from '@/components/modals/AddRecipeToMenusModal'
-import { Clock, LockKeyhole, UnlockKeyhole, Users } from 'lucide-react'
 import { RecipeActionsDropdown } from './RecipeActionsDropdown'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { revalidatePath } from 'next/cache'
 import { RecipePrivacyButton } from './RecipePrivacyButton'
+import { Clock, Users } from 'lucide-react'
 
 interface RecipePageProps {
   params: { recipeID: string }
@@ -34,7 +28,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
 
   return (
     <>
-      <div className="flex flex-row justify-between justify-items-center w-full">
+      <div className="flex w-full flex-col justify-between justify-items-center gap-2 sm:flex-row">
         <div className="flex flex-col">
           <Typography variant="extralight" className="">
             {recipe.isPrivate ? 'Secret' : 'Public'}
@@ -68,7 +62,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
       <div className="flex flex-col gap-0">
         {!isZero(recipe.preparationTime) && (
           <div className="flex flex-row items-center gap-2">
-            <Clock className="w-4 h-4" />
+            <Clock className="h-4 w-4" />
             <Typography variant="bold">Prep</Typography>
             <Typography variant="pn" className="pt-px">
               {timeValueToLabel(recipe.preparationTime) ||
@@ -78,7 +72,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
         )}
         {!isZero(recipe.cookingTime) && (
           <div className="flex flex-row items-center gap-2">
-            <Clock className="w-4 h-4" />
+            <Clock className="h-4 w-4" />
             <Typography variant="bold">Cook</Typography>
             <Typography variant="pn" className="pt-px">
               {timeValueToLabel(recipe.cookingTime) || recipe.cookingTime}
@@ -86,7 +80,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
           </div>
         )}
         <div className="flex flex-row items-center gap-2">
-          <Users className="w-4 h-4" />
+          <Users className="h-4 w-4" />
           <Typography variant="bold">Servings</Typography>
           <Typography variant="pn" className="pt-px">
             {recipe.servings}

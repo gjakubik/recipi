@@ -1,5 +1,4 @@
 import { User } from 'next-auth'
-import { Recipe, GetMenusResult } from '@/types'
 import { getRecipes, getMenus } from '@/lib/db/api'
 import { RECIPE_QUERY, MENU_QUERY } from '@/lib/constants'
 
@@ -66,7 +65,7 @@ export const ServerRecipeList = async ({
         count={count}
         getQueryString={getRecipeQueryString}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         <Suspense fallback={LoadingCards}>
           <RecipeList
             recipes={recipes}
