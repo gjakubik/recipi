@@ -16,11 +16,7 @@ export const ingredients = mysqlTable(
     calories: float('calories'),
     protein: float('protein'),
     fat: float('fat'),
-    carbs: float('carbs'),
-    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(), // This col in other tables is a string, I want to move them to this format
-    updatedAt: timestamp('updated_at', { mode: 'date' })
-      .defaultNow()
-      .onUpdateNow(),
+    carbs: float('carbs')
   },
   (table) => {
     return {

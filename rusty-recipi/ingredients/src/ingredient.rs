@@ -42,7 +42,7 @@ impl fmt::Display for Ingredient {
 
 // ingest from each dataset
 pub async fn ingest_foundation_foods(pool: &sqlx::Pool<MySql>) {
-    let path = FilePath::new("C:/Users/micha/recipi/.data/foundation_foods.json");
+    let path = FilePath::new("/Users/michaellee/recipi/.data/foundation_foods.json");
     let f = File::open(path).unwrap();
     let mut reader = BufReader::new(f);
     let mut lines = reader.lines();
@@ -83,7 +83,7 @@ pub async fn ingest_foundation_foods(pool: &sqlx::Pool<MySql>) {
 }
 
 pub async fn ingest_sr_legacy_foods(pool: &sqlx::Pool<MySql>) {
-    let path = FilePath::new("C:/Users/micha/recipi/.data/sr_legacy_foods.json");
+    let path = FilePath::new("/Users/michaellee/recipi/.data/sr_legacy_foods.json");
     let f = File::open(path).unwrap();
     let mut reader = BufReader::new(f);
     let mut lines = reader.lines();
@@ -101,7 +101,7 @@ pub async fn ingest_sr_legacy_foods(pool: &sqlx::Pool<MySql>) {
                 match ingredient {
                     Some(i) => {
                         if data_access::add_ingredient(pool, &i).await {
-                            println!("Added ingredient: {}", i);
+                            // println!("Added ingredient: {}", i);
                         } else {
                             println!("Error: Could not add ingredient: {}", i);
                         }
@@ -112,7 +112,6 @@ pub async fn ingest_sr_legacy_foods(pool: &sqlx::Pool<MySql>) {
                     }
                 }
                 num += 1;
-                break;
             }
             Err(e) => {
                 println!("Error: {:?}", e);
@@ -125,7 +124,7 @@ pub async fn ingest_sr_legacy_foods(pool: &sqlx::Pool<MySql>) {
 }
 
 pub async fn ingest_fndds_foods(pool: &sqlx::Pool<MySql>) {
-    let path = FilePath::new("C:/Users/micha/recipi/.data/fndds_foods.json");
+    let path = FilePath::new("/Users/michaellee/recipi/.data/fndds_foods.json");
     let f = File::open(path).unwrap();
     let mut reader = BufReader::new(f);
     let mut lines = reader.lines();
@@ -143,7 +142,7 @@ pub async fn ingest_fndds_foods(pool: &sqlx::Pool<MySql>) {
                 match ingredient {
                     Some(i) => {
                         if data_access::add_ingredient(pool, &i).await {
-                            println!("Added ingredient: {}", i);
+                            // println!("Added ingredient: {}", i);
                         } else {
                             println!("Error: Could not add ingredient: {}", i);
                         }
@@ -154,7 +153,6 @@ pub async fn ingest_fndds_foods(pool: &sqlx::Pool<MySql>) {
                     }
                 }
                 num += 1;
-                break;
             }
             Err(e) => {
                 println!("Error: {:?}", e);
@@ -167,7 +165,7 @@ pub async fn ingest_fndds_foods(pool: &sqlx::Pool<MySql>) {
 }
 
 pub async fn ingest_branded_foods(pool: &sqlx::Pool<MySql>) {
-    let path = FilePath::new("C:/Users/micha/recipi/.data/branded_foods.json");
+    let path = FilePath::new("/Users/michaellee/recipi/.data/branded_foods.json");
     let f = File::open(path).unwrap();
     let mut reader = BufReader::new(f);
     let mut lines = reader.lines();
@@ -185,7 +183,7 @@ pub async fn ingest_branded_foods(pool: &sqlx::Pool<MySql>) {
                 match ingredient {
                     Some(i) => {
                         if data_access::add_ingredient(pool, &i).await {
-                            println!("Added ingredient: {}", i);
+                            // println!("Added ingredient: {}", i);
                         } else {
                             println!("Error: Could not add ingredient: {}", i);
                         }
@@ -196,7 +194,6 @@ pub async fn ingest_branded_foods(pool: &sqlx::Pool<MySql>) {
                     }
                 }
                 num += 1;
-                break;
             }
             Err(e) => {
                 println!("Error: {:?}", e);
