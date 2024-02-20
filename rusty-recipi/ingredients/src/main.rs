@@ -11,20 +11,19 @@ use axum::{
 };
 use color_eyre::eyre::{self, Error};
 use eyre::Report;
-use sqlx::{FromRow, Pool, mysql::{MySql, MySqlPool}, Row, types::chrono::*};
+use sqlx::{FromRow, Pool, mysql::{MySql, MySqlPool, MySqlPoolOptions}, Row, types::chrono::*};
 use serde::{Deserialize, Serialize};
-use std::{env, vec};
+use std::{env, vec, path::Path as FilePath, fs::File};
+use std::io::BufReader;
+use std::io::BufRead;
 use sqlx::*;
 use tokio::*;
 use crate::data_access::*;
+use crate::ingredient::*;
 
 pub mod data_access;
-/*
-MAIN
-- Sets up DB connections, registers API routes, and listens for requests
-- Currently supports: 
-    - /ingredient (get, post, put, delete)
-*/
+pub mod ingredient;
+
 #[tokio::main]
 async fn main() {
     // Set up DB connections
@@ -39,31 +38,43 @@ async fn main() {
         }
     };
 
-    let router = Router::new()
-        .route(
-            "/ingredient",
-            post(add_ingredient_handler)
-            .with_state(pool.clone())
-        )
-        .route(
-            "/ingredient/:id",
-            get(get_ingredient_handler_id)
-            .put(update_ingredient_handler_id)
-            .delete(delete_ingredient_handler_id)
-            .with_state(pool.clone())
-        )
-        .route(
-            "/ingredient/name/:name",
-            get(get_ingredient_handler_name)
-            .delete(delete_ingredient_handler_name)
-            .put(update_ingredient_handler_name)
-            .with_state(pool.clone())
-        );
+    // println!("-------- FOUNDATION FOODS --------");
+    // ingredient::ingest_foundation_foods(&pool).await; // works lets go
+    println!("-------- SR LEGACY FOODS --------");
+    ingredient::ingest_sr_legacy_foods(&pool).await;
+    println!("-------- FNDDS FOODS --------");
+    ingredient::ingest_fndds_foods(&pool).await;
+    println!("-------- BRANDED FOODS --------");
+    ingredient::ingest_branded_foods(&pool).await;
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
-    .await
-    .unwrap();
-    axum::serve(listener, router).await.unwrap();
+    let router = Router::new()
+    .route(
+        "/ingredient",
+        post(add_ingredient_handler)
+        .with_state(pool.clone())
+    )
+    .route(
+        "/ingredient/:id",
+        get(get_ingredient_handler_id)
+        .put(update_ingredient_handler_id)
+        .delete(delete_ingredient_handler_id)
+        .with_state(pool.clone())
+    )
+    .route(
+        "/ingredient/name/:name",
+        get(get_ingredient_handler_name)
+        .delete(delete_ingredient_handler_name)
+        .put(update_ingredient_handler_name)
+        .with_state(pool.clone())
+    );
+
+let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
+.await
+.unwrap();
+axum::serve(listener, router).await.unwrap();
+
+    return;
+
 }
 
 async fn get_ingredient_handler_id(
@@ -96,7 +107,7 @@ async fn add_ingredient_handler(
     State(pool): State<Pool<MySql>>,
     Json(ingredient): Json<Ingredient>
 ) -> impl IntoResponse {
-    let result = add_ingredient(pool, ingredient).await;
+    let result = add_ingredient(&pool, &ingredient).await;
 
     if result {
         (StatusCode::CREATED, "Ingredient added").into_response()
