@@ -7,14 +7,16 @@ import { MenuListItem } from '@/components/menu/MenuListItem'
 import { getMenuQueryString } from '@/lib/utils'
 
 interface ServerMenuListProps {
-  pagePath: '/my-menus' | '/'
+  pagePath: string
   user?: User
+  profileUserId?: string
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export const ServerMenuList = async ({
   pagePath,
   user,
+  profileUserId,
   searchParams,
 }: ServerMenuListProps) => {
   //TODO: Add message for if there are no menus, and have a button to create one
@@ -39,8 +41,15 @@ export const ServerMenuList = async ({
       ? (sortByParam as 'title' | 'creationDate' | 'updatedAt')
       : MENU_QUERY.sortBy
 
+  const authorId =
+    pagePath === '/my-menus'
+      ? user?.id
+      : pagePath.includes('/profile')
+        ? profileUserId
+        : undefined
+
   const { menus, count } = await getMenus({
-    authorId: pagePath === '/my-menus' ? user?.id : undefined,
+    authorId,
     page,
     limit,
     sort,

@@ -8,17 +8,19 @@ import { getRecipeQueryString } from '@/lib/utils'
 import { Suspense } from 'react'
 import { LoadingCards } from './LoadingCards'
 
-interface ServerMenuListProps {
-  pagePath: '/my-recipes' | '/'
+interface ServerRecipeListProps {
+  pagePath: string
   user?: User
+  profileUserId?: string
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export const ServerRecipeList = async ({
   pagePath,
   user,
+  profileUserId,
   searchParams,
-}: ServerMenuListProps) => {
+}: ServerRecipeListProps) => {
   //TODO: Add message for if there are no menus, and have a button to create one
 
   const {
@@ -41,8 +43,15 @@ export const ServerRecipeList = async ({
       ? (sortByParam as 'title' | 'creationDate' | 'updatedAt')
       : RECIPE_QUERY.sortBy
 
+  const authorId =
+    pagePath === '/my-recipes'
+      ? user?.id
+      : pagePath.includes('/profile')
+        ? profileUserId
+        : undefined
+
   const { recipes, count } = await getRecipes({
-    authorId: pagePath === '/my-recipes' ? user?.id : undefined,
+    authorId,
     page,
     limit,
     sort,

@@ -5,14 +5,16 @@ import { ServerRecipeList } from './ServerRecipeList'
 import { LoadingRecipeList } from './LoadingRecipeList'
 
 interface ServerRecipeListLoaderProps {
-  pagePath: '/my-recipes' | '/'
+  pagePath: string
   user?: User
+  profileUserId?: string
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export const ServerRecipeListLoader = async ({
   pagePath,
   user,
+  profileUserId,
   searchParams,
 }: ServerRecipeListLoaderProps) => {
   return (
@@ -20,6 +22,7 @@ export const ServerRecipeListLoader = async ({
       <ServerRecipeList
         pagePath={pagePath}
         user={user}
+        profileUserId={profileUserId}
         searchParams={searchParams}
       />
     </Suspense>
