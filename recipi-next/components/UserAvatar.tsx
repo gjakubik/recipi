@@ -1,4 +1,5 @@
 import { User } from '@/types'
+import Link from 'next/link'
 import { cn, getInitials } from '@/lib/utils'
 
 import { Typography } from '@/components/ui/typography'
@@ -11,8 +12,8 @@ interface UserAvatarProps {
 
 export const UserAvatar = ({ user, className }: UserAvatarProps) => {
   return (
-    <div className={cn('flex flex-row gap-2 items-center', className)}>
-      <Avatar className="w-[30px] h-[30px]">
+    <div className={cn('flex flex-row items-center gap-2', className)}>
+      <Avatar className="h-[30px] w-[30px]">
         <AvatarImage
           src={user.image ? user.image : undefined}
           alt={user.name!}

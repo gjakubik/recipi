@@ -18,3 +18,5 @@ export { default as getFeatureFlag } from './featureFlag/getFeatureFlag'
 export { default as getFeatureFlags } from './featureFlag/getFeatureFlags'
 export { default as updateFeatureFlag } from './featureFlag/updateFeatureFlag'
 export { default as deleteFeatureFlag } from './featureFlag/deleteFeatureFlag'
+
+export { default as getUser } from './user/getUser'
