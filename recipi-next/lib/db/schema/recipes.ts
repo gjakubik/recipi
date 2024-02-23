@@ -1,4 +1,4 @@
-import { Ingredient, StoredFile } from '@/types'
+import { RecipeIngredient, StoredFile } from '@/types'
 import {
   mysqlTable,
   timestamp,
@@ -28,7 +28,7 @@ export const recipes = mysqlTable(
     servings: varchar('servings', { length: 50 }).notNull(),
     difficultyLevel: varchar('difficulty_level', { length: 50 }).notNull(),
     ingredients: json('ingredients')
-      .$type<Ingredient[]>()
+      .$type<RecipeIngredient[]>()
       .default([])
       .notNull(),
     instructions: json('instructions').$type<string[]>().default([]).notNull(),

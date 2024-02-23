@@ -10,7 +10,7 @@ import {
   recipeAIUploadText,
   recipeAIUploadImage,
 } from '@/app/_actions/recipeAIUpload'
-import { Ingredient } from '@/types'
+import { RecipeIngredient } from '@/types'
 import { UploadDropzone } from '@uploadthing/react'
 import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
 import { UploadFileResponse } from 'uploadthing/client'
@@ -96,7 +96,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
       data.ingredients &&
         form.setValue(
           'ingredients',
-          data.ingredients.map((ing: Ingredient, i: number) => {
+          data.ingredients.map((ing: RecipeIngredient, i: number) => {
             //if we are able to parse the amount, use that, otherwise leave it empty. If the unit is empty, then set it to the amount
             const validAmount = parseFloat(ing.amount || '') > 0
             const amount = validAmount ? ing.amount : ''
@@ -177,7 +177,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
       data.ingredients &&
         form.setValue(
           'ingredients',
-          data.ingredients.map((ing: Ingredient, i: number) => {
+          data.ingredients.map((ing: RecipeIngredient, i: number) => {
             //if we are able to parse the amount, use that, otherwise leave it empty. If the unit is empty, then set it to the amount
             const validAmount = parseFloat(ing.amount || '') > 0
             const amount = validAmount ? ing.amount : ''
@@ -247,7 +247,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
       data.ingredients &&
         form.setValue(
           'ingredients',
-          data.ingredients.map((ing: Ingredient, i: number) => {
+          data.ingredients.map((ing: RecipeIngredient, i: number) => {
             return {
               ...ing,
               id: i,
@@ -293,9 +293,9 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
           <Button
             onClick={() => setActiveTab('text')}
             variant="text"
-            className={`px-2 pb-3 hover:cursor ${
+            className={`hover:cursor px-2 pb-3 ${
               activeTab === 'text'
-                ? 'font-bold long-dashed-border'
+                ? 'long-dashed-border font-bold'
                 : 'dashed-border-hover'
             } transition duration-150 ease-in-out`}
           >
@@ -304,9 +304,9 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
           <Button
             onClick={() => setActiveTab('image')}
             variant="text"
-            className={`px-2 pb-3 hover:cursor ${
+            className={`hover:cursor px-2 pb-3 ${
               activeTab === 'image'
-                ? 'font-bold long-dashed-border'
+                ? 'long-dashed-border font-bold'
                 : 'dashed-border-hover'
             } transition duration-150 ease-in-out`}
           >
@@ -315,16 +315,16 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
           <Button
             onClick={() => setActiveTab('recipe-converter')}
             variant="text"
-            className={`px-2 pb-3 hover:cursor ${
+            className={`hover:cursor px-2 pb-3 ${
               activeTab === 'recipe-converter'
-                ? 'font-bold long-dashed-border'
+                ? 'long-dashed-border font-bold'
                 : 'dashed-border-hover'
             } transition duration-150 ease-in-out`}
           >
             ChatGPT
           </Button>
         </div>
-        <div className="min-h-[450px] w-full max-w-[500px] m-auto">
+        <div className="m-auto min-h-[450px] w-full max-w-[500px]">
           {activeTab === 'text' && (
             <div className="flex flex-col gap-2">
               <Typography variant="p">Paste the recipe text here:</Typography>
@@ -339,11 +339,11 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
             </div>
           )}
           {activeTab === 'image' && (
-            <div className="flex flex-col gap-2 relative">
+            <div className="relative flex flex-col gap-2">
               <Typography variant="p">Upload the recipe image here:</Typography>
               {!image && (
                 <UploadDropzone<UploadThingFileRouter>
-                  className="drop-shadow-md h-[400px]"
+                  className="h-[400px] drop-shadow-md"
                   endpoint="titleImage"
                   onClientUploadComplete={(res) => {
                     if (!res) {
@@ -372,14 +372,14 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
                 <img
                   src={image.url}
                   alt="Recipe"
-                  className={`w-full h-[400px] object-cover rounded-md ${
-                    isSaving ? 'grayscale brightness-50' : ''
+                  className={`h-[400px] w-full rounded-md object-cover ${
+                    isSaving ? 'brightness-50 grayscale' : ''
                   }`}
                 />
               )}
               {isSaving && (
                 <motion.div
-                  className="absolute inset-0 flex justify-center items-center"
+                  className="absolute inset-0 flex items-center justify-center"
                   variants={robotVariants}
                   initial={{ scale: 1, rotate: 0 }} // Start from a non-scaled, non-rotated state
                   animate="animate" // Reference to the animate variant
@@ -390,7 +390,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
             </div>
           )}
           {activeTab === 'recipe-converter' && (
-            <div className="flex flex-col min-h-[450px]">
+            <div className="flex min-h-[450px] flex-col">
               <Typography variant="bold">
                 Use your own ChatGPT plus account (free)
               </Typography>

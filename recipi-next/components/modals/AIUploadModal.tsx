@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import _ from 'lodash'
 import { useToast } from '@/components/ui/use-toast'
 import { abbToUnit } from '@/lib/utils'
-import { Ingredient } from '@/types'
+import { RecipeIngredient } from '@/types'
 
 import {
   Dialog,
@@ -58,7 +58,7 @@ export const AIUploadModal = ({ children }: PropsWithChildren) => {
       data.ingredients &&
         form.setValue(
           'ingredients',
-          data.ingredients.map((ing: Ingredient, i: number) => {
+          data.ingredients.map((ing: RecipeIngredient, i: number) => {
             return {
               ...ing,
               id: i,
@@ -132,7 +132,7 @@ export const AIUploadModal = ({ children }: PropsWithChildren) => {
             disabled={isSaving || !inputJSON || success}
             className={
               isSaving
-                ? 'opacity-50 cursor-not-allowed'
+                ? 'cursor-not-allowed opacity-50'
                 : 'hover:bg-primary-700'
             }
           >
