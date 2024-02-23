@@ -108,6 +108,9 @@ This project is built using several key technologies:
   applications
 - [Planetscale](https://planetscale.com/) - Scalable MySQL platform for
   developers
+- [React Table](https://react-table.tanstack.com/) - Lightweight, fast and
+  extendable datagrid for React
+  - [React Query](https://react-query.tanstack.com/) - Hooks for fetching,
 - [React Hook Form](https://react-hook-form.com/) - Performant, flexible and
   extensible forms with easy-to-use validation
 
