@@ -1,9 +1,12 @@
 'use client'
 
 import * as React from 'react'
+import { useQueryState, parseAsInteger } from 'nuqs'
 import {
   ColumnDef,
   ColumnFiltersState,
+  PaginationState,
+  RowSelectionState,
   SortingState,
   VisibilityState,
   flexRender,
@@ -15,6 +18,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import useSearch from '@/app/store/useSearch'
 
 import {
   Table,
@@ -24,25 +28,39 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-
+import { Search } from '@/components/Search'
 import { DataTablePagination } from './DataTablePagination'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  rowSelection: RowSelectionState
+  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>
+  searchColumn?: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  rowSelection,
+  setRowSelection,
+  searchColumn,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [page, setPage] = useQueryState('page', parseAsInteger)
+  const [pageSize, setPageSize] = useQueryState('pageSize', parseAsInteger)
+
+  const pagination = React.useMemo<PaginationState>(() => {
+    return {
+      pageIndex: page || 0,
+      pageSize: pageSize || 10,
+    }
+  }, [page, pageSize])
 
   const table = useReactTable({
     data,
@@ -52,6 +70,15 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
       columnFilters,
+      pagination,
+    },
+    onPaginationChange: (getNewPagination) => {
+      // make sure updater is callable (to avoid typescript warning)
+      if (typeof getNewPagination !== 'function') return
+
+      const newPagination = getNewPagination(pagination)
+      setPage(newPagination.pageIndex)
+      setPageSize(newPagination.pageSize)
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -69,6 +96,17 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       {/* <DataTableToolbar table={table} /> */}
+      {searchColumn && (
+        <Search
+          placeholder={`Filter ${searchColumn}`}
+          value={
+            (table.getColumn(searchColumn)?.getFilterValue() as string) ?? ''
+          }
+          onChange={(e) =>
+            table.getColumn(searchColumn)?.setFilterValue(e.target.value)
+          }
+        />
+      )}
       <div className="rounded-md border">
         <Table>
           <TableHeader>

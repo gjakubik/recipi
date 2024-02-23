@@ -1,28 +1,30 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useQueryState } from 'nuqs'
+import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 interface SearchProps {
-  initialSearch: string
   placeholder?: string
+  paramName?: string
   className?: string
+  withButton?: boolean
 }
 
 export function UrlSearch({
-  initialSearch,
   className,
+  paramName = 'search',
   placeholder = 'Type to search Recipi...',
+  withButton = false,
 }: SearchProps) {
-  const [search, setSearch] = useState(initialSearch)
   const router = useRouter()
-  const pathname = usePathname()
+  const [search, setSearch] = useQueryState(paramName)
 
   return (
-    <div className={cn(className, 'relative')}>
+    <div className={cn(className, 'relative flex flex-row gap-2')}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-gray-500"
@@ -41,18 +43,17 @@ export function UrlSearch({
         type="text"
         placeholder={placeholder}
         className="pl-12 pr-4"
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) =>
+          setSearch(e.target.value === '' ? null : e.target.value)
+        }
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            if (search === '') {
-              router.replace(pathname)
-              return
-            }
-            router.replace(pathname + '?search=' + search)
+            router.refresh()
           }
         }}
-        value={search}
+        value={search || ''}
       />
+      {withButton && <Button onClick={() => router.refresh()}>Search</Button>}
     </div>
   )
 }

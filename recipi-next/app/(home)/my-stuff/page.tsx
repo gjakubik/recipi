@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation'
 import { getAuthorRecipes, getMenus } from '@/lib/db/api'
 import { RecipeList } from '@/components/recipe/RecipeList'
 import { getCurrentUser } from '@/lib/session'
-import { Search } from '@/components/Search'
 import { MENU_QUERY } from '@/lib/constants'
 
 const HomePage = async () => {
@@ -18,10 +17,7 @@ const HomePage = async () => {
 
   return (
     <>
-      <div className="flex sm:hidden w-full pb-6">
-        <Search className="w-full" />
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         <RecipeList initialMenus={initialMenus} recipes={recipes} user={user} />
       </div>
     </>
