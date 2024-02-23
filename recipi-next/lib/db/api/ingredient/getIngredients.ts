@@ -12,8 +12,6 @@ interface GetIngredients {
 const getIngredients = async ({
   search,
 }: GetIngredients): Promise<Ingredient[]> => {
-  console.log('search', search)
-  console.log('typeof search', typeof search)
   if (!search) {
     return await db
       .select({
@@ -23,6 +21,7 @@ const getIngredients = async ({
         protein: ingredients.protein,
         fat: ingredients.fat,
         carbs: ingredients.carbs,
+        processed: ingredients.processed,
       })
       .from(ingredients)
       .orderBy(asc(ingredients.description))
@@ -44,6 +43,7 @@ const getIngredients = async ({
       protein: ingredients.protein,
       fat: ingredients.fat,
       carbs: ingredients.carbs,
+      processed: ingredients.processed,
     })
     .from(ingredients)
     .where(

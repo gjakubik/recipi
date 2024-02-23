@@ -30,7 +30,7 @@ export default async function RootLayout({
 
   return (
     // <html lang="en" className="h-screen">
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="max-w-screen w-screen">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

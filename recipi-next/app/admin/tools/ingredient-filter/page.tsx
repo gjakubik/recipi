@@ -1,4 +1,4 @@
-import { getIngredients } from '@/lib/db/api'
+import { getIngredients, getNextIngredient } from '@/lib/db/api'
 
 import { Typography } from '@/components/ui/typography'
 import { UrlSearch } from '@/components/UrlSearch'
@@ -11,18 +11,22 @@ interface IngredietntFilterPageProps {
 export default async function IngredientFilterPage({
   searchParams,
 }: IngredietntFilterPageProps) {
-  const { search: searchParam } = searchParams
+  const { allSearch: searchParam } = searchParams
 
   const search = typeof searchParam === 'string' ? searchParam : ''
 
-  const ingredients = await getIngredients({ search })
-
-  console.log(ingredients)
+  const ingredients = search
+    ? await getIngredients({ search })
+    : (await getNextIngredient()) ?? []
 
   return (
     <>
       <Typography variant="h2">Ingredient Filter</Typography>
-      <UrlSearch initialSearch={search} />
+      <UrlSearch
+        paramName="allSearch"
+        placeholder="Search all Ingredients..."
+        withButton
+      />
       <IngredientTable ingredients={ingredients} />
     </>
   )
