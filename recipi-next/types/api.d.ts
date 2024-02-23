@@ -1,4 +1,4 @@
-import { Recipe, MenuWithRecipes } from './schema'
+import { Recipe, MenuWithRecipes, Ingredient } from './schema'
 
 export type GetRecipesResult = {
   recipes: Recipe[]
@@ -7,5 +7,10 @@ export type GetRecipesResult = {
 
 export type GetMenusResult = {
   menus: MenuWithRecipes[]
+  count: number
+}
+
+export type GetIngredientsResult = {
+  ingredients: Ingredient[]
   count: number
 }
