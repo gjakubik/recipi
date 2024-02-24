@@ -194,3 +194,12 @@ pub async fn delete_ingredient_name(
         }
     }
 }
+
+pub async fn delete_all_ingredients(
+    pool: sqlx::Pool<MySql>
+) {
+    sqlx::query(
+        "DELETE FROM ingredients;"
+    )
+    .execute(&pool).await;
+}
