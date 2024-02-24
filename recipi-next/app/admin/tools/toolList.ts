@@ -1,5 +1,10 @@
 export const TOOL_LIST = [
   {
+    name: 'Ingredient Upload',
+    description: 'Upload ingredient',
+    href: '/admin/tools/ingredient-upload',
+  },
+  {
     name: 'Ingredient Filter',
     description: 'Filter ingredients',
     href: '/admin/tools/ingredient-filter',
