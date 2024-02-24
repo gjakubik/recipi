@@ -37,15 +37,22 @@ async fn main() {
             return;
         }
     };
+/*
+    data_access::delete_all_ingredients(pool).await;
+    println!("done deleting ingredients");
+    return;*/
 
-    // println!("-------- FOUNDATION FOODS --------");
-    // ingredient::ingest_foundation_foods(&pool).await; // works lets go
+    //println!("-------- FOUNDATION FOODS --------");
+    //ingredient::ingest_foundation_foods(&pool).await; // works lets go
     println!("-------- SR LEGACY FOODS --------");
     ingredient::ingest_sr_legacy_foods(&pool).await;
-    println!("-------- FNDDS FOODS --------");
+    
+    /*println!("-------- FNDDS FOODS --------");
     ingredient::ingest_fndds_foods(&pool).await;
     println!("-------- BRANDED FOODS --------");
-    ingredient::ingest_branded_foods(&pool).await;
+    ingredient::ingest_branded_foods(&pool).await;*/
+
+    return; 
 
     let router = Router::new()
     .route(
