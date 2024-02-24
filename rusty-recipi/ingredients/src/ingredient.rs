@@ -19,6 +19,7 @@ pub struct Ingredient {
     pub protein: f32, // protein per 100g
     pub fat: f32, // fat per 100g
     pub carbs: f32, // carbs per 100g
+    
 }
 
 impl Ingredient {
@@ -233,10 +234,20 @@ fn ingredient_from_raw_food(raw_food: Food) -> Option<Ingredient>
     let calories_nutrient = raw_food.foodNutrients.iter().find(|x| x.nutrient.id == 1008);
     let calories = match calories_nutrient {
         Some(c) => c.amount.unwrap_or(0.0),
-        None => 0.0,
+        None => calories_from_kj(&raw_food)
     };
 
     Some(Ingredient::new(raw_food.fdcId.into(), &description, calories, protein, fat, carbs))
+}
+
+fn calories_from_kj(raw_food: &Food) -> f32 {
+    let kj_nutrient = raw_food.foodNutrients.iter().find(|x| x.nutrient.id == 1062);
+    let kj = match kj_nutrient {
+        Some(k) => k.amount.unwrap_or(0.0),
+        None => 0.0,
+    };
+
+    kj * 0.239006
 }
 
 #[derive(Debug, Serialize, Deserialize)]
