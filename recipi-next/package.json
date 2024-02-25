@@ -85,6 +85,7 @@
     "typescript": "5.2.2",
     "undici": "^5.25.2",
     "uploadthing": "^5.7.4",
+    "uuid": "^9.0.1",
     "vaul": "^0.8.0",
     "zod": "^3.22.2",
     "zustand": "^4.4.7"
@@ -93,6 +94,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "@types/lodash": "^4.14.202",
     "@types/react-beautiful-dnd": "^13.1.4",
+    "@types/uuid": "^9.0.8",
     "drizzle-kit": "^0.19.13",
     "postcss-nesting": "^12.0.2",
     "prettier": "^3.2.5",
