@@ -31,8 +31,8 @@ pub async fn get_ingredient_id(
             protein: row.get(3),
             fat: row.get(4),
             carbs: row.get(5),
-            portions: row.get(6),
-            description: row.get(7),
+            portions: row.get(7),
+            fdc_id: row.get(8),
         }
     })
     .fetch_all(&pool).await;
@@ -73,25 +73,25 @@ pub async fn add_ingredient(pool: &sqlx::Pool<MySql>, ingredient: &Ingredient) -
     let res = sqlx::query(
         "INSERT INTO ingredients (
             id,
-            fdc_id,
             description,
             calories,
             protein,
             fat,
             carbs,
-            portions,
             processed
+            portions,
+            fdc_id
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
         .bind(&ingredient.id)
-        .bind(&ingredient.fdc_id)
         .bind(&ingredient.description)
         .bind(&ingredient.calories)
         .bind(&ingredient.protein)
         .bind(&ingredient.fat)
         .bind(&ingredient.carbs)
-        .bind(&ingredient.portions)
         .bind(false)
+        .bind(&ingredient.portions)
+        .bind(&ingredient.fdc_id)
         .execute(pool).await;
 
     println!("Result: {:?}", res);

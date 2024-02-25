@@ -29,12 +29,12 @@ export const columns: ColumnDef<Ingredient>[] = [
     enableHiding: false,
   },
   {
-    header: 'Id',
+    header: 'ID',
     accessorKey: 'id',
   },
   {
-    header: 'FDC Id',
-    accessorKey: 'fdcId',
+    header: 'FDC ID',
+    accessorKey: 'fdc_id',
   },
   {
     header: 'Description',
@@ -58,10 +58,17 @@ export const columns: ColumnDef<Ingredient>[] = [
   },
   {
     header: 'Portions',
-    accessorKey: 'portions',
+    cell: ({ row }) => {
+      const portions = row.original.portions
+      return portions.map((portion) => (
+        <div key={portion.unit}>
+          <div>Unit: {portion.unit}</div>
+          <div>Abbreviation: {portion.abbreviation}</div>
+          <div>Value: {portion.value}</div>
+          <div>Gram Weight: {portion.gram_weight}</div>
+          <div>Grams/Unit{portion.gram_per_unit}</div>
+        </div>
+      ))
+    },
   },
-  /*
-  see checkbox example ^^ get info for cell from row data instead of accessor key
-  just getting info we want from portion object and render some ui for each portion and make a list w/ dividers
-  */
 ]
