@@ -33,6 +33,10 @@ export const columns: ColumnDef<Ingredient>[] = [
     accessorKey: 'id',
   },
   {
+    header: 'FDC Id',
+    accessorKey: 'fdcId',
+  },
+  {
     header: 'Description',
     accessorKey: 'description',
   },
@@ -51,5 +55,9 @@ export const columns: ColumnDef<Ingredient>[] = [
   {
     header: 'Carbs',
     accessorKey: 'carbs',
+  },
+  {
+    header: 'Portions',
+    accessorKey: 'portions',
   },
 ]
