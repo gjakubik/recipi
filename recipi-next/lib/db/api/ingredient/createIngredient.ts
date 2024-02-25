@@ -10,13 +10,13 @@ import { v4 as uuidv4 } from 'uuid'
 const createIngredient = async (ingredient: InsertIngredient) => {
   const newIngredientExec = await db.insert(ingredients).values({
     id: ingredient.id ? ingredient.id : createUuid(),
-    fdc_id: ingredient.fdc_id,
     description: ingredient.description,
     calories: ingredient.calories,
     protein: ingredient.protein,
     fat: ingredient.fat,
     carbs: ingredient.carbs,
     portions: ingredient.portions,
+    fdc_id: ingredient.fdc_id,
   })
 
   const newIngredient = await getIngredient(newIngredientExec.insertId)

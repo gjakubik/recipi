@@ -43,7 +43,7 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
       protein: '0.0',
       fat: '0.0',
       carbs: '0.0',
-      portions: {},
+      portions: [],
       processed: false,
     },
   })

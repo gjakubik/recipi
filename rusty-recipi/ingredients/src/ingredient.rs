@@ -15,13 +15,13 @@ use crate::data_access;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Ingredient {
     pub id: String,
-    pub fdc_id: i64,
     pub description: String,
     pub calories: f32, // calories per 100g
     pub protein: f32, // protein per 100g
     pub fat: f32, // fat per 100g
     pub carbs: f32, // carbs per 100g
     pub portions: sqlx::types::Json<Vec<PortionConversion>>,
+    pub fdc_id: i64,
 }
 
 impl Ingredient {
