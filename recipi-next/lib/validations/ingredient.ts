@@ -4,7 +4,7 @@ export type IngredientFormValues = z.infer<typeof ingredientFormSchema>
 
 export const ingredientFormSchema = z.object({
   id: z.string(),
-  fdc_id: z.number(),
+  fdc_id: z.string(),
   description: z.string(),
   calories: z.string(),
   protein: z.string(),

@@ -5,7 +5,7 @@ import _ from 'lodash'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { createIngredient } from '@/lib/db/api'
+import { createIngredient, updateIngredient } from '@/lib/db/api'
 import {
   IngredientFormValues,
   ingredientFormSchema,
@@ -15,6 +15,13 @@ import { Form } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { FormInput } from '@/components/FormInput'
+import { AddPortionModal } from '../modals/AddPortionModal'
+import {
+  HamburgerMenuIcon,
+  PlusIcon,
+  Cross1Icon,
+  Pencil1Icon,
+} from '@radix-ui/react-icons'
 
 interface IngredientFormProps {
   initialValues?: IngredientFormValues & {
@@ -25,8 +32,9 @@ interface IngredientFormProps {
     protein?: string
     fat?: string
     carbs?: string
-    poritions?: JSON
+    poritions?: []
     processed?: boolean
+    hasPortions?: boolean
   }
 }
 
@@ -35,23 +43,27 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
   const { toast } = useToast()
   const form = useForm<IngredientFormValues>({
     resolver: zodResolver(ingredientFormSchema),
-    defaultValues: {
-      id: '0',
-      fdc_id: 0,
-      description: '',
-      calories: '0.0',
-      protein: '0.0',
-      fat: '0.0',
-      carbs: '0.0',
-      portions: [],
-      processed: false,
-    },
+    defaultValues: !!initialValues
+      ? {
+          ...initialValues,
+        }
+      : {
+          id: '0',
+          fdc_id: '0',
+          description: '',
+          calories: '0.0',
+          protein: '0.0',
+          fat: '0.0',
+          carbs: '0.0',
+          portions: [{}],
+          processed: false,
+        },
   })
 
   const onFormSubmit = async (data: IngredientFormValues) => {
     const prepIngredient = {
       id: data.id,
-      fdc_id: data.fdc_id,
+      fdc_id: parseInt(data.fdc_id),
       description: data.description,
       calories: parseFloat(data.calories),
       protein: parseFloat(data.protein),
@@ -61,8 +73,10 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
     }
 
     try {
-      const insertedIngredient = await createIngredient(prepIngredient)
-      if (!insertedIngredient) {
+      const upsertedIngredient = initialValues
+        ? await updateIngredient(prepIngredient)
+        : await createIngredient(prepIngredient)
+      if (!upsertedIngredient) {
         toast({
           title: `Error ${initialValues} creating ingredient`,
           description: `Something went wrong:
@@ -79,16 +93,15 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
       }
 
       toast({
-        title: `Ingredient ${insertedIngredient.id}
-            ${insertedIngredient.description} created
-            }`,
+        title: `Ingredient ${upsertedIngredient.id}
+            ${upsertedIngredient.description} created`,
       })
       router.refresh()
       // Go to previous page
       router.back()
     } catch (error) {
       toast({
-        title: `Error ${initialValues} creating recipe`,
+        title: `Error ${initialValues} creating ingredient`,
         description: 'Something went wrong',
       })
       console.log(error)
@@ -146,6 +159,14 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             placeholder="0.0"
           />
           <div className="flex flex-row items-end gap-2">
+            <AddPortionModal index={index} updateIngredient={updateIngredient}>
+              <Button variant="ghost" className="hidden xs:flex sm:hidden">
+                <div className="pr-2">
+                  {hasPortion ? <Pencil1Icon /> : <PlusIcon />}
+                </div>{' '}
+                Note
+              </Button>
+            </AddPortionModal>
             <Button variant="ghost" type="reset" onClick={() => form.reset()}>
               {initialValues ? 'Reset' : 'Clear'}
             </Button>
