@@ -1,6 +1,5 @@
 import { getCurrentUser } from '@/lib/session'
 
-import { Typography } from '@/components/ui/typography'
 import { ServerRecipeListLoader } from '@/components/recipe/ServerRecipeListLoader'
 
 interface ProfileRecipesTabProps {
@@ -21,6 +20,7 @@ export default async function ProfileRecipesTab({
         user={user}
         profileUserId={userId}
         searchParams={searchParams}
+        gridClassName="lg:grid-cols-2 xl:grid-cols-3"
       />
     </>
   )

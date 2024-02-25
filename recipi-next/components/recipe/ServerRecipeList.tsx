@@ -1,4 +1,5 @@
 import { User } from 'next-auth'
+import { cn } from '@/lib/utils'
 import { getRecipes, getMenus } from '@/lib/db/api'
 import { RECIPE_QUERY, MENU_QUERY } from '@/lib/constants'
 
@@ -15,6 +16,7 @@ interface ServerRecipeListProps {
   user?: User
   profileUserId?: string
   searchParams: { [key: string]: string | string[] | undefined }
+  gridClassName?: string
 }
 
 export const ServerRecipeList = async ({
@@ -23,6 +25,7 @@ export const ServerRecipeList = async ({
   user,
   profileUserId,
   searchParams,
+  gridClassName,
 }: ServerRecipeListProps) => {
   //TODO: Add message for if there are no menus, and have a button to create one
 
@@ -78,7 +81,12 @@ export const ServerRecipeList = async ({
         count={count}
         getQueryString={getRecipeQueryString}
       />
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+        className={cn(
+          'grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3',
+          gridClassName
+        )}
+      >
         <Suspense fallback={LoadingCards}>
           <RecipeList recipes={recipes} initialMenus={initialMenus} />
         </Suspense>
