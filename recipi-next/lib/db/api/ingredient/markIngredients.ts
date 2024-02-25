@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 import { ingredients } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 
-const markIngredients = async (ids: number[]) => {
+const markIngredients = async (ids: string[]) => {
   ids.forEach(async (id) => {
     await db
       .update(ingredients)

@@ -24,6 +24,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const isDev = process.env.NODE_ENV === 'development'
+  console.log(`dev environment: ${process.env}`)
 
   const user = await getCurrentUser()
   const featureFlags = await getFeatureFlags()

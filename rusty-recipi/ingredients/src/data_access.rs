@@ -31,6 +31,8 @@ pub async fn get_ingredient_id(
             protein: row.get(3),
             fat: row.get(4),
             carbs: row.get(5),
+            portions: row.get(6),
+            description: row.get(7),
         }
     })
     .fetch_all(&pool).await;
@@ -56,6 +58,8 @@ pub async fn get_ingredient_name(
             protein: row.get(3),
             fat: row.get(4),
             carbs: row.get(5),
+            portions: row.get(6),
+            fdc_id: row.get(7),
         }
     })
     .fetch_all(&pool).await;
@@ -69,19 +73,25 @@ pub async fn add_ingredient(pool: &sqlx::Pool<MySql>, ingredient: &Ingredient) -
     let res = sqlx::query(
         "INSERT INTO ingredients (
             id,
+            fdc_id,
             description,
             calories,
             protein,
             fat,
-            carbs
+            carbs,
+            portions,
+            processed
         )
-        VALUES (?, ?, ?, ?, ?, ?)")
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
         .bind(&ingredient.id)
+        .bind(&ingredient.fdc_id)
         .bind(&ingredient.description)
         .bind(&ingredient.calories)
         .bind(&ingredient.protein)
         .bind(&ingredient.fat)
         .bind(&ingredient.carbs)
+        .bind(&ingredient.portions)
+        .bind(false)
         .execute(pool).await;
 
     println!("Result: {:?}", res);
@@ -151,13 +161,13 @@ pub async fn update_ingredient_name(pool: sqlx::Pool<MySql>, ingredient: Ingredi
 
 pub async fn delete_ingredient_id(
     id: i32,
-    pool: sqlx::Pool<MySql>
+    pool: &sqlx::Pool<MySql>
 ) -> bool {
     let res = sqlx::query(
         "DELETE FROM ingredients WHERE id = ?"
     )
     .bind(id)
-    .execute(&pool).await;
+    .execute(pool).await;
 
     println!("Result: {:?}", res);
 
@@ -196,10 +206,10 @@ pub async fn delete_ingredient_name(
 }
 
 pub async fn delete_all_ingredients(
-    pool: sqlx::Pool<MySql>
+    pool: &sqlx::Pool<MySql>
 ) {
     sqlx::query(
         "DELETE FROM ingredients;"
     )
-    .execute(&pool).await;
+    .execute(pool).await;
 }

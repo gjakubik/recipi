@@ -18,7 +18,9 @@ const getNextIngredient = async (): Promise<Ingredient[] | undefined> => {
       protein: ingredients.protein,
       fat: ingredients.fat,
       carbs: ingredients.carbs,
+      portions: ingredients.portions,
       processed: ingredients.processed,
+      fdc_id: ingredients.fdc_id,
     })
     .from(ingredients)
     .where(eq(ingredients.processed, false))
@@ -31,7 +33,12 @@ const getNextIngredient = async (): Promise<Ingredient[] | undefined> => {
 
   const nextIngredient = nextIngredientRes[0]
 
-  const nextIngredientPhrase = nextIngredient.description?.split(',')[0]
+  const nextIngredientPhraseList = nextIngredient.description?.split(',')
+  const hasComma = (nextIngredientPhraseList?.length || 0) > 1
+  console.log(
+    `ingredient phrase list: ${nextIngredientPhraseList}, hasComma? ${hasComma}`
+  )
+  const nextIngredientPhrase = nextIngredientPhraseList?.[0]
 
   const similarIngredients = await db
     .select({
@@ -41,18 +48,23 @@ const getNextIngredient = async (): Promise<Ingredient[] | undefined> => {
       protein: ingredients.protein,
       fat: ingredients.fat,
       carbs: ingredients.carbs,
+      portions: ingredients.portions,
       processed: ingredients.processed,
+      fdc_id: ingredients.fdc_id,
     })
     .from(ingredients)
     .where(
       and(
         eq(ingredients.processed, false),
         nextIngredientPhrase
-          ? like(ingredients.description, `${nextIngredientPhrase},%`)
+          ? like(
+              ingredients.description,
+              `${nextIngredientPhrase}${hasComma ? ',' : ''}%`
+            )
           : undefined
       )
     )
-
+  console.log('similar ingredients: ', similarIngredients)
   return similarIngredients
 }
 

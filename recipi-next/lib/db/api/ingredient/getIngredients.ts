@@ -16,11 +16,13 @@ const getIngredients = async ({
     return await db
       .select({
         id: ingredients.id,
+        fdc_id: ingredients.fdc_id,
         description: ingredients.description,
         calories: ingredients.calories,
         protein: ingredients.protein,
         fat: ingredients.fat,
         carbs: ingredients.carbs,
+        portions: ingredients.portions,
         processed: ingredients.processed,
       })
       .from(ingredients)
@@ -28,28 +30,30 @@ const getIngredients = async ({
       .limit(100)
   }
 
-  let searchInt
+  let searchStr
   try {
-    searchInt = parseInt(search)
+    searchStr = search
   } catch (error) {
-    searchInt = undefined
+    searchStr = undefined
   }
 
   return await db
     .select({
       id: ingredients.id,
+      fdc_id: ingredients.fdc_id,
       description: ingredients.description,
       calories: ingredients.calories,
       protein: ingredients.protein,
       fat: ingredients.fat,
       carbs: ingredients.carbs,
+      portions: ingredients.portions,
       processed: ingredients.processed,
     })
     .from(ingredients)
     .where(
       or(
         search ? like(ingredients.description, `%${search}%`) : undefined,
-        searchInt ? eq(ingredients.id, searchInt) : undefined
+        searchStr ? eq(ingredients.id, searchStr) : undefined
       )
     )
     .orderBy(asc(ingredients.description))

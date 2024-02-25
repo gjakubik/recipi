@@ -38,56 +38,14 @@ async fn main() {
         }
     };
     
-    // ingredient deletion
-    /*
-    data_access::delete_all_ingredients(pool).await;
+    // ingredient deletion -- WARNING: this will delete all ingredients in the DB
+    data_access::delete_all_ingredients(&pool).await;
     println!("done deleting ingredients");
-    return;
-    */
 
-    //println!("-------- FOUNDATION FOODS --------");
-    //ingredient::ingest_foundation_foods(&pool).await; // works lets go
-    
     println!("-------- SR LEGACY FOODS --------");
     ingredient::ingest_sr_legacy_foods(&pool).await;
-    
-    /*
-    println!("-------- FNDDS FOODS --------");
-    ingredient::ingest_fndds_foods(&pool).await;
-    println!("-------- BRANDED FOODS --------");
-    ingredient::ingest_branded_foods(&pool).await;
-    */
 
     return; 
-
-    let router = Router::new()
-    .route(
-        "/ingredient",
-        post(add_ingredient_handler)
-        .with_state(pool.clone())
-    )
-    .route(
-        "/ingredient/:id",
-        get(get_ingredient_handler_id)
-        .put(update_ingredient_handler_id)
-        .delete(delete_ingredient_handler_id)
-        .with_state(pool.clone())
-    )
-    .route(
-        "/ingredient/name/:name",
-        get(get_ingredient_handler_name)
-        .delete(delete_ingredient_handler_name)
-        .put(update_ingredient_handler_name)
-        .with_state(pool.clone())
-    );
-
-let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
-.await
-.unwrap();
-axum::serve(listener, router).await.unwrap();
-
-    return;
-
 }
 
 async fn get_ingredient_handler_id(
@@ -162,7 +120,7 @@ async fn delete_ingredient_handler_id(
     State(pool): State<Pool<MySql>>
 ) -> impl IntoResponse
 {
-    let result = delete_ingredient_id(id, pool).await;
+    let result = delete_ingredient_id(id, &pool).await;
 
     if result {
         (StatusCode::OK, "Ingredient deleted").into_response()
