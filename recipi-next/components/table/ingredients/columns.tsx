@@ -60,4 +60,8 @@ export const columns: ColumnDef<Ingredient>[] = [
     header: 'Portions',
     accessorKey: 'portions',
   },
+  /*
+  see checkbox example ^^ get info for cell from row data instead of accessor key
+  just getting info we want from portion object and render some ui for each portion and make a list w/ dividers
+  */
 ]

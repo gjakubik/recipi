@@ -4,7 +4,8 @@ import { db } from '@/lib/db'
 import { ingredients } from '@/lib/db/schema'
 import { InsertIngredient } from '@/types'
 import getIngredient from './getIngredient'
-import { uuidv4 } from '@/lib/db'
+// import { uuidv4 } from '@/lib/db'
+import { v4 as uuidv4 } from 'uuid'
 
 const createIngredient = async (ingredient: InsertIngredient) => {
   const newIngredientExec = await db.insert(ingredients).values({

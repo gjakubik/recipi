@@ -4,7 +4,6 @@ import { db } from '@/lib/db'
 import { ingredients } from '@/lib/db/schema'
 import { Ingredient } from '@/types'
 import { eq } from 'drizzle-orm'
-import { uuidv4 } from '@/lib/db'
 
 const getIngredient = async (id: string): Promise<Ingredient | undefined> => {
   try {

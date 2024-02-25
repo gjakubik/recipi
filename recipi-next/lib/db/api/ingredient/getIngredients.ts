@@ -4,7 +4,6 @@ import { db } from '@/lib/db'
 import { ingredients } from '@/lib/db/schema'
 import { Ingredient } from '@/types'
 import { like, asc, or, eq } from 'drizzle-orm'
-import { uuidv4 } from '@/lib/db'
 
 interface GetIngredients {
   search?: string

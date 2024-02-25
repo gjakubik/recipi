@@ -291,7 +291,7 @@ fn ingredient_from_raw_food(raw_food: Food) -> Option<Ingredient>
 
                 let value = match unwrapped_portion.value {
                     Some(v) => v,
-                    None => 0.0,
+                    None => 1f32,
                 };
                 let gram_weight = match unwrapped_portion.gramWeight {
                     Some(g) => g,

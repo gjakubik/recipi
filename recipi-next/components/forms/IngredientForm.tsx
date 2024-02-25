@@ -163,6 +163,13 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
                 className="w-[80px]"
                 placeholder="0"
               />
+              <FormInput
+                name="fdc_id"
+                label="FDC ID"
+                type="string"
+                className="w-[80px]"
+                placeholder="0"
+              />
               <FormInput name="description" label="Description" type="string" />
               <FormInput
                 name="protein"

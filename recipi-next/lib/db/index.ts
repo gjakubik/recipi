@@ -1,6 +1,5 @@
 import { drizzle } from 'drizzle-orm/planetscale-serverless'
 import { connect } from '@planetscale/database'
-
 import * as schema from './schema'
 
 const connection = connect({
@@ -9,4 +8,3 @@ const connection = connect({
 
 // @ts-ignore
 export const db = drizzle(connection, { schema })
-export const { v4: uuidv4 } = require('uuid')
