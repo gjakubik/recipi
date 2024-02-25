@@ -5,6 +5,7 @@ import { ServerMenuList } from './ServerMenuList'
 import { LoadingMenuList } from './LoadingMenuList'
 
 interface ServerMenuListLoaderProps {
+  title?: string
   pagePath: string
   user?: User
   profileUserId?: string
@@ -12,6 +13,7 @@ interface ServerMenuListLoaderProps {
 }
 
 export const ServerMenuListLoader = async ({
+  title,
   pagePath,
   user,
   profileUserId,
@@ -20,6 +22,7 @@ export const ServerMenuListLoader = async ({
   return (
     <Suspense fallback={LoadingMenuList}>
       <ServerMenuList
+        title={title}
         pagePath={pagePath}
         user={user}
         profileUserId={profileUserId}

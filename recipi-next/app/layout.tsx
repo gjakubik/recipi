@@ -10,6 +10,7 @@ import { QueryProvider } from '@/providers/QueryProvider'
 import { getFeatureFlags } from '@/lib/db/api'
 import { FeatureFlagProvider } from '@/providers/FeatureFlagProvider'
 import { getCurrentUser } from '@/lib/session'
+import { CurrentUserProvider } from '@/providers/CurrentUserProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,7 +32,7 @@ export default async function RootLayout({
 
   return (
     // <html lang="en" className="h-screen">
-    <html lang="en" suppressHydrationWarning className="max-w-screen w-screen">
+    <html lang="en" suppressHydrationWarning className="w-full">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -41,9 +42,11 @@ export default async function RootLayout({
         >
           <QueryProvider>
             <TooltipProvider delayDuration={1200}>
-              <FeatureFlagProvider user={user} featureFlags={featureFlags}>
-                {children}
-              </FeatureFlagProvider>
+              <CurrentUserProvider user={user}>
+                <FeatureFlagProvider user={user} featureFlags={featureFlags}>
+                  {children}
+                </FeatureFlagProvider>
+              </CurrentUserProvider>
             </TooltipProvider>
             <Toaster />
             {!isDev && <Analytics />}

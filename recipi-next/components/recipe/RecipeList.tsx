@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { User } from 'next-auth'
 import { Recipe, GetMenusResult } from '@/types'
 import useSearch from '@/app/store/useSearch'
 
@@ -9,11 +8,10 @@ import { RecipeCard } from '@/components/recipe/RecipeCard'
 
 interface RecipeListProps {
   recipes: Recipe[]
-  user?: User
   initialMenus: GetMenusResult
 }
 
-export function RecipeList({ initialMenus, recipes, user }: RecipeListProps) {
+export function RecipeList({ initialMenus, recipes }: RecipeListProps) {
   const { search } = useSearch()
   const [forceUpdate, setForceUpdate] = useState(0)
 
@@ -37,7 +35,6 @@ export function RecipeList({ initialMenus, recipes, user }: RecipeListProps) {
           cardKey={recipe.id}
           recipe={recipe}
           initialMenus={initialMenus}
-          user={user}
           forceUpdate={forceUpdate}
           setForceUpdate={setForceUpdate}
         />

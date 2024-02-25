@@ -2,6 +2,7 @@ import { User } from 'next-auth'
 import { getRecipes, getMenus } from '@/lib/db/api'
 import { RECIPE_QUERY, MENU_QUERY } from '@/lib/constants'
 
+import { Typography } from '@/components/ui/typography'
 import { ServerPagination } from '@/components/ServerPagination'
 import { RecipeList } from './RecipeList'
 import { getRecipeQueryString } from '@/lib/utils'
@@ -9,6 +10,7 @@ import { Suspense } from 'react'
 import { LoadingCards } from './LoadingCards'
 
 interface ServerRecipeListProps {
+  title?: string
   pagePath: string
   user?: User
   profileUserId?: string
@@ -16,6 +18,7 @@ interface ServerRecipeListProps {
 }
 
 export const ServerRecipeList = async ({
+  title,
   pagePath,
   user,
   profileUserId,
@@ -65,6 +68,7 @@ export const ServerRecipeList = async ({
   return (
     <div className="flex flex-col gap-4">
       <ServerPagination
+        title={title}
         mode="recipe"
         basePath={pagePath}
         page={page}
@@ -76,11 +80,7 @@ export const ServerRecipeList = async ({
       />
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         <Suspense fallback={LoadingCards}>
-          <RecipeList
-            recipes={recipes}
-            user={user}
-            initialMenus={initialMenus}
-          />
+          <RecipeList recipes={recipes} initialMenus={initialMenus} />
         </Suspense>
       </div>
       <ServerPagination

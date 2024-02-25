@@ -8,6 +8,7 @@ import { signIn, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 import { NavConfig, NavGroup, NavItem } from '@/types'
 import { cn } from '@/lib/utils'
+import { useCurrentUser } from '@/hooks/use-current-user'
 
 import { Separator } from '@/components/ui/separator'
 import { Typography } from '@/components/ui/typography'
@@ -34,15 +35,16 @@ import {
   ChevronDownIcon,
   Cross1Icon,
 } from '@radix-ui/react-icons'
+import { UserIcon, SunMoon, Wrench, Sun, Moon } from 'lucide-react'
 
 export interface HeaderProps {
-  user?: User | null
   config: NavConfig
   children?: React.ReactNode
 }
-export const MainNav = ({ user, config, children }: HeaderProps) => {
+export const MainNav = ({ config, children }: HeaderProps) => {
   const { setTheme } = useTheme()
   const pathname = usePathname()
+  const user = useCurrentUser()
   const [isLoading, setIsLoading] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [groupHoverState, setGroupHoverState] = useState(
@@ -77,7 +79,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
 
   return (
     <header>
-      <div className="flex h-[90px] flex-row items-center justify-between gap-4 sm:mr-4">
+      <div className=" flex h-[90px] w-full flex-row items-center justify-between gap-4 sm:mr-4">
         <Link href="/">
           <div className="hidden items-center justify-center gap-4 px-4 py-4 sm:pl-12 md:flex">
             <ActivityLogIcon className="h-6 w-6" />
@@ -205,7 +207,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
             }
           })}
         </div>
-        <div className="flex flex-row space-x-4">
+        <div className="mr-4 flex flex-row space-x-4">
           {/* {config.searchVisible && <Search className="hidden sm:flex" />} */}
           {!!user && pathname !== '/create' && config.createVisible && (
             <Button
@@ -230,28 +232,39 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/profile" className="cursor-pointer">
+                  <UserIcon className="mr-2 h-4 w-4" />
+                  Profile
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
+                  <SunMoon className="mr-2 h-4 w-4" />
                   Theme Preference
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
                     <DropdownMenuItem onClick={() => setTheme('light')}>
-                      Light
+                      <Sun className="mr-2 h-4 w-4" /> Light
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setTheme('dark')}>
+                      <Moon className="mr-2 h-4 w-4" />
                       Dark
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setTheme('system')}>
+                      <SunMoon className="mr-2 h-4 w-4" />
                       System
                     </DropdownMenuItem>
                   </DropdownMenuSubContent>
                 </DropdownMenuPortal>
               </DropdownMenuSub>
               {user?.role === 'admin' && (
-                <DropdownMenuItem>
-                  <Link href="/admin">Admin</Link>
+                <DropdownMenuItem asChild>
+                  <Link href="/admin" className="cursor-pointer">
+                    <Wrench className="mr-2 h-4 w-4" />
+                    Admin
+                  </Link>
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />

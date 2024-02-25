@@ -35,7 +35,7 @@ export const RoutedMenuTabs = ({ user, menu }: RoutedMenuTabsProps) => {
       <div className="flex flex-row items-center gap-2">
         <Typography
           variant="pn"
-          className="px-4 pb-3 dashed-border-hover hover:cursor-default"
+          className="dashed-border-hover px-4 pb-3 hover:cursor-default"
           onClick={() => updateTab('recipes')}
         >
           Recipes
@@ -43,7 +43,7 @@ export const RoutedMenuTabs = ({ user, menu }: RoutedMenuTabsProps) => {
         {canSeeGroceryList && (
           <Typography
             variant="pn"
-            className="px-4 pb-3 dashed-border-hover hover:cursor-default"
+            className="dashed-border-hover px-4 pb-3 hover:cursor-default"
             onClick={() => updateTab('grocery-list')}
           >
             Grocery List
@@ -53,7 +53,7 @@ export const RoutedMenuTabs = ({ user, menu }: RoutedMenuTabsProps) => {
       {tab === 'recipes' && (
         <div>
           {menu.recipeInfo?.length === 0 ? (
-            <div className="h-32 flex flex-col gap-2 items-center justify-center">
+            <div className="flex h-32 flex-col items-center justify-center gap-2">
               <Typography>No Recipes Here. Add some!</Typography>
               <div>
                 {!!user ? (
@@ -68,9 +68,8 @@ export const RoutedMenuTabs = ({ user, menu }: RoutedMenuTabsProps) => {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 xs:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-x-4 md:gap-x-8">
+            <div className="grid grid-cols-1 gap-8 xs:grid-cols-2 sm:gap-x-4 md:gap-x-8 xl:grid-cols-3">
               <RecipeList
-                user={user}
                 // @ts-ignore
                 recipes={menu.recipeInfo.filter((r) => !!r)}
               />

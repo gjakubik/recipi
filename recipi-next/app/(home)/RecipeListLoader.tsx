@@ -11,7 +11,6 @@ export const RecipeListLoader = async () => {
   return (
     <RecipeListPaginated
       initialData={initialData}
-      user={user}
       initialMenus={initialMenus}
     />
   )

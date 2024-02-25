@@ -5,6 +5,7 @@ import { ServerRecipeList } from './ServerRecipeList'
 import { LoadingRecipeList } from './LoadingRecipeList'
 
 interface ServerRecipeListLoaderProps {
+  title?: string
   pagePath: string
   user?: User
   profileUserId?: string
@@ -12,6 +13,7 @@ interface ServerRecipeListLoaderProps {
 }
 
 export const ServerRecipeListLoader = async ({
+  title,
   pagePath,
   user,
   profileUserId,
@@ -20,6 +22,7 @@ export const ServerRecipeListLoader = async ({
   return (
     <Suspense fallback={LoadingRecipeList}>
       <ServerRecipeList
+        title={title}
         pagePath={pagePath}
         user={user}
         profileUserId={profileUserId}
