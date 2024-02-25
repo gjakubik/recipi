@@ -7,6 +7,7 @@ import { MenuListItem } from '@/components/menu/MenuListItem'
 import { getMenuQueryString } from '@/lib/utils'
 
 interface ServerMenuListProps {
+  title?: string
   pagePath: string
   user?: User
   profileUserId?: string
@@ -14,6 +15,7 @@ interface ServerMenuListProps {
 }
 
 export const ServerMenuList = async ({
+  title,
   pagePath,
   user,
   profileUserId,
@@ -59,6 +61,7 @@ export const ServerMenuList = async ({
   return (
     <div className="flex flex-col gap-2">
       <ServerPagination
+        title={title}
         mode="menu"
         basePath={pagePath}
         page={page}

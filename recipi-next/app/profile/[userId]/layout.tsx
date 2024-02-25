@@ -19,13 +19,11 @@ export default async function ProfilePageLayout({
   params: { userId },
   children,
 }: ProfilePageProps) {
-  const user = await getCurrentUser()
-
   const profile = await getUser(userId)
 
   return (
     <div className="h-min-screen flex flex-col">
-      <MainNav user={user} config={defaultNavConfig} />
+      <MainNav config={defaultNavConfig} />
       {profile ? (
         <Container className="flex-col space-y-4 pb-8 md:w-5/6 lg:w-2/3">
           <Typography variant="h2">{profile.name}</Typography>

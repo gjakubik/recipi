@@ -22,7 +22,7 @@ export function Search({
     <div className={cn(className, 'relative')}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-gray-500"
+        className="pointer-events-none absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-gray-500"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"

@@ -13,9 +13,9 @@ export default async function CreateLayout({
   const user = await getCurrentUser()
   if (!user) return redirect('/')
   return (
-    <div className="flex flex-col h-screen">
-      <MainNav user={user} config={adminNavConfig} />
-      <Container className="md:w-5/6 lg:w-2/3 flex-col space-y-4 pb-8">
+    <div className="flex h-screen flex-col">
+      <MainNav config={adminNavConfig} />
+      <Container className="flex-col space-y-4 pb-8 md:w-5/6 lg:w-2/3">
         {children}
       </Container>
     </div>
