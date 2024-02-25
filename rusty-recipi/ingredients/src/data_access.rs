@@ -26,12 +26,13 @@ pub async fn get_ingredient_id(
     .map(|row: sqlx::mysql::MySqlRow| {
         Ingredient {
             id: row.get(0),
-            description: row.get(1),
-            calories: row.get(2),
-            protein: row.get(3),
-            fat: row.get(4),
-            carbs: row.get(5),
-            portions: row.get(6),
+            fdc_id: row.get(1),
+            description: row.get(2),
+            calories: row.get(3),
+            protein: row.get(4),
+            fat: row.get(5),
+            carbs: row.get(6),
+            portions: row.get(7),
         }
     })
     .fetch_all(&pool).await;
@@ -52,12 +53,13 @@ pub async fn get_ingredient_name(
     .map(|row: sqlx::mysql::MySqlRow| {
         Ingredient {
             id: row.get(0),
-            description: row.get(1),
-            calories: row.get(2),
-            protein: row.get(3),
-            fat: row.get(4),
-            carbs: row.get(5),
-            portions: row.get(6),
+            fdc_id: row.get(1),
+            description: row.get(2),
+            calories: row.get(3),
+            protein: row.get(4),
+            fat: row.get(5),
+            carbs: row.get(6),
+            portions: row.get(7),
         }
     })
     .fetch_all(&pool).await;
@@ -71,21 +73,25 @@ pub async fn add_ingredient(pool: &sqlx::Pool<MySql>, ingredient: &Ingredient) -
     let res = sqlx::query(
         "INSERT INTO ingredients (
             id,
+            fdc_id,
             description,
             calories,
             protein,
             fat,
             carbs,
-            portions
+            portions,
+            processed
         )
-        VALUES (?, ?, ?, ?, ?, ?)")
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
         .bind(&ingredient.id)
+        .bind(&ingredient.fdc_id)
         .bind(&ingredient.description)
         .bind(&ingredient.calories)
         .bind(&ingredient.protein)
         .bind(&ingredient.fat)
         .bind(&ingredient.carbs)
         .bind(&ingredient.portions)
+        .bind(false)
         .execute(pool).await;
 
     println!("Result: {:?}", res);

@@ -39,8 +39,8 @@ async fn main() {
     };
     
     // ingredient deletion -- WARNING: this will delete all ingredients in the DB
-    // data_access::delete_all_ingredients(&pool).await;
-    // println!("done deleting ingredients");
+    data_access::delete_all_ingredients(&pool).await;
+    println!("done deleting ingredients");
 
     println!("-------- SR LEGACY FOODS --------");
     ingredient::ingest_sr_legacy_foods(&pool).await;

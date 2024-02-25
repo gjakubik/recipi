@@ -7,24 +7,26 @@ use std::io::BufReader;
 use std::io::BufRead;
 use std::fmt::Display;
 use sqlx::{FromRow, mysql::{MySql}, Row, types::chrono::*};
+use uuid::Uuid;
 
 use crate::data_access;
 
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Ingredient {
-    pub id: i64,
+    pub id: String,
+    pub fdc_id: i64,
     pub description: String,
     pub calories: f32, // calories per 100g
     pub protein: f32, // protein per 100g
     pub fat: f32, // fat per 100g
     pub carbs: f32, // carbs per 100g
     pub portions: sqlx::types::Json<Vec<PortionConversion>>,
-
 }
 
 impl Ingredient {
-    pub fn new(id: i64,
+    pub fn new(
+        fdc_id: i64,
         description: &str,
         calories: f32,
         protein: f32,
@@ -33,7 +35,8 @@ impl Ingredient {
         portions: Option<sqlx::types::Json<Vec<PortionConversion>>>
     ) -> Ingredient {
         Ingredient {
-            id,
+            id: Uuid::new_v4().to_string(), // NOTE: v4 creates a 128-bit value that's stored as a hex string in 5 groups (with dashes, 36 chars)
+            fdc_id,
             description: description.to_string(),
             calories,
             protein,
@@ -46,7 +49,11 @@ impl Ingredient {
 
 impl fmt::Display for Ingredient {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Ingredient: id: {}, name: {}, calories/100g: {}, protein/100g: {}, fat/100g: {}, carbs/100g: {}", self.id, self.description, self.calories, self.protein, self.fat, self.carbs)
+        write!(
+            f,
+            "Ingredient: id: {}, fdc_id: {}, name: {}, calories/100g: {}, protein/100g: {}, fat/100g: {}, carbs/100g: {}, portions: {:?}",
+            self.id, self.fdc_id, self.description, self.calories, self.protein, self.fat, self.carbs, self.portions
+        )
     }
 }
 
@@ -56,7 +63,7 @@ pub struct PortionConversion {
     abbreviation: String,
     value: f32,
     gram_weight: f32,
-    gram_per_unit: Option<f32>,
+    gram_per_unit: f32,
 }
 
 // foundation foods -- DEPRECATED
@@ -76,6 +83,7 @@ pub async fn ingest_foundation_foods(pool: &sqlx::Pool<MySql>) {
         match result {
             Ok(raw_food) => {
                 let ingredient = ingredient_from_raw_food(raw_food);
+                println!("Ingredient: {:?}", ingredient);
                 match ingredient {
                     Some(i) => {
                         if data_access::add_ingredient(pool, &i).await {
@@ -117,8 +125,6 @@ pub async fn ingest_sr_legacy_foods(pool: &sqlx::Pool<MySql>) {
         match result {
             Ok(raw_food) => {
                 let ingredient = ingredient_from_raw_food(raw_food);
-                println!("Ingredient: {:?}", ingredient);
-                return;
                 match ingredient {
                     Some(i) => {
                         if data_access::add_ingredient(pool, &i).await {
@@ -272,12 +278,17 @@ fn ingredient_from_raw_food(raw_food: Food) -> Option<Ingredient>
                     Some(u) => {
                         unit = u.name.unwrap_or("".to_string());
                         abbreviation = u.abbreviation.unwrap_or("".to_string());
+
+                        if unit == "undetermined" {
+                            unit = unwrapped_portion.modifier.unwrap_or("undetermined".to_string());
+                        }
                     }
                     None => {
-                        unit = "".to_string();
-                        abbreviation = "".to_string();
+                        unit = "undetermined".to_string();
+                        abbreviation = "undetermined".to_string();
                     }
                 };
+
                 let value = match unwrapped_portion.value {
                     Some(v) => v,
                     None => 0.0,
@@ -288,8 +299,8 @@ fn ingredient_from_raw_food(raw_food: Food) -> Option<Ingredient>
                 };
 
                 let gram_per_unit = match value {
-                    0.0 => Some(gram_weight), // if no value given, then assume portion size is gram weight
-                    _ => Some(gram_weight / value),
+                    0.0 => gram_weight, // if no value given, then assume portion size is gram weight
+                    _ => gram_weight / value,
                 };
 
                 portion_conversions.push(PortionConversion {
