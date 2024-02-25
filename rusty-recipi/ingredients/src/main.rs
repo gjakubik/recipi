@@ -38,9 +38,9 @@ async fn main() {
         }
     };
     
-    // ingredient deletion
-    data_access::delete_all_ingredients(pool).await;
-    println!("done deleting ingredients");
+    // ingredient deletion -- WARNING: this will delete all ingredients in the DB
+    // data_access::delete_all_ingredients(&pool).await;
+    // println!("done deleting ingredients");
 
     println!("-------- SR LEGACY FOODS --------");
     ingredient::ingest_sr_legacy_foods(&pool).await;
@@ -120,7 +120,7 @@ async fn delete_ingredient_handler_id(
     State(pool): State<Pool<MySql>>
 ) -> impl IntoResponse
 {
-    let result = delete_ingredient_id(id, pool).await;
+    let result = delete_ingredient_id(id, &pool).await;
 
     if result {
         (StatusCode::OK, "Ingredient deleted").into_response()

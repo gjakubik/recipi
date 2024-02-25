@@ -5,6 +5,7 @@ import {
   varchar,
   float,
   index,
+  json,
   boolean,
 } from 'drizzle-orm/mysql-core'
 
@@ -18,6 +19,7 @@ export const ingredients = mysqlTable(
     protein: float('protein'),
     fat: float('fat'),
     carbs: float('carbs'),
+    portions: json('portions'),
     processed: boolean('processed').default(false),
   },
   (table) => {

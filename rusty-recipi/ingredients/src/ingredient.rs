@@ -19,11 +19,19 @@ pub struct Ingredient {
     pub protein: f32, // protein per 100g
     pub fat: f32, // fat per 100g
     pub carbs: f32, // carbs per 100g
-    
+    pub portions: sqlx::types::Json<Vec<PortionConversion>>,
+
 }
 
 impl Ingredient {
-    pub fn new(id: i64, description: &str, calories: f32, protein: f32, fat: f32, carbs: f32) -> Ingredient {
+    pub fn new(id: i64,
+        description: &str,
+        calories: f32,
+        protein: f32,
+        fat: f32,
+        carbs: f32,
+        portions: Option<sqlx::types::Json<Vec<PortionConversion>>>
+    ) -> Ingredient {
         Ingredient {
             id,
             description: description.to_string(),
@@ -31,6 +39,7 @@ impl Ingredient {
             protein,
             fat,
             carbs,
+            portions: portions.unwrap_or(sqlx::types::Json(Vec::new())),
         }
     }
 }
@@ -41,7 +50,16 @@ impl fmt::Display for Ingredient {
     }
 }
 
-// ingest from each dataset
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PortionConversion {
+    unit: String,
+    abbreviation: String,
+    value: f32,
+    gram_weight: f32,
+    gram_per_unit: Option<f32>,
+}
+
+// foundation foods -- DEPRECATED
 pub async fn ingest_foundation_foods(pool: &sqlx::Pool<MySql>) {
     let path = FilePath::new("/Users/michaellee/recipi/.data/foundation_foods.json");
     let f = File::open(path).unwrap();
@@ -99,6 +117,8 @@ pub async fn ingest_sr_legacy_foods(pool: &sqlx::Pool<MySql>) {
         match result {
             Ok(raw_food) => {
                 let ingredient = ingredient_from_raw_food(raw_food);
+                println!("Ingredient: {:?}", ingredient);
+                return;
                 match ingredient {
                     Some(i) => {
                         if data_access::add_ingredient(pool, &i).await {
@@ -124,6 +144,7 @@ pub async fn ingest_sr_legacy_foods(pool: &sqlx::Pool<MySql>) {
     println!("Number of sr legacy foods: {}", num);
 }
 
+// FNDDS foods -- DEPRECATED
 pub async fn ingest_fndds_foods(pool: &sqlx::Pool<MySql>) {
     let path = FilePath::new("/Users/michaellee/recipi/.data/fndds_foods.json");
     let f = File::open(path).unwrap();
@@ -165,6 +186,7 @@ pub async fn ingest_fndds_foods(pool: &sqlx::Pool<MySql>) {
     println!("Number of fndds foods: {}", num);
 }
 
+// Branded foods -- DEPRECATED
 pub async fn ingest_branded_foods(pool: &sqlx::Pool<MySql>) {
     let path = FilePath::new("/Users/michaellee/recipi/.data/branded_foods.json");
     let f = File::open(path).unwrap();
@@ -209,7 +231,7 @@ pub async fn ingest_branded_foods(pool: &sqlx::Pool<MySql>) {
 fn ingredient_from_raw_food(raw_food: Food) -> Option<Ingredient>
 {
     let description = match raw_food.description {
-        Some(d) => d,
+        Some(ref d) => d,
         None => return None,
     };
 
@@ -237,7 +259,53 @@ fn ingredient_from_raw_food(raw_food: Food) -> Option<Ingredient>
         None => calories_from_kj(&raw_food)
     };
 
-    Some(Ingredient::new(raw_food.fdcId.into(), &description, calories, protein, fat, carbs))
+    let portions = match raw_food.foodPortions {
+        Some(p) => {
+            let mut portion_conversions = Vec::new();
+            for portion in p {
+                let unwrapped_portion = portion.unwrap();
+                let measure_unit = unwrapped_portion.measureUnit;
+                
+                let mut unit = "".to_string();
+                let mut abbreviation = "".to_string();
+                match measure_unit {
+                    Some(u) => {
+                        unit = u.name.unwrap_or("".to_string());
+                        abbreviation = u.abbreviation.unwrap_or("".to_string());
+                    }
+                    None => {
+                        unit = "".to_string();
+                        abbreviation = "".to_string();
+                    }
+                };
+                let value = match unwrapped_portion.value {
+                    Some(v) => v,
+                    None => 0.0,
+                };
+                let gram_weight = match unwrapped_portion.gramWeight {
+                    Some(g) => g,
+                    None => 0.0,
+                };
+
+                let gram_per_unit = match value {
+                    0.0 => Some(gram_weight), // if no value given, then assume portion size is gram weight
+                    _ => Some(gram_weight / value),
+                };
+
+                portion_conversions.push(PortionConversion {
+                    unit,
+                    abbreviation,
+                    value,
+                    gram_weight,
+                    gram_per_unit,
+                });
+            }
+            Some(sqlx::types::Json(portion_conversions))
+        }
+        None => None,
+    };
+
+    Some(Ingredient::new(raw_food.fdcId.into(), &description, calories, protein, fat, carbs, portions))
 }
 
 fn calories_from_kj(raw_food: &Food) -> f32 {
