@@ -37,6 +37,14 @@ export type Comment = InferModel<typeof comments>
 
 export type Ingredient = InferModel<typeof ingredients>
 
+export type IngredientPortion = {
+  unit: string
+  abbreviation?: string
+  value?: number
+  gram_weight?: number
+  gram_per_unit?: number
+}
+
 export type InsertIngredient = InferModel<typeof ingredients, 'insert'>
 
 export type RecipeIngredient = {
