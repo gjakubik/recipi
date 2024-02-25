@@ -10,6 +10,7 @@ interface ServerRecipeListLoaderProps {
   user?: User
   profileUserId?: string
   searchParams: { [key: string]: string | string[] | undefined }
+  gridClassName?: string
 }
 
 export const ServerRecipeListLoader = async ({
@@ -18,6 +19,7 @@ export const ServerRecipeListLoader = async ({
   user,
   profileUserId,
   searchParams,
+  gridClassName,
 }: ServerRecipeListLoaderProps) => {
   return (
     <Suspense fallback={LoadingRecipeList}>
@@ -27,6 +29,7 @@ export const ServerRecipeListLoader = async ({
         user={user}
         profileUserId={profileUserId}
         searchParams={searchParams}
+        gridClassName={gridClassName}
       />
     </Suspense>
   )

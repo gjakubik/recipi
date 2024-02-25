@@ -232,12 +232,14 @@ export const MainNav = ({ config, children }: HeaderProps) => {
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/profile" className="cursor-pointer">
-                  <UserIcon className="mr-2 h-4 w-4" />
-                  Profile
-                </Link>
-              </DropdownMenuItem>
+              {user && (
+                <DropdownMenuItem asChild>
+                  <Link href={`/profile/${user.id}`} className="cursor-pointer">
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <SunMoon className="mr-2 h-4 w-4" />

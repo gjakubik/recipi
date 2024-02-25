@@ -19,14 +19,26 @@ export default async function ProfilePageLayout({
   params: { userId },
   children,
 }: ProfilePageProps) {
+  const user = await getCurrentUser()
   const profile = await getUser(userId)
+
+  // TODO: Not found here
+  if (!profile) {
+    redirect('/')
+  }
+
+  const isMyProfile = user?.id === userId
+  const { name, email } = profile
 
   return (
     <div className="h-min-screen flex flex-col">
       <MainNav config={defaultNavConfig} />
       {profile ? (
         <Container className="flex-col space-y-4 pb-8 md:w-5/6 lg:w-2/3">
-          <Typography variant="h2">{profile.name}</Typography>
+          <Typography variant="h3">
+            {isMyProfile ? 'My Profile' : name}
+          </Typography>
+          <Typography variant="light">{email}</Typography>
 
           <div className="flex flex-row items-center gap-2">
             <Link

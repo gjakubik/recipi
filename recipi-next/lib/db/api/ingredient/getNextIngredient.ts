@@ -35,9 +35,6 @@ const getNextIngredient = async (): Promise<Ingredient[] | undefined> => {
 
   const nextIngredientPhraseList = nextIngredient.description?.split(',')
   const hasComma = (nextIngredientPhraseList?.length || 0) > 1
-  console.log(
-    `ingredient phrase list: ${nextIngredientPhraseList}, hasComma? ${hasComma}`
-  )
   const nextIngredientPhrase = nextIngredientPhraseList?.[0]
 
   const similarIngredients = await db
@@ -64,7 +61,7 @@ const getNextIngredient = async (): Promise<Ingredient[] | undefined> => {
           : undefined
       )
     )
-  console.log('similar ingredients: ', similarIngredients)
+
   return similarIngredients
 }
 

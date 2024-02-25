@@ -18,7 +18,7 @@ export default async function ToolsPage() {
       <div className="flex flex-col gap-4">
         {TOOL_LIST.map((tool) => (
           <Link href={tool.href} key={tool.name}>
-            <div className="flex flex-row gap-2 items-baseline dashed-border-hover">
+            <div className="dashed-border-hover flex flex-row items-baseline gap-2">
               <Typography variant="h5">{tool.name}</Typography>
               <Typography>{tool.description}</Typography>
             </div>
