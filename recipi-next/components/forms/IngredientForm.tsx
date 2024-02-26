@@ -15,13 +15,22 @@ import { Form } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { FormInput } from '@/components/FormInput'
+import { PlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
 import { AddPortionModal } from '../modals/AddPortionModal'
 import {
-  HamburgerMenuIcon,
-  PlusIcon,
-  Cross1Icon,
-  Pencil1Icon,
-} from '@radix-ui/react-icons'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { AddUnitModal } from '@/components/modals/AddUnitModal'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command'
+import { Plus } from 'lucide-react'
 
 interface IngredientFormProps {
   initialValues?: IngredientFormValues & {
@@ -34,8 +43,23 @@ interface IngredientFormProps {
     carbs?: string
     poritions?: []
     processed?: boolean
-    hasPortions?: boolean
   }
+}
+
+const [customPortionOptions, setCustomPortionOptions] = React.useState<
+  string[]
+>([])
+const addCustomPortion = (
+  unit: string,
+  abbreviation: string,
+  value: string,
+  setGramWeight: string,
+  gramsPerUnit: string
+) => {
+  setCustomPortionOptions([
+    ...customPortionOptions,
+    `${unit}, ${abbreviation}, ${value}, ${setGramWeight}, ${gramsPerUnit}`,
+  ])
 }
 
 export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
@@ -159,12 +183,13 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             placeholder="0.0"
           />
           <div className="flex flex-row items-end gap-2">
-            <AddPortionModal index={index} updateIngredient={updateIngredient}>
-              <Button variant="ghost" className="hidden xs:flex sm:hidden">
-                <div className="pr-2">
-                  {hasPortion ? <Pencil1Icon /> : <PlusIcon />}
-                </div>{' '}
-                Note
+            <AddPortionModal addCustomPortion={addCustomPortion}>
+              <Button
+                variant="ghost"
+                className="flex flex-row items-center gap-1"
+              >
+                <Plus width={15} className="mb-px" />
+                Add Portion
               </Button>
             </AddPortionModal>
             <Button variant="ghost" type="reset" onClick={() => form.reset()}>
