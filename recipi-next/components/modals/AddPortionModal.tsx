@@ -1,8 +1,6 @@
 'use client'
 
 import { PropsWithChildren, useState } from 'react'
-import _ from 'lodash'
-import { Form } from '@/components/ui/form'
 
 import {
   Dialog,
@@ -15,11 +13,8 @@ import {
   DialogClose,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useRouter } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
 import { FormInput } from '@/components/FormInput'
-import { IngredientFormValues } from '@/lib/validations/ingredient'
 
 interface AddPortionModalProps extends PropsWithChildren {
   index: number

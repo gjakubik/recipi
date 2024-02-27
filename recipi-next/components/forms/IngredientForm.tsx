@@ -66,9 +66,9 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             {
               unit: '',
               abbreviation: '',
-              value: 0,
-              gram_weight: 0,
-              gram_per_unit: 0,
+              value: '0',
+              gram_weight: '0',
+              gram_per_unit: '0',
             },
           ],
           processed: false,
@@ -80,12 +80,18 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
     const prepIngredient = {
       id: '',
       fdc_id: parseInt(data.fdc_id),
-      description: data.description,
+      description: data.description ? data.description : '',
       calories: parseFloat(data.calories),
       protein: parseFloat(data.protein),
       fat: parseFloat(data.fat),
       carbs: parseFloat(data.carbs),
-      portions: data.portions,
+      portions: data.portions.map((portion) => ({
+        unit: portion.unit,
+        abbreviation: portion.abbreviation,
+        value: parseFloat(portion.value),
+        gram_weight: parseFloat(portion.gram_weight),
+        gram_per_unit: parseFloat(portion.gram_per_unit),
+      })),
     }
 
     try {
@@ -170,30 +176,22 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             placeholder="0.0"
           />
           <div className="flex flex-row items-end gap-2">
-            <div>
-              <AddPortionModal
-                index={
-                  form.getValues('portions').length
-                    ? form.getValues('portions').length - 1
-                    : 0
-                }
-              >
-                <Button
-                  variant="ghost"
-                  className="flex flex-row items-center gap-1"
-                >
-                  <Plus width={15} className="mb-px" />
-                  Add Portion
-                </Button>
-              </AddPortionModal>
-            </div>
-            <Button
-              variant="ghost"
-              type="reset"
-              onClick={() => {
-                form.reset()
-              }}
+            <AddPortionModal
+              index={
+                form.getValues('portions').length
+                  ? form.getValues('portions').length - 1
+                  : 0
+              }
             >
+              <Button
+                variant="ghost"
+                className="flex flex-row items-center gap-1"
+              >
+                <Plus width={15} className="mb-px" />
+                Add Portion
+              </Button>
+            </AddPortionModal>
+            <Button variant="ghost" type="reset" onClick={() => form.reset()}>
               {initialValues ? 'Reset' : 'Clear'}
             </Button>
             <Button type="submit">{initialValues ? 'Save' : 'Create'}</Button>
