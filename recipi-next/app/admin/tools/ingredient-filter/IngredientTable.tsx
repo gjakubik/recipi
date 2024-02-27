@@ -26,7 +26,7 @@ export const IngredientTable = ({ ingredients }: IngredientTableProps) => {
   }, [rowSelection])
 
   const ingredientName = useMemo(
-    () => ingredients[0].description?.split(',')[0],
+    () => ingredients[0]?.description?.split(',')[0],
 
     [ingredients]
   )

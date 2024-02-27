@@ -26,7 +26,7 @@ const createIngredient = async (ingredient: InsertIngredient) => {
         })
         .from(ingredients)
         .where(eq(ingredients.id, uuid))
-    ).entries.length > 0
+    ).length > 0
   ) {
     throw new Error(`Ingredient with id: ${uuid} already exists`)
   }
@@ -37,6 +37,29 @@ const createIngredient = async (ingredient: InsertIngredient) => {
     ingredient.description == null
   ) {
     throw new Error('Ingredient description cannot be empty')
+  }
+
+  if (
+    (
+      await db
+        .select({
+          id: ingredients.id,
+          fdc_id: ingredients.fdc_id,
+          description: ingredients.description,
+          calories: ingredients.calories,
+          protein: ingredients.protein,
+          fat: ingredients.fat,
+          carbs: ingredients.carbs,
+          portions: ingredients.portions,
+          processed: ingredients.processed,
+        })
+        .from(ingredients)
+        .where(eq(ingredients.description, ingredient.description))
+    ).length > 0
+  ) {
+    throw new Error(
+      `Ingredient with description: ${ingredient.description} already exists`
+    )
   }
 
   const newIngredientExec = await db.insert(ingredients).values({
