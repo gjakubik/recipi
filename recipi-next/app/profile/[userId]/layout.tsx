@@ -7,7 +7,7 @@ import { getUser } from '@/lib/db/api'
 import { Container } from '@/components/ui/container'
 import { Typography } from '@/components/ui/typography'
 import { MainNav } from '@/components/MainNav'
-import Link from 'next/link'
+import { TabLink } from '@/components/TabLink'
 
 interface ProfilePageProps extends PropsWithChildren {
   params: {
@@ -28,7 +28,7 @@ export default async function ProfilePageLayout({
   }
 
   const isMyProfile = user?.id === userId
-  const { name, email } = profile
+  const { name, email, created_at } = profile
 
   return (
     <div className="h-min-screen flex flex-col">
@@ -38,21 +38,17 @@ export default async function ProfilePageLayout({
           <Typography variant="h3">
             {isMyProfile ? 'My Profile' : name}
           </Typography>
-          <Typography variant="light">{email}</Typography>
+          <div>
+            {isMyProfile && <Typography>Name: {name}</Typography>}
+            <Typography variant="pn">Email: {email}</Typography>
+            <Typography variant="pn">
+              Joined: {created_at?.toLocaleDateString()}
+            </Typography>
+          </div>
 
           <div className="flex flex-row items-center gap-2">
-            <Link
-              className="dashed-border-hover px-4 pb-3"
-              href={`/profile/${userId}/recipes`}
-            >
-              Recipes
-            </Link>
-            <Link
-              className="dashed-border-hover px-4 pb-3"
-              href={`/profile/${userId}/menus`}
-            >
-              Menus
-            </Link>
+            <TabLink tabId="recipes">Recipes</TabLink>
+            <TabLink tabId="menus">Menus</TabLink>
           </div>
           {children}
         </Container>
