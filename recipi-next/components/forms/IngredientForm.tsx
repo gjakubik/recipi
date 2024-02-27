@@ -95,7 +95,9 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
     }
 
     try {
-      const upsertedIngredient = await createIngredient(prepIngredient)
+      const upsertedIngredient = initialValues
+        ? await createIngredient(prepIngredient)
+        : await updateIngredient(prepIngredient)
       if (!upsertedIngredient) {
         toast({
           title: `Error ${initialValues} creating ingredient`,
