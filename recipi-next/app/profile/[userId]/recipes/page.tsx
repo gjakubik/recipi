@@ -1,26 +1,26 @@
 import { getCurrentUser } from '@/lib/session'
+import { getMenus, getAuthorRecipes } from '@/lib/db/api'
+import { MENU_QUERY } from '@/lib/constants'
 
 import { ServerRecipeListLoader } from '@/components/recipe/ServerRecipeListLoader'
+import { FullClientRecipeList } from '@/components/recipe/FullClientRecipeList'
 
 interface ProfileRecipesTabProps {
   params: { userId: string }
-  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export default async function ProfileRecipesTab({
   params: { userId },
-  searchParams,
 }: ProfileRecipesTabProps) {
-  const user = await getCurrentUser()
+  const recipes = await getAuthorRecipes({ userId })
+  const initialMenus = await getMenus({ authorId: userId, ...MENU_QUERY })
 
   return (
     <>
-      <ServerRecipeListLoader
-        pagePath={`/profile/${userId}/recipes`}
-        user={user}
-        profileUserId={userId}
-        searchParams={searchParams}
-        gridClassName="lg:grid-cols-2 xl:grid-cols-3"
+      <FullClientRecipeList
+        recipes={recipes}
+        paramNames={{ page: 'page', limit: 'pageSize' }}
+        initialMenus={initialMenus}
       />
     </>
   )

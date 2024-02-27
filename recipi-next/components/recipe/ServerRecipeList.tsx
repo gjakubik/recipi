@@ -9,6 +9,7 @@ import { RecipeList } from './RecipeList'
 import { getRecipeQueryString } from '@/lib/utils'
 import { Suspense } from 'react'
 import { LoadingCards } from './LoadingCards'
+import { UrlPagination } from '../UrlPagination'
 
 interface ServerRecipeListProps {
   title?: string
@@ -70,7 +71,7 @@ export const ServerRecipeList = async ({
 
   return (
     <div className="flex flex-col gap-4">
-      <ServerPagination
+      {/* <ServerPagination
         title={title}
         mode="recipe"
         basePath={pagePath}
@@ -80,6 +81,12 @@ export const ServerRecipeList = async ({
         sortBy={sortBy}
         count={count}
         getQueryString={getRecipeQueryString}
+      /> */}
+      <UrlPagination
+        mode="server"
+        count={count}
+        paramNames={{ page: 'rcp_page', limit: 'rcp_limit' }}
+        defaultLimit={6}
       />
       <div
         className={cn(
@@ -91,7 +98,14 @@ export const ServerRecipeList = async ({
           <RecipeList recipes={recipes} initialMenus={initialMenus} />
         </Suspense>
       </div>
-      <ServerPagination
+      <UrlPagination
+        mode="server"
+        count={count}
+        paramNames={{ page: 'rcp_page', limit: 'rcp_limit' }}
+        defaultLimit={6}
+        withPageInfo
+      />
+      {/* <ServerPagination
         mode="recipe"
         basePath={pagePath}
         page={page}
@@ -101,7 +115,7 @@ export const ServerRecipeList = async ({
         count={count}
         getQueryString={getRecipeQueryString}
         withPageInfo
-      />
+      /> */}
     </div>
   )
 }
