@@ -21,6 +21,8 @@ export const ServerRecipeListLoader = async ({
   searchParams,
   gridClassName,
 }: ServerRecipeListLoaderProps) => {
+  //create a key for suspense with all the search params
+  const suspenseKey = JSON.stringify(searchParams)
   return (
     <Suspense fallback={LoadingRecipeList}>
       <ServerRecipeList

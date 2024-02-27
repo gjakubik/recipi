@@ -35,7 +35,7 @@ import { User } from 'next-auth'
 
 interface RecipeCardProps {
   recipe: Recipe
-  initialMenus: GetMenusResult
+  initialMenus?: GetMenusResult
   cardKey: string | number
   onClick?: () => void
   forceUpdate: number
@@ -186,7 +186,7 @@ export const RecipeCard = ({
             <Link href={`/recipe/${recipe.id}/edit`}>Edit Recipe</Link>
           </Button>
         )}
-        {loggedIn && (
+        {loggedIn && initialMenus && (
           <AddRecipeToMenusModal
             user={user}
             recipe={recipe}

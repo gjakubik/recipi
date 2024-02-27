@@ -4,25 +4,15 @@ import { db } from '@/lib/db'
 import { recipes, users } from '@/lib/db/schema'
 import { getCurrentUser } from '@/lib/session'
 import { GetRecipesResult } from '@/types'
-import { eq, sql, like, or, and, asc, desc } from 'drizzle-orm'
+import { ne, eq, sql, like, or, and, asc, desc } from 'drizzle-orm'
 
-interface GetRecipes {
+interface GetExploreRecipes {
   search?: string
-  authorId?: string
-  sortBy?: 'title' | 'creationDate' | 'updatedAt'
-  sort?: 'asc' | 'desc'
-  limit?: number
-  page?: number
 }
 
-const getRecipes = async ({
+const getExploreRecipes = async ({
   search,
-  authorId,
-  sortBy,
-  sort,
-  limit = 10,
-  page = 0,
-}: GetRecipes): Promise<GetRecipesResult> => {
+}: GetExploreRecipes): Promise<GetRecipesResult> => {
   const user = await getCurrentUser()
   return await db.transaction(async (tx) => {
     const recipeList = await tx
@@ -54,52 +44,24 @@ const getRecipes = async ({
         },
       })
       .from(recipes)
-      .limit(limit)
-      .offset(page * limit)
       .where(
         and(
           or(
-            search ? like(recipes.title, `%${search}%`) : undefined,
-            search ? like(recipes.description, `%${search}%`) : undefined
+            like(recipes.title, `%${search}%`),
+            like(recipes.description, `%${search}%`)
           ),
-          or(
-            eq(recipes.isPrivate, false),
-            user ? eq(recipes.authorId, user.id) : undefined
-          ),
-          authorId ? eq(recipes.authorId, authorId) : undefined
+          user?.id ? ne(recipes.authorId, user.id) : undefined,
+          eq(recipes.isPrivate, false)
         )
       )
       .innerJoin(users, eq(recipes.authorId, users.id))
-      .orderBy(
-        sortBy && sortBy in recipes
-          ? sort === 'asc'
-            ? asc(recipes[sortBy])
-            : desc(recipes[sortBy])
-          : desc(recipes.updatedAt)
-      )
-
-    const countQuery = await tx
-      .select({
-        count: sql<number>`count(${recipes.id})`,
-      })
-      .from(recipes)
-      .where(
-        and(
-          or(
-            search ? like(recipes.title, `%${search}%`) : undefined,
-            search ? like(recipes.description, `%${search}%`) : undefined
-          ),
-          authorId ? eq(recipes.authorId, authorId) : undefined
-        )
-      )
-
-    const count = countQuery[0]?.count
+      .orderBy(asc(recipes.creationDate))
 
     return {
       recipes: recipeList,
-      count: count,
+      count: recipeList.length,
     }
   })
 }
 
-export default getRecipes
+export default getExploreRecipes
