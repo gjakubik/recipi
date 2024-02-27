@@ -41,25 +41,9 @@ interface IngredientFormProps {
     protein?: string
     fat?: string
     carbs?: string
-    poritions?: []
+    portions?: []
     processed?: boolean
   }
-}
-
-const [customPortionOptions, setCustomPortionOptions] = React.useState<
-  string[]
->([])
-const addCustomPortion = (
-  unit: string,
-  abbreviation: string,
-  value: string,
-  setGramWeight: string,
-  gramsPerUnit: string
-) => {
-  setCustomPortionOptions([
-    ...customPortionOptions,
-    `${unit}, ${abbreviation}, ${value}, ${setGramWeight}, ${gramsPerUnit}`,
-  ])
 }
 
 export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
@@ -97,9 +81,8 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
     }
 
     try {
-      const upsertedIngredient = initialValues
-        ? await updateIngredient(prepIngredient)
-        : await createIngredient(prepIngredient)
+      console.log('hi')
+      const upsertedIngredient = await createIngredient(prepIngredient)
       if (!upsertedIngredient) {
         toast({
           title: `Error ${initialValues} creating ingredient`,
@@ -183,7 +166,9 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             placeholder="0.0"
           />
           <div className="flex flex-row items-end gap-2">
-            <AddPortionModal addCustomPortion={addCustomPortion}>
+            <AddPortionModal
+              index={initialValues ? initialValues.portions.length : 0}
+            >
               <Button
                 variant="ghost"
                 className="flex flex-row items-center gap-1"
@@ -192,10 +177,18 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
                 Add Portion
               </Button>
             </AddPortionModal>
-            <Button variant="ghost" type="reset" onClick={() => form.reset()}>
+            <Button
+              variant="ghost"
+              type="reset"
+              onClick={() => {
+                form.reset()
+              }}
+            >
               {initialValues ? 'Reset' : 'Clear'}
             </Button>
-            <Button type="submit">{initialValues ? 'Save' : 'Create'}</Button>
+            <Button type="submit" onClick={() => onFormSubmit}>
+              {initialValues ? 'Save' : 'Create'}
+            </Button>
           </div>
         </div>
       </form>
