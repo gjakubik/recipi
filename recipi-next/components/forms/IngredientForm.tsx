@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/command'
 import { Plus } from 'lucide-react'
 import { f } from 'nuqs/dist/serializer-RqlbYgUW'
+import upsertIngredient from '@/lib/db/api/ingredient/upsertIngredient'
 
 interface IngredientFormProps {
   initialValues?: IngredientFormValues & {
@@ -95,9 +96,7 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
     }
 
     try {
-      const upsertedIngredient = initialValues
-        ? await createIngredient(prepIngredient)
-        : await updateIngredient(prepIngredient)
+      const upsertedIngredient = await upsertIngredient(prepIngredient)
       if (!upsertedIngredient) {
         toast({
           title: `Error ${initialValues} creating ingredient`,
@@ -178,13 +177,7 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             placeholder="0.0"
           />
           <div className="flex flex-row items-end gap-2">
-            <AddPortionModal
-              index={
-                form.getValues('portions').length
-                  ? form.getValues('portions').length - 1
-                  : 0
-              }
-            >
+            <AddPortionModal index={form.getValues('portions').length - 1}>
               <Button
                 variant="ghost"
                 className="flex flex-row items-center gap-1"

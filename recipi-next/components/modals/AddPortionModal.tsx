@@ -22,6 +22,14 @@ interface AddPortionModalProps extends PropsWithChildren {
 
 export const AddPortionModal = ({ children, index }: AddPortionModalProps) => {
   const form = useFormContext()
+  let new_portion = {
+    unit: '',
+    abbreviation: '',
+    value: '0',
+    gram_weight: '0',
+    gram_per_unit: '0',
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -76,22 +84,6 @@ export const AddPortionModal = ({ children, index }: AddPortionModalProps) => {
             <Button
               onClick={() => {
                 console.log(form.getValues())
-                form.setValue(`portions`, [
-                  ...form.getValues(`portions`),
-                  {
-                    unit: form.getValues(`portions.${index}.unit`),
-                    abbreviation: form.getValues(
-                      `portions.${index}.abbreviation`
-                    ),
-                    value: form.getValues(`portions.${index}.value`),
-                    gram_weight: form.getValues(
-                      `portions.${index}.gram_weight`
-                    ),
-                    gram_per_unit: form.getValues(
-                      `portions.${index}.gram_per_unit`
-                    ),
-                  },
-                ])
               }}
             >
               Save
