@@ -31,17 +31,17 @@ import {
   CommandItem,
 } from '@/components/ui/command'
 import { Plus } from 'lucide-react'
+import { f } from 'nuqs/dist/serializer-RqlbYgUW'
 
 interface IngredientFormProps {
   initialValues?: IngredientFormValues & {
-    id?: string
     fdc_id?: string
     description?: string
     calories?: string
     protein?: string
     fat?: string
     carbs?: string
-    portions?: []
+    portions?: [{}]
     processed?: boolean
   }
 }
@@ -56,21 +56,29 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
           ...initialValues,
         }
       : {
-          id: '0',
           fdc_id: '0',
           description: '',
           calories: '0.0',
           protein: '0.0',
           fat: '0.0',
           carbs: '0.0',
-          portions: [{}],
+          portions: [
+            {
+              unit: '',
+              abbreviation: '',
+              value: 0,
+              gram_weight: 0,
+              gram_per_unit: 0,
+            },
+          ],
           processed: false,
         },
   })
 
   const onFormSubmit = async (data: IngredientFormValues) => {
+    console.log('hi')
     const prepIngredient = {
-      id: data.id,
+      id: '',
       fdc_id: parseInt(data.fdc_id),
       description: data.description,
       calories: parseFloat(data.calories),
@@ -81,13 +89,11 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
     }
 
     try {
-      console.log('hi')
       const upsertedIngredient = await createIngredient(prepIngredient)
       if (!upsertedIngredient) {
         toast({
           title: `Error ${initialValues} creating ingredient`,
           description: `Something went wrong:
-            ${prepIngredient.id}, 
             ${prepIngredient.fdc_id}
             ${prepIngredient.description},
             ${prepIngredient.calories},
@@ -123,20 +129,18 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
       >
         <div className="flex flex-row flex-wrap items-end gap-2">
           <FormInput
-            name="id"
-            label="ID"
-            type="string"
-            className="w-[80px]"
-            placeholder="0"
-          />
-          <FormInput
             name="fdc_id"
             label="FDC ID"
             type="string"
             className="w-[80px]"
             placeholder="0"
           />
-          <FormInput name="description" label="Description" type="string" />
+          <FormInput
+            name="description"
+            label="Description"
+            type="string"
+            placeholder="Ingredient Description"
+          />
           <FormInput
             name="protein"
             label="Protein"
@@ -166,17 +170,23 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             placeholder="0.0"
           />
           <div className="flex flex-row items-end gap-2">
-            <AddPortionModal
-              index={initialValues ? initialValues.portions.length : 0}
-            >
-              <Button
-                variant="ghost"
-                className="flex flex-row items-center gap-1"
+            <div>
+              <AddPortionModal
+                index={
+                  form.getValues('portions').length
+                    ? form.getValues('portions').length - 1
+                    : 0
+                }
               >
-                <Plus width={15} className="mb-px" />
-                Add Portion
-              </Button>
-            </AddPortionModal>
+                <Button
+                  variant="ghost"
+                  className="flex flex-row items-center gap-1"
+                >
+                  <Plus width={15} className="mb-px" />
+                  Add Portion
+                </Button>
+              </AddPortionModal>
+            </div>
             <Button
               variant="ghost"
               type="reset"
@@ -186,9 +196,7 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             >
               {initialValues ? 'Reset' : 'Clear'}
             </Button>
-            <Button type="submit" onClick={() => onFormSubmit}>
-              {initialValues ? 'Save' : 'Create'}
-            </Button>
+            <Button type="submit">{initialValues ? 'Save' : 'Create'}</Button>
           </div>
         </div>
       </form>
