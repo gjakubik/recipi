@@ -78,7 +78,7 @@ pub async fn add_ingredient(pool: &sqlx::Pool<MySql>, ingredient: &Ingredient) -
             protein,
             fat,
             carbs,
-            processed
+            processed,
             portions,
             fdc_id
         )

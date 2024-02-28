@@ -5,27 +5,51 @@ import _ from 'lodash'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { createIngredient } from '@/lib/db/api'
+import { createIngredient, updateIngredient } from '@/lib/db/api'
 import {
   IngredientFormValues,
   ingredientFormSchema,
 } from '@/lib/validations/ingredient'
-
 import { Form } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { FormInput } from '@/components/FormInput'
+import { PlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
+import { AddPortionModal } from '../modals/AddPortionModal'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { AddUnitModal } from '@/components/modals/AddUnitModal'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command'
+import { Plus } from 'lucide-react'
+import { f } from 'nuqs/dist/serializer-RqlbYgUW'
+import upsertIngredient from '@/lib/db/api/ingredient/upsertIngredient'
 
 interface IngredientFormProps {
   initialValues?: IngredientFormValues & {
-    id?: string
     fdc_id?: string
     description?: string
     calories?: string
     protein?: string
     fat?: string
     carbs?: string
-    poritions?: JSON
+    portions?: [
+      {
+        unit: string
+        abbreviation: string
+        value: string
+        gram_weight: string
+        gram_per_unit: string
+      },
+    ]
     processed?: boolean
   }
 }
@@ -36,37 +60,53 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
   const form = useForm<IngredientFormValues>({
     resolver: zodResolver(ingredientFormSchema),
     defaultValues: {
-      id: '0',
-      fdc_id: 0,
+      fdc_id: '',
       description: '',
-      calories: '0.0',
-      protein: '0.0',
-      fat: '0.0',
-      carbs: '0.0',
-      portions: [],
+      calories: '',
+      protein: '',
+      fat: '',
+      carbs: '',
+      portions: [
+        {
+          unit: '',
+          abbreviation: '',
+          value: '',
+          gram_weight: '',
+          gram_per_unit: '',
+        },
+      ],
       processed: false,
     },
   })
 
   const onFormSubmit = async (data: IngredientFormValues) => {
     const prepIngredient = {
-      id: data.id,
-      fdc_id: data.fdc_id,
-      description: data.description,
+      id: '',
+      fdc_id: parseInt(data.fdc_id),
+      description: data.description ? data.description : '',
       calories: parseFloat(data.calories),
       protein: parseFloat(data.protein),
       fat: parseFloat(data.fat),
       carbs: parseFloat(data.carbs),
-      portions: data.portions,
+      portions: data.portions.map((portion) => ({
+        unit: portion.unit ? portion.unit : '',
+        abbreviation: portion.abbreviation ? portion.abbreviation : '',
+        value: parseFloat(portion.value) ? parseFloat(portion.value) : 0,
+        gram_weight: parseFloat(portion.gram_weight)
+          ? parseFloat(portion.gram_weight)
+          : 0,
+        gram_per_unit: parseFloat(portion.gram_per_unit)
+          ? parseFloat(portion.gram_per_unit)
+          : 0,
+      })),
     }
 
     try {
-      const insertedIngredient = await createIngredient(prepIngredient)
-      if (!insertedIngredient) {
+      const upsertedIngredient = await upsertIngredient(prepIngredient)
+      if (!upsertedIngredient) {
         toast({
           title: `Error ${initialValues} creating ingredient`,
           description: `Something went wrong:
-            ${prepIngredient.id}, 
             ${prepIngredient.fdc_id}
             ${prepIngredient.description},
             ${prepIngredient.calories},
@@ -79,16 +119,15 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
       }
 
       toast({
-        title: `Ingredient ${insertedIngredient.id}
-            ${insertedIngredient.description} created
-            }`,
+        title: `Ingredient ${upsertedIngredient.id}
+            ${upsertedIngredient.description} created`,
       })
       router.refresh()
       // Go to previous page
       router.back()
     } catch (error) {
       toast({
-        title: `Error ${initialValues} creating recipe`,
+        title: `Error ${initialValues} creating ingredient`,
         description: 'Something went wrong',
       })
       console.log(error)
@@ -103,20 +142,18 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
       >
         <div className="flex flex-row flex-wrap items-end gap-2">
           <FormInput
-            name="id"
-            label="ID"
-            type="string"
-            className="w-[80px]"
-            placeholder="0"
-          />
-          <FormInput
             name="fdc_id"
             label="FDC ID"
             type="string"
             className="w-[80px]"
             placeholder="0"
           />
-          <FormInput name="description" label="Description" type="string" />
+          <FormInput
+            name="description"
+            label="Description"
+            type="string"
+            placeholder="Ingredient Description"
+          />
           <FormInput
             name="protein"
             label="Protein"
@@ -146,6 +183,15 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             placeholder="0.0"
           />
           <div className="flex flex-row items-end gap-2">
+            <AddPortionModal index={form.getValues('portions').length - 1}>
+              <Button
+                variant="ghost"
+                className="flex flex-row items-center gap-1"
+              >
+                <Plus width={15} className="mb-px" />
+                Add Portion
+              </Button>
+            </AddPortionModal>
             <Button variant="ghost" type="reset" onClick={() => form.reset()}>
               {initialValues ? 'Reset' : 'Clear'}
             </Button>

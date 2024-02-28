@@ -25,10 +25,8 @@ export const IngredientTable = ({ ingredients }: IngredientTableProps) => {
     return Object.keys(rowSelection).map((id) => ingredients[parseInt(id)].id)
   }, [rowSelection])
 
-  console.log(`Ingredients: ${ingredients}`)
-
   const ingredientName = useMemo(
-    () => ingredients[0].description?.split(',')[0],
+    () => ingredients[0]?.description?.split(',')[0],
 
     [ingredients]
   )

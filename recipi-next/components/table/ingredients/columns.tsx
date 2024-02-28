@@ -66,7 +66,7 @@ export const columns: ColumnDef<Ingredient>[] = [
           <div>Abbreviation: {portion.abbreviation}</div>
           <div>Value: {portion.value}</div>
           <div>Gram Weight: {portion.gram_weight}</div>
-          <div>Grams/Unit{portion.gram_per_unit}</div>
+          <div>Grams/Unit: {portion.gram_per_unit}</div>
         </div>
       ))
     },
