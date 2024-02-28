@@ -155,6 +155,13 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             placeholder="Ingredient Description"
           />
           <FormInput
+            name="calories"
+            label="Calories"
+            type="string"
+            className="w-[80px]"
+            placeholder="0.0"
+          />
+          <FormInput
             name="protein"
             label="Protein"
             type="string"
@@ -171,13 +178,6 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
           <FormInput
             name="carbs"
             label="Carbs"
-            type="string"
-            className="w-[80px]"
-            placeholder="0.0"
-          />
-          <FormInput
-            name="calories"
-            label="Calories"
             type="string"
             className="w-[80px]"
             placeholder="0.0"
