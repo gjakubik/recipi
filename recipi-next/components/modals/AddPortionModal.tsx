@@ -34,7 +34,7 @@ export const AddPortionModal = ({ children, index }: AddPortionModalProps) => {
           Enter portion data for this ingredient
         </DialogDescription>
         <form className="flex-col space-y-8">
-          {form.getValues('portions').map((p: {}, i: number) => (
+          {form.getValues('portions').map((p, i) => (
             <div className="flex flex-row flex-wrap items-end gap-2">
               <FormInput
                 name={`portions[${i}].unit`}
@@ -48,7 +48,7 @@ export const AddPortionModal = ({ children, index }: AddPortionModalProps) => {
                 label={i == 0 ? 'Abbreviation' : ''}
                 type="string"
                 className="w-[80px]"
-                placeholder="0"
+                placeholder="N/A"
               />
               <FormInput
                 name={`portions[${i}].value`}
@@ -82,7 +82,17 @@ export const AddPortionModal = ({ children, index }: AddPortionModalProps) => {
             <Button
               onClick={() => {
                 form.setValue(`portions`, [
-                  ...form.getValues().portions.map((portion: {}) => portion),
+                  ...form
+                    .getValues()
+                    .portions.map(
+                      (p: {
+                        unit: string
+                        abbreviation: string
+                        value: string
+                        gram_weight: string
+                        gram_per_unit: string
+                      }) => p
+                    ),
                   {
                     unit: '',
                     abbreviation: '',
