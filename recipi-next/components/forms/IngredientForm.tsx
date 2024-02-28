@@ -10,7 +10,6 @@ import {
   IngredientFormValues,
   ingredientFormSchema,
 } from '@/lib/validations/ingredient'
-
 import { Form } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
@@ -42,7 +41,15 @@ interface IngredientFormProps {
     protein?: string
     fat?: string
     carbs?: string
-    portions?: [{}]
+    portions?: [
+      {
+        unit: string
+        abbreviation: string
+        value: string
+        gram_weight: string
+        gram_per_unit: string
+      },
+    ]
     processed?: boolean
   }
 }
@@ -52,32 +59,27 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
   const { toast } = useToast()
   const form = useForm<IngredientFormValues>({
     resolver: zodResolver(ingredientFormSchema),
-    defaultValues: !!initialValues
-      ? {
-          ...initialValues,
-        }
-      : {
-          fdc_id: '0',
-          description: '',
-          calories: '0.0',
-          protein: '0.0',
-          fat: '0.0',
-          carbs: '0.0',
-          portions: [
-            {
-              unit: '',
-              abbreviation: '',
-              value: '0',
-              gram_weight: '0',
-              gram_per_unit: '0',
-            },
-          ],
-          processed: false,
+    defaultValues: {
+      fdc_id: '',
+      description: '',
+      calories: '',
+      protein: '',
+      fat: '',
+      carbs: '',
+      portions: [
+        {
+          unit: '',
+          abbreviation: '',
+          value: '',
+          gram_weight: '',
+          gram_per_unit: '',
         },
+      ],
+      processed: false,
+    },
   })
 
   const onFormSubmit = async (data: IngredientFormValues) => {
-    console.log('hi')
     const prepIngredient = {
       id: '',
       fdc_id: parseInt(data.fdc_id),
@@ -87,11 +89,15 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
       fat: parseFloat(data.fat),
       carbs: parseFloat(data.carbs),
       portions: data.portions.map((portion) => ({
-        unit: portion.unit,
-        abbreviation: portion.abbreviation,
-        value: parseFloat(portion.value),
-        gram_weight: parseFloat(portion.gram_weight),
-        gram_per_unit: parseFloat(portion.gram_per_unit),
+        unit: portion.unit ? portion.unit : '',
+        abbreviation: portion.abbreviation ? portion.abbreviation : '',
+        value: parseFloat(portion.value) ? parseFloat(portion.value) : 0,
+        gram_weight: parseFloat(portion.gram_weight)
+          ? parseFloat(portion.gram_weight)
+          : 0,
+        gram_per_unit: parseFloat(portion.gram_per_unit)
+          ? parseFloat(portion.gram_per_unit)
+          : 0,
       })),
     }
 
