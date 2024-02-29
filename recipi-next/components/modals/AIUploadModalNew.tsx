@@ -70,6 +70,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
         setValue('cookingTime', data.cookingTime || '')
         setValue(
           'ingredients',
+          // @ts-ignore
           data.ingredients?.map((ing, i) => ({
             ...ing,
             id: i,
@@ -79,6 +80,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
         )
         setValue(
           'instructions',
+          // @ts-ignore
           data.instructions?.map((instruction, i) => ({
             id: i,
             instruction,
@@ -96,8 +98,10 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
   )
 
   const handleSave = async (
-    uploadFunction: (data: any) => Promise<string | undefined>,
-    data: any
+    uploadFunction: (
+      data: string | UploadFileResponse
+    ) => Promise<string | undefined>,
+    data: string | UploadFileResponse
   ) => {
     setIsSaving(true)
     try {
@@ -123,18 +127,33 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
 
   const onSaveText = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    handleSave(recipeAIUploadText, textInput)
+    handleSave(
+      recipeAIUploadText as (
+        data: string | UploadFileResponse
+      ) => Promise<string | undefined>,
+      textInput
+    )
   }
 
   const onSaveImage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     if (!image) return
-    handleSave(recipeAIUploadImage, image)
+    handleSave(
+      recipeAIUploadImage as (
+        data: string | UploadFileResponse
+      ) => Promise<string | undefined>,
+      image
+    )
   }
 
   const onSaveUrl = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    handleSave(recipeAIUploadUrl, urlInput)
+    handleSave(
+      recipeAIUploadUrl as (
+        data: string | UploadFileResponse
+      ) => Promise<string | undefined>,
+      urlInput
+    )
   }
 
   const onSavePersonal = (

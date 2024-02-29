@@ -52,13 +52,29 @@ export const recipeAIUploadUrl = async (url: string) => {
 
   if (!html) throw new Error('No html found at url')
 
+  // Try to extract the body of the html
+  const body = html.match(/<body[^>]*>((.|[\n\r])*)<\/body>/)
+
+  if (!body) throw new Error('No body found in html')
+
+  const cleanedBody = body[0]
+    .replace(/<script[\s\S]*?<\/script>/g, '')
+    .replace(/<style[\s\S]*?<\/style>/g, '')
+    .replace(/<svg[\s\S]*?<\/svg>/g, '')
+    .replace(/<img[\s\S]*?>/g, '')
+    .replace(/<form[\s\S]*?<\/form>/g, '')
+    .replace(/<a[\s\S]*?<\/a>/g, '')
+    .replace(/<[^>]*>/g, '')
+
+  console.log(cleanedBody)
+
   const prompt = `
     ${URL_PROMPT}
-    HTML: ${html}
+    HTML: ${cleanedBody}
   `
   // Convert the html to text using your AI model
   const htmlTextResponse = await ai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-3.5-turbo-0125',
     messages: [
       {
         role: 'user',
