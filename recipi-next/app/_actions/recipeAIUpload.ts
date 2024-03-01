@@ -92,9 +92,7 @@ export const recipeAIUploadUrl = async (url: string) => {
   return recipeJSON
 }
 
-export const recipeAIUploadImage = async (
-  image: UploadFileResponse<{ userId: string }>
-) => {
+export const recipeAIUploadImage = async (image: UploadFileResponse<null>) => {
   const user = getCurrentUser()
   if (!user) {
     throw new Error('No user found, login to use this feature')
