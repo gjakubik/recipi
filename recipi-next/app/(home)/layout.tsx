@@ -1,4 +1,3 @@
-import { getCurrentUser } from '@/lib/session'
 import { MainNav } from '@/components/MainNav'
 import { defaultNavConfig } from '@/config/default'
 
@@ -7,11 +6,10 @@ export default async function CreateLayout({
 }: {
   children: React.ReactNode
 }) {
-  const user = await getCurrentUser()
   return (
-    <div className="flex flex-col h-screen">
-      <MainNav user={user} config={defaultNavConfig} />
-      <div className="container mx-auto lg:max-w-[1200px] py-12">
+    <div className="flex h-screen flex-col">
+      <MainNav config={defaultNavConfig} />
+      <div className="container mx-auto py-12 lg:max-w-[1200px]">
         {children}
       </div>
     </div>

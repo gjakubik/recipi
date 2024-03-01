@@ -35,23 +35,35 @@ export type Category = InferModel<typeof categories>
 
 export type Comment = InferModel<typeof comments>
 
-export type Ingredient = {
+export type Ingredient = InferModel<typeof ingredients>
+
+export type IngredientPortion = {
+  unit: string
+  abbreviation?: string
+  value?: number
+  gram_weight?: number
+  gram_per_unit?: number
+}
+
+export type InsertIngredient = InferModel<typeof ingredients, 'insert'>
+
+export type RecipeIngredient = {
   name: string
   note?: string
   amount?: string
   unit?: string
 }
 
-export type CombinedIngredient = Ingredient &
+export type CombinedIngredient = RecipeIngredient &
   (
     | {
         combined: true
-        ingredients: Ingredient[]
+        ingredients: RecipeIngredient[]
       }
     | { combined: false }
   )
 
-export type IngredientForm = {
+export type RecipeIngredientForm = {
   id?: string | number
   name: string
   note?: string

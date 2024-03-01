@@ -5,22 +5,33 @@ import { ServerRecipeList } from './ServerRecipeList'
 import { LoadingRecipeList } from './LoadingRecipeList'
 
 interface ServerRecipeListLoaderProps {
-  pagePath: '/my-recipes' | '/'
+  title?: string
+  pagePath: string
   user?: User
+  profileUserId?: string
   searchParams: { [key: string]: string | string[] | undefined }
+  gridClassName?: string
 }
 
 export const ServerRecipeListLoader = async ({
+  title,
   pagePath,
   user,
+  profileUserId,
   searchParams,
+  gridClassName,
 }: ServerRecipeListLoaderProps) => {
+  //create a key for suspense with all the search params
+  const suspenseKey = JSON.stringify(searchParams)
   return (
     <Suspense fallback={LoadingRecipeList}>
       <ServerRecipeList
+        title={title}
         pagePath={pagePath}
         user={user}
+        profileUserId={profileUserId}
         searchParams={searchParams}
+        gridClassName={gridClassName}
       />
     </Suspense>
   )

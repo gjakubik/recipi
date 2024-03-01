@@ -12,16 +12,8 @@ use axum::{
 use color_eyre::eyre::{self, Error};
 use sqlx::{FromRow, mysql::{MySql}, Row, types::chrono::*};
 use serde::{Deserialize, Serialize};
+use crate::ingredient::Ingredient;
 
-
-#[derive(FromRow, Debug, Serialize, Deserialize)]
-pub struct Ingredient {
-    id: Option<i32>,
-    name: String,
-    calories: i32,
-    created_at: Option<chrono::DateTime<Utc>>,
-    updated_at: Option<chrono::DateTime<Utc>>,
-}
 
 pub async fn get_ingredient_id(
     id: i32,
@@ -34,10 +26,13 @@ pub async fn get_ingredient_id(
     .map(|row: sqlx::mysql::MySqlRow| {
         Ingredient {
             id: row.get(0),
-            name: row.get(1),
+            description: row.get(1),
             calories: row.get(2),
-            created_at: row.get(3),
-            updated_at: row.get(4),
+            protein: row.get(3),
+            fat: row.get(4),
+            carbs: row.get(5),
+            portions: row.get(7),
+            fdc_id: row.get(8),
         }
     })
     .fetch_all(&pool).await;
@@ -58,10 +53,13 @@ pub async fn get_ingredient_name(
     .map(|row: sqlx::mysql::MySqlRow| {
         Ingredient {
             id: row.get(0),
-            name: row.get(1),
+            description: row.get(1),
             calories: row.get(2),
-            created_at: row.get(3),
-            updated_at: row.get(4),
+            protein: row.get(3),
+            fat: row.get(4),
+            carbs: row.get(5),
+            portions: row.get(6),
+            fdc_id: row.get(7),
         }
     })
     .fetch_all(&pool).await;
@@ -71,15 +69,30 @@ pub async fn get_ingredient_name(
     result.expect("Error fetching ingredients")
 }
 
-pub async fn add_ingredient(pool: sqlx::Pool<MySql>, ingredient: Ingredient) -> bool {
+pub async fn add_ingredient(pool: &sqlx::Pool<MySql>, ingredient: &Ingredient) -> bool {
     let res = sqlx::query(
         "INSERT INTO ingredients (
-            name,
-            calories)
-        VALUES (?, ?)")
-        .bind(ingredient.name)
-        .bind(ingredient.calories)
-        .execute(&pool).await;
+            id,
+            description,
+            calories,
+            protein,
+            fat,
+            carbs,
+            processed,
+            portions,
+            fdc_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+        .bind(&ingredient.id)
+        .bind(&ingredient.description)
+        .bind(&ingredient.calories)
+        .bind(&ingredient.protein)
+        .bind(&ingredient.fat)
+        .bind(&ingredient.carbs)
+        .bind(false)
+        .bind(&ingredient.portions)
+        .bind(&ingredient.fdc_id)
+        .execute(pool).await;
 
     println!("Result: {:?}", res);
 
@@ -97,10 +110,13 @@ pub async fn add_ingredient(pool: sqlx::Pool<MySql>, ingredient: Ingredient) -> 
 pub async fn update_ingredient_id(pool: sqlx::Pool<MySql>, ingredient: Ingredient, id: i32) -> bool {
     let res = sqlx::query(
         "UPDATE ingredients
-        SET name = ?, calories = ?
+        SET name = ?, calories = ?, protein = ?, fat = ?, carbs = ?
         WHERE id = ?")
-        .bind(ingredient.name)
+        .bind(ingredient.description)
         .bind(ingredient.calories)
+        .bind(ingredient.protein)
+        .bind(ingredient.fat)
+        .bind(ingredient.carbs)
         .bind(id)
         .execute(&pool).await;
 
@@ -117,14 +133,17 @@ pub async fn update_ingredient_id(pool: sqlx::Pool<MySql>, ingredient: Ingredien
     }
 }
 
-pub async fn update_ingredient_name(pool: sqlx::Pool<MySql>, ingredient: Ingredient, name: String) -> bool {
+pub async fn update_ingredient_name(pool: sqlx::Pool<MySql>, ingredient: Ingredient, description: String) -> bool {
     let res = sqlx::query(
         "UPDATE ingredients
-        SET name = ?, calories = ?
-        WHERE name = ?")
-        .bind(ingredient.name)
+        SET description = ?, calories = ?, protein = ?, fat = ?, carbs = ?
+        WHERE description = ?")
+        .bind(ingredient.description)
         .bind(ingredient.calories)
-        .bind(name)
+        .bind(ingredient.protein)
+        .bind(ingredient.fat)
+        .bind(ingredient.carbs)
+        .bind(description)
         .execute(&pool).await;
 
     println!("Result: {:?}", res);
@@ -142,13 +161,13 @@ pub async fn update_ingredient_name(pool: sqlx::Pool<MySql>, ingredient: Ingredi
 
 pub async fn delete_ingredient_id(
     id: i32,
-    pool: sqlx::Pool<MySql>
+    pool: &sqlx::Pool<MySql>
 ) -> bool {
     let res = sqlx::query(
         "DELETE FROM ingredients WHERE id = ?"
     )
     .bind(id)
-    .execute(&pool).await;
+    .execute(pool).await;
 
     println!("Result: {:?}", res);
 
@@ -164,13 +183,13 @@ pub async fn delete_ingredient_id(
 }
 
 pub async fn delete_ingredient_name(
-    name: String,
+    description: String,
     pool: sqlx::Pool<MySql>
 ) -> bool {
     let res = sqlx::query(
-        "DELETE FROM ingredients WHERE name = ?"
+        "DELETE FROM ingredients WHERE description = ?"
     )
-    .bind(name)
+    .bind(description)
     .execute(&pool).await;
 
     println!("Result: {:?}", res);
@@ -184,4 +203,13 @@ pub async fn delete_ingredient_name(
             return false;
         }
     }
+}
+
+pub async fn delete_all_ingredients(
+    pool: &sqlx::Pool<MySql>
+) {
+    sqlx::query(
+        "DELETE FROM ingredients;"
+    )
+    .execute(pool).await;
 }

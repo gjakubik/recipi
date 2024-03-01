@@ -8,6 +8,7 @@ import { signIn, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 import { NavConfig, NavGroup, NavItem } from '@/types'
 import { cn } from '@/lib/utils'
+import { useCurrentUser } from '@/hooks/use-current-user'
 
 import { Separator } from '@/components/ui/separator'
 import { Typography } from '@/components/ui/typography'
@@ -25,7 +26,7 @@ import {
   DropdownMenuSubContent,
 } from '@/components/ui/dropdown-menu'
 import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
-import { Search } from '@/components/Search'
+// import { Search } from '@/components/Search'
 import { MobileNav } from '@/components/MobileNav'
 import {
   ActivityLogIcon,
@@ -34,15 +35,16 @@ import {
   ChevronDownIcon,
   Cross1Icon,
 } from '@radix-ui/react-icons'
+import { UserIcon, SunMoon, Wrench, Sun, Moon } from 'lucide-react'
 
 export interface HeaderProps {
-  user?: User | null
   config: NavConfig
   children?: React.ReactNode
 }
-export const MainNav = ({ user, config, children }: HeaderProps) => {
+export const MainNav = ({ config, children }: HeaderProps) => {
   const { setTheme } = useTheme()
   const pathname = usePathname()
+  const user = useCurrentUser()
   const [isLoading, setIsLoading] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [groupHoverState, setGroupHoverState] = useState(
@@ -77,9 +79,9 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
 
   return (
     <header>
-      <div className="flex flex-row justify-between gap-4 items-center h-[90px] sm:mr-4">
+      <div className=" flex h-[90px] w-full flex-row items-center justify-between gap-4 sm:mr-4">
         <Link href="/">
-          <div className="hidden md:flex justify-center items-center gap-4 px-4 sm:pl-12 py-4">
+          <div className="hidden items-center justify-center gap-4 px-4 py-4 sm:pl-12 md:flex">
             <ActivityLogIcon className="h-6 w-6" />
             <Typography variant="h3">Recipi</Typography>
           </div>
@@ -87,9 +89,9 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
 
         <div
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="grow flex md:hidden justify-start items-center gap-1 hover:cursor-pointer px-4 sm:pl-6 py-4"
+          className="flex grow items-center justify-start gap-1 px-4 py-4 hover:cursor-pointer sm:pl-6 md:hidden"
         >
-          <div className="flex justify-center items-center gap-3">
+          <div className="flex items-center justify-center gap-3">
             {isDropdownOpen ? (
               <Cross1Icon className="h-6 w-6" />
             ) : (
@@ -108,7 +110,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
             {children}
           </MobileNav>
         )}
-        <div className="hidden md:flex flex-row space-x-8 justify-self-stretch grow ml-4 h-full">
+        <div className="ml-4 hidden h-full grow flex-row space-x-8 justify-self-stretch md:flex">
           {config.items.map((item, ix) => {
             //test if item is of type NavGroup
             if (item.authenticated && !user) return null
@@ -122,14 +124,14 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
                 >
                   <Link
                     href={group.href}
-                    className={`h-full m-auto self-stretch flex flex-row items-center justify-between ${
+                    className={`m-auto flex h-full flex-row items-center justify-between self-stretch ${
                       groupHoverState[ix]
-                        ? 'bg-neutral-100 dark:bg-secondary shadow-lg'
+                        ? 'bg-neutral-100 shadow-lg dark:bg-secondary'
                         : ''
                     }`}
                   >
                     <PopoverAnchor
-                      className={`w-full h-full flex flex-row items-center gap-2`}
+                      className={`flex h-full w-full flex-row items-center gap-2`}
                       onMouseEnter={() => handleMouseEnter(ix)}
                       onMouseLeave={() => handleMouseLeave(ix)}
                     >
@@ -155,14 +157,14 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
                     onMouseEnter={() => handleMouseEnter(ix)}
                     onMouseLeave={() => handleMouseLeave(ix)}
                     className={cn(
-                      `rounded-none border-none shadow-lg px-4 pt-0 flex flex-col gap-2 bg-neutral-100 dark:bg-secondary`,
+                      `flex flex-col gap-2 rounded-none border-none bg-neutral-100 px-4 pt-0 shadow-lg dark:bg-secondary`,
                       {
                         'w-[120px]': group.minWidth === 'small',
                       }
                     )}
                   >
                     <div
-                      className={`w-full flex flex-col space-y-2 items-stretch`}
+                      className={`flex w-full flex-col items-stretch space-y-2`}
                     >
                       {group.items.map((link) => (
                         <Link
@@ -194,7 +196,7 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
                   className="flex flex-row items-center gap-2"
                 >
                   <Typography
-                    className={`m-auto dashed-border-hover ${
+                    className={`dashed-border-hover m-auto ${
                       pathname === link.href ? 'font-semibold' : ''
                     }`}
                   >
@@ -205,13 +207,13 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
             }
           })}
         </div>
-        <div className="flex flex-row space-x-4">
-          {config.searchVisible && <Search className="hidden sm:flex" />}
+        <div className="mr-4 flex flex-row space-x-4">
+          {/* {config.searchVisible && <Search className="hidden sm:flex" />} */}
           {!!user && pathname !== '/create' && config.createVisible && (
             <Button
               asChild
               variant="secondary"
-              className="hidden sm:flex min-w-[110px]"
+              className="hidden min-w-[110px] sm:flex"
             >
               <Link href="/create">Add Recipe</Link>
             </Button>
@@ -230,28 +232,41 @@ export const MainNav = ({ user, config, children }: HeaderProps) => {
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              {user && (
+                <DropdownMenuItem asChild>
+                  <Link href={`/profile/${user.id}`} className="cursor-pointer">
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
+                  <SunMoon className="mr-2 h-4 w-4" />
                   Theme Preference
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
                     <DropdownMenuItem onClick={() => setTheme('light')}>
-                      Light
+                      <Sun className="mr-2 h-4 w-4" /> Light
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setTheme('dark')}>
+                      <Moon className="mr-2 h-4 w-4" />
                       Dark
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setTheme('system')}>
+                      <SunMoon className="mr-2 h-4 w-4" />
                       System
                     </DropdownMenuItem>
                   </DropdownMenuSubContent>
                 </DropdownMenuPortal>
               </DropdownMenuSub>
               {user?.role === 'admin' && (
-                <DropdownMenuItem>
-                  <Link href="/admin">Admin</Link>
+                <DropdownMenuItem asChild>
+                  <Link href="/admin" className="cursor-pointer">
+                    <Wrench className="mr-2 h-4 w-4" />
+                    Admin
+                  </Link>
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />

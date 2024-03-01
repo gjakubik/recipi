@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { getRecipe, getMenus } from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
 import { timeValueToLabel, isZero } from '@/lib/utils'
@@ -34,7 +35,15 @@ export default async function RecipePage({ params }: RecipePageProps) {
             {recipe.isPrivate ? 'Secret' : 'Public'}
           </Typography>
           <Typography variant="h3">{recipe.title}</Typography>
-          <Typography variant="light">By {recipe.author.name}</Typography>
+          <Typography variant="light">
+            By{' '}
+            <Link
+              href={`/profile/${recipe.authorId}/recipes`}
+              className="underline"
+            >
+              {recipe.author.name}
+            </Link>
+          </Typography>
           {recipe.updatedAt && (
             <Typography variant="light">
               Updated: {new Date(recipe.updatedAt).toLocaleDateString()}

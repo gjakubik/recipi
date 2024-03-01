@@ -1,3 +1,5 @@
+'use server'
+
 import { db } from '@/lib/db'
 import { recipes, users } from '@/lib/db/schema'
 import { Recipe } from '@/types'

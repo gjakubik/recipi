@@ -8,6 +8,7 @@ import { GetMenusResult, Recipe } from '@/types'
 import { useResizableRef } from '@/hooks/use-resizable-observer'
 import useSearch from '@/app/store/useSearch'
 import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
+import { useCurrentUser } from '@/hooks/use-current-user'
 
 import {
   Card,
@@ -34,10 +35,9 @@ import { User } from 'next-auth'
 
 interface RecipeCardProps {
   recipe: Recipe
-  initialMenus: GetMenusResult
+  initialMenus?: GetMenusResult
   cardKey: string | number
   onClick?: () => void
-  user?: User
   forceUpdate: number
   setForceUpdate: (value: number) => void
 }
@@ -47,10 +47,10 @@ export const RecipeCard = ({
   initialMenus,
   cardKey,
   onClick,
-  user,
   forceUpdate,
   setForceUpdate,
 }: RecipeCardProps) => {
+  const user = useCurrentUser()
   const { search } = useSearch()
   const [showAllIngredients, setShowAllIngredients] = useState(false)
 
@@ -71,15 +71,15 @@ export const RecipeCard = ({
   return (
     <Card
       key={cardKey}
-      className="flex flex-col h-full shadow hover:shadow-xl hover:cursor-pointer dark:hover:bg-gray-900 transition-all duration-200 ease-in-out"
+      className="flex h-full flex-col shadow transition-all duration-200 ease-in-out hover:cursor-pointer hover:shadow-xl dark:hover:bg-gray-900"
       onClick={() => onClick?.()}
     >
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link href={`/recipe/${recipe.id}`} className="grow flex flex-col">
+          <Link href={`/recipe/${recipe.id}`} className="flex grow flex-col">
             <CardHeader className="pb-2">
               <CardTitle>
-                <Typography className="text-xl border-b long-dashed-border">
+                <Typography className="long-dashed-border border-b text-xl">
                   {recipe.title}
                 </Typography>
               </CardTitle>
@@ -98,11 +98,11 @@ export const RecipeCard = ({
                 {recipe.description}
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col gap-2 justify-between grow">
+            <CardContent className="flex grow flex-col justify-between gap-2">
               <div className="flex flex-col gap-1">
                 {!isZero(recipe.preparationTime) && (
                   <div className="flex flex-row gap-1">
-                    <Clock className="w-3 h-3 mt-1" />
+                    <Clock className="mt-1 h-3 w-3" />
                     <Typography variant="light">Prep</Typography>
                     <Typography variant="extralight" className="ml-1">
                       {timeValueToLabel(recipe.preparationTime || '')}
@@ -111,7 +111,7 @@ export const RecipeCard = ({
                 )}
                 {!isZero(recipe.cookingTime) && (
                   <div className="flex flex-row gap-1">
-                    <Clock className="w-3 h-3 mt-1" />
+                    <Clock className="mt-1 h-3 w-3" />
                     <Typography variant="light">Cook</Typography>
                     <Typography variant="extralight" className="ml-1">
                       {timeValueToLabel(recipe.cookingTime || '')}
@@ -120,7 +120,7 @@ export const RecipeCard = ({
                 )}
                 {recipe.servings && (
                   <div className="flex flex-row gap-1">
-                    <Users className="w-3 h-3 mt-1" />
+                    <Users className="mt-1 h-3 w-3" />
                     <Typography variant="light">Servings</Typography>
                     <Typography variant="extralight" className="ml-1">
                       {removeServings(recipe.servings)}
@@ -128,7 +128,7 @@ export const RecipeCard = ({
                   </div>
                 )}
               </div>
-              <div className="grow flex flex-col justify-end">
+              <div className="flex grow flex-col justify-end">
                 <div
                   className={`grow ${
                     showAllIngredients ? '' : 'min-h-[65px] overflow-clip'
@@ -163,7 +163,7 @@ export const RecipeCard = ({
               </div>
               <div>
                 <Separator className="mb-4" />
-                <div className="flex flex-row justify-between items-center">
+                <div className="flex flex-row items-center justify-between">
                   <UserAvatar user={recipe.author} />
                   <Typography variant="light">
                     {recipe.creationDate
@@ -180,13 +180,13 @@ export const RecipeCard = ({
           <Typography>Go to {recipe.title}</Typography>
         </TooltipContent>
       </Tooltip>
-      <CardFooter className="flex flex-row justify-end items-center gap-4">
+      <CardFooter className="flex flex-row items-center justify-end gap-4">
         {isOwner && (
           <Button asChild size="sm" variant="outline">
             <Link href={`/recipe/${recipe.id}/edit`}>Edit Recipe</Link>
           </Button>
         )}
-        {loggedIn && (
+        {loggedIn && initialMenus && (
           <AddRecipeToMenusModal
             user={user}
             recipe={recipe}

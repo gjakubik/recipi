@@ -14,6 +14,7 @@ import { PaginationLimitInput } from '@/components/PaginationLimitInput'
 import { ListQueryParams } from '@/types'
 
 interface ServerPaginationProps {
+  title?: string
   mode: 'recipe' | 'menu'
   basePath: string
   page: number
@@ -26,6 +27,7 @@ interface ServerPaginationProps {
 }
 
 export const ServerPagination = ({
+  title,
   mode,
   basePath,
   page,
@@ -58,6 +60,8 @@ export const ServerPagination = ({
             basePath={basePath}
           />
         </div>
+      ) : title ? (
+        <Typography variant="h3">{title}</Typography>
       ) : (
         <div />
       )}

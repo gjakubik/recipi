@@ -5,14 +5,14 @@ import { User } from 'next-auth'
 import { GetMenusResult, GetRecipesResult } from '@/types'
 import { RECIPE_QUERY } from '@/lib/constants'
 import useSearch from '@/app/store/useSearch'
+import { useRecipeQuery } from '@/hooks/use-recipe-query'
+import { useCurrentUser } from '@/hooks/use-current-user'
 
 import { RecipeCard } from '@/components/recipe/RecipeCard'
 import { ClientPagination } from '../ClientPagintation'
-import { useRecipeQuery } from '@/hooks/use-recipe-query'
 
 interface RecipeListPaginatedProps {
   initialData: GetRecipesResult
-  user?: User
   initialMenus: GetMenusResult
   showUserRecipes?: boolean
 }
@@ -20,9 +20,9 @@ interface RecipeListPaginatedProps {
 export function RecipeListPaginated({
   initialMenus,
   initialData,
-  user,
   showUserRecipes,
 }: RecipeListPaginatedProps) {
+  const user = useCurrentUser()
   const { search } = useSearch()
   const [forceUpdate, setForceUpdate] = useState(0)
 
@@ -40,14 +40,13 @@ export function RecipeListPaginated({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {recipes.map((recipe) => (
           <RecipeCard
             key={recipe.id}
             cardKey={recipe.id}
             recipe={recipe}
             initialMenus={initialMenus}
-            user={user}
             forceUpdate={forceUpdate}
             setForceUpdate={setForceUpdate}
           />

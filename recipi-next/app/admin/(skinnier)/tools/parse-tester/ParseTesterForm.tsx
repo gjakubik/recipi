@@ -7,18 +7,20 @@ import { Typography } from '@/components/ui/typography'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 import { fractionToFloat } from '@/lib/utils'
+import { serverFetch } from '@/app/_actions/serverFetch'
 
 export const ParseTesterForm = () => {
   const [input, setInput] = useState<string>('')
   const [output, setOutput] = useState<string>('')
   const [isParsing, setIsParsing] = useState<boolean>(false)
 
-  const onSubmit = (input: string) => {
+  const onSubmit = async (input: string) => {
     setIsParsing(true)
 
     // **************************************
     // Add arbitrary logic here to test parsing
-    const parsed = fractionToFloat(input).toString()
+    const res = await serverFetch(input)
+    const parsed = res
 
     // **************************************
     setOutput(parsed)
@@ -41,7 +43,7 @@ export const ParseTesterForm = () => {
         </Button>
       </div>
       <div className="flex flex-col gap-2">
-        <Typography variant="h5">Output:</Typography>
+        <Typography variant="h5">Output: {output.length}</Typography>
         <Typography>{output}</Typography>
       </div>
     </div>

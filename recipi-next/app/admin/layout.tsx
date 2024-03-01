@@ -1,7 +1,6 @@
 import { getCurrentUser } from '@/lib/session'
 import { redirect } from 'next/navigation'
 
-import { Container } from '@/components/ui/container'
 import { MainNav } from '@/components/MainNav'
 import { adminNavConfig } from '@/config/admin'
 
@@ -13,11 +12,11 @@ export default async function CreateLayout({
   const user = await getCurrentUser()
   if (!user) return redirect('/')
   return (
-    <div className="flex flex-col h-screen">
-      <MainNav user={user} config={adminNavConfig} />
-      <Container className="md:w-5/6 lg:w-2/3 flex-col space-y-4 pb-8">
+    <div className="flex h-screen flex-col">
+      <MainNav config={adminNavConfig} />
+      <div className="container mx-auto flex flex-col space-y-4 py-12 lg:max-w-[1200px]">
         {children}
-      </Container>
+      </div>
     </div>
   )
 }

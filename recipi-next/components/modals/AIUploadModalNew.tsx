@@ -1,6 +1,6 @@
 'use client'
 
-import { PropsWithChildren, useState } from 'react'
+import { PropsWithChildren, useCallback, useState } from 'react'
 import { Variants, motion } from 'framer-motion'
 import { useFormContext } from 'react-hook-form'
 import _ from 'lodash'
@@ -9,8 +9,8 @@ import { abbToUnit } from '@/lib/utils'
 import {
   recipeAIUploadText,
   recipeAIUploadImage,
+  recipeAIUploadUrl,
 } from '@/app/_actions/recipeAIUpload'
-import { Ingredient } from '@/types'
 import { UploadDropzone } from '@uploadthing/react'
 import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
 import { UploadFileResponse } from 'uploadthing/client'
@@ -25,6 +25,7 @@ import {
   DialogFooter,
   DialogClose,
 } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Typography } from '@/components/ui/typography'
@@ -51,169 +52,107 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
   const [textInput, setTextInput] = useState('')
   const [image, setImage] = useState<UploadFileResponse | null>(null)
   const [inputJSON, setInputJSON] = useState('')
+  const [urlInput, setUrlInput] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const [success, setSuccess] = useState(false)
   const [activeTab, setActiveTab] = useState('text')
 
-  const onSaveText = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault()
-    setIsSaving(true)
-    let data
-    try {
-      const res = await recipeAIUploadText(textInput)
-      if (!res) {
-        toast({
-          title: 'AI Upload Error',
-          description:
-            'There was an error processing your recipe, try again or enter manually',
-        })
-        setIsSaving(false)
-        return
-      }
-      data = JSON.parse(res)
-    } catch (err) {
-      console.log(err)
-      toast({
-        title: 'Error',
-        description: 'Invalid JSON',
-        variant: 'destructive',
-      })
-      setIsSaving(false)
-      return
-    }
-
-    try {
-      data.title && form.setValue('title', data.title)
-      data.description && form.setValue('description', data.description)
-      data.difficultyLevel &&
-        form.setValue('difficultyLevel', _.lowerCase(data.difficultyLevel))
-      data.servings && form.setValue('servings', data.servings)
-      data.preparationTime &&
-        form.setValue('preparationTime', data.preparationTime)
-      data.cookingTime && form.setValue('cookingTime', data.cookingTime)
-      data.ingredients &&
-        form.setValue(
+  const setFormValues = useCallback(
+    (data: any) => {
+      const setValue = form.setValue
+      try {
+        setValue('title', data.title || '')
+        setValue('description', data.description || '')
+        setValue('difficultyLevel', _.lowerCase(data.difficultyLevel) || '')
+        setValue('servings', data.servings || '')
+        setValue('preparationTime', data.preparationTime || '')
+        setValue('cookingTime', data.cookingTime || '')
+        setValue(
           'ingredients',
-          data.ingredients.map((ing: Ingredient, i: number) => {
-            //if we are able to parse the amount, use that, otherwise leave it empty. If the unit is empty, then set it to the amount
-            const validAmount = parseFloat(ing.amount || '') > 0
-            const amount = validAmount ? ing.amount : ''
-            // if the amount is invalid and there is no unit, then set the unit to amount
-            const unit = abbToUnit(
-              _.trimEnd(!validAmount && !ing.unit ? ing.amount : ing.unit, 's')
-            )
-            return {
-              ...ing,
-              id: i,
-              amount,
-              unit,
-            }
-          })
-        )
-      data.instructions &&
-        form.setValue(
-          'instructions',
-          data.instructions.map((ins: string, i: number) => ({
+          // @ts-ignore
+          data.ingredients?.map((ing, i) => ({
+            ...ing,
             id: i,
-            instruction: ins,
-          }))
+            amount: parseFloat(ing.amount) ? ing.amount : '',
+            unit: abbToUnit(_.trimEnd(ing.unit || ing.amount, 's')),
+          })) || []
         )
-    } catch (err) {
-      console.log(err)
+        setValue(
+          'instructions',
+          // @ts-ignore
+          data.instructions?.map((instruction, i) => ({
+            id: i,
+            instruction,
+          })) || []
+        )
+      } catch (error) {
+        toast({
+          title: 'Error',
+          description: 'Failed to set form values',
+          variant: 'destructive',
+        })
+      }
+    },
+    [form, toast]
+  )
+
+  const handleSave = async (
+    uploadFunction: (
+      data: string | UploadFileResponse
+    ) => Promise<string | undefined>,
+    data: string | UploadFileResponse
+  ) => {
+    setIsSaving(true)
+    try {
+      const res = await uploadFunction(data)
+      if (!res) throw new Error('Upload failed')
+
+      const parsedData = JSON.parse(res)
+      setFormValues(parsedData)
+
+      setIsSaving(false)
+      setOpen(false)
+      toast({ title: 'Success', description: 'Recipe processed successfully!' })
+    } catch (error: any) {
+      console.error(error)
+      setIsSaving(false)
       toast({
         title: 'Error',
-        description: 'Invalid JSON',
+        description: error.message || 'An error occurred',
         variant: 'destructive',
       })
-      setIsSaving(false)
-      return
     }
-
-    setIsSaving(false)
-    setOpen(false)
   }
 
-  const onSaveImage = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    if (!image) return
+  const onSaveText = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    setIsSaving(true)
-    let data
-    try {
-      const res = await recipeAIUploadImage(image)
-      if (!res) {
-        toast({
-          title: 'AI Upload Error',
-          description:
-            'There was an error processing your recipe, try again or enter manually',
-        })
-        setIsSaving(false)
-        return
-      }
-      data = JSON.parse(res)
-    } catch (err) {
-      console.log(err)
-      toast({
-        title: 'Error',
-        description: 'Invalid JSON',
-        variant: 'destructive',
-      })
-      setIsSaving(false)
-      return
-    }
+    handleSave(
+      recipeAIUploadText as (
+        data: string | UploadFileResponse
+      ) => Promise<string | undefined>,
+      textInput
+    )
+  }
 
-    try {
-      data.title && form.setValue('title', data.title)
-      data.description && form.setValue('description', data.description)
-      data.difficultyLevel &&
-        form.setValue('difficultyLevel', _.lowerCase(data.difficultyLevel))
-      data.servings && form.setValue('servings', data.servings)
-      data.preparationTime &&
-        form.setValue('preparationTime', data.preparationTime)
-      data.cookingTime && form.setValue('cookingTime', data.cookingTime)
-      data.ingredients &&
-        form.setValue(
-          'ingredients',
-          data.ingredients.map((ing: Ingredient, i: number) => {
-            //if we are able to parse the amount, use that, otherwise leave it empty. If the unit is empty, then set it to the amount
-            const validAmount = parseFloat(ing.amount || '') > 0
-            const amount = validAmount ? ing.amount : ''
-            // if the amount is invalid and there is no unit, then set the unit to amount
-            const unit = abbToUnit(
-              _.trimEnd(!validAmount && !ing.unit ? ing.amount : ing.unit, 's')
-            )
-            return {
-              ...ing,
-              id: i,
-              amount,
-              unit,
-            }
-          })
-        )
-      data.instructions &&
-        form.setValue(
-          'instructions',
-          data.instructions.map((ins: string, i: number) => ({
-            id: i,
-            instruction: ins,
-          }))
-        )
-    } catch (err) {
-      console.log(err)
-      toast({
-        title: 'Error',
-        description: 'Invalid JSON',
-        variant: 'destructive',
-      })
-      setIsSaving(false)
-      return
-    }
+  const onSaveImage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    if (!image) return
+    handleSave(
+      recipeAIUploadImage as (
+        data: string | UploadFileResponse
+      ) => Promise<string | undefined>,
+      image
+    )
+  }
 
-    setIsSaving(false)
-    setOpen(false)
+  const onSaveUrl = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    handleSave(
+      recipeAIUploadUrl as (
+        data: string | UploadFileResponse
+      ) => Promise<string | undefined>,
+      urlInput
+    )
   }
 
   const onSavePersonal = (
@@ -221,62 +160,22 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
   ) => {
     e.preventDefault()
     setIsSaving(true)
-    let data
     try {
-      data = JSON.parse(inputJSON)
-    } catch (err) {
-      console.log(err)
+      const parsedData = JSON.parse(inputJSON)
+      setFormValues(parsedData)
+
+      setIsSaving(false)
+      setOpen(false)
+      toast({ title: 'Success', description: 'Recipe processed successfully!' })
+    } catch (e: any) {
+      console.error(e)
+      setIsSaving(false)
       toast({
         title: 'Error',
-        description: 'Invalid JSON',
+        description: e.message || 'An error occurred',
         variant: 'destructive',
       })
-      setIsSaving(false)
-      return
     }
-
-    try {
-      data.title && form.setValue('title', data.title)
-      data.description && form.setValue('description', data.description)
-      data.difficultyLevel &&
-        form.setValue('difficultyLevel', _.lowerCase(data.difficultyLevel))
-      data.servings && form.setValue('servings', data.servings)
-      data.preparationTime &&
-        form.setValue('preparationTime', data.preparationTime)
-      data.cookingTime && form.setValue('cookingTime', data.cookingTime)
-      data.ingredients &&
-        form.setValue(
-          'ingredients',
-          data.ingredients.map((ing: Ingredient, i: number) => {
-            return {
-              ...ing,
-              id: i,
-              unit: abbToUnit(_.trimEnd(ing.unit, 's')),
-            }
-          })
-        )
-      data.instructions &&
-        form.setValue(
-          'instructions',
-          data.instructions.map((ins: string, i: number) => ({
-            id: i,
-            instruction: ins,
-          }))
-        )
-    } catch (err) {
-      console.log(err)
-      toast({
-        title: 'Error',
-        description: 'Invalid JSON',
-        variant: 'destructive',
-      })
-      setIsSaving(false)
-      return
-    }
-
-    setIsSaving(false)
-    setSuccess(true)
-    setOpen(false)
   }
 
   return (
@@ -293,20 +192,31 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
           <Button
             onClick={() => setActiveTab('text')}
             variant="text"
-            className={`px-2 pb-3 hover:cursor ${
+            className={`hover:cursor px-2 pb-3 ${
               activeTab === 'text'
-                ? 'font-bold long-dashed-border'
+                ? 'long-dashed-border font-bold'
                 : 'dashed-border-hover'
             } transition duration-150 ease-in-out`}
           >
             Text
           </Button>
           <Button
+            onClick={() => setActiveTab('url')}
+            variant="text"
+            className={`hover:cursor px-2 pb-3 ${
+              activeTab === 'url'
+                ? 'long-dashed-border font-bold'
+                : 'dashed-border-hover'
+            } transition duration-150 ease-in-out`}
+          >
+            URL
+          </Button>
+          <Button
             onClick={() => setActiveTab('image')}
             variant="text"
-            className={`px-2 pb-3 hover:cursor ${
+            className={`hover:cursor px-2 pb-3 ${
               activeTab === 'image'
-                ? 'font-bold long-dashed-border'
+                ? 'long-dashed-border font-bold'
                 : 'dashed-border-hover'
             } transition duration-150 ease-in-out`}
           >
@@ -315,16 +225,16 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
           <Button
             onClick={() => setActiveTab('recipe-converter')}
             variant="text"
-            className={`px-2 pb-3 hover:cursor ${
+            className={`hover:cursor px-2 pb-3 ${
               activeTab === 'recipe-converter'
-                ? 'font-bold long-dashed-border'
+                ? 'long-dashed-border font-bold'
                 : 'dashed-border-hover'
             } transition duration-150 ease-in-out`}
           >
             ChatGPT
           </Button>
         </div>
-        <div className="min-h-[450px] w-full max-w-[500px] m-auto">
+        <div className="m-auto min-h-[450px] w-full max-w-[500px]">
           {activeTab === 'text' && (
             <div className="flex flex-col gap-2">
               <Typography variant="p">Paste the recipe text here:</Typography>
@@ -338,12 +248,25 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
               <div></div>
             </div>
           )}
+          {activeTab === 'url' && (
+            <div className="flex flex-col gap-2">
+              <Typography variant="p">
+                Paste the URL of the recipe here:
+              </Typography>
+              <Input
+                placeholder="Recipe URL goes here..."
+                className="w-full"
+                value={urlInput}
+                onChange={(e) => setUrlInput(e.target.value)}
+              />
+            </div>
+          )}
           {activeTab === 'image' && (
-            <div className="flex flex-col gap-2 relative">
+            <div className="relative flex flex-col gap-2">
               <Typography variant="p">Upload the recipe image here:</Typography>
               {!image && (
                 <UploadDropzone<UploadThingFileRouter>
-                  className="drop-shadow-md h-[400px]"
+                  className="h-[400px] drop-shadow-md"
                   endpoint="titleImage"
                   onClientUploadComplete={(res) => {
                     if (!res) {
@@ -372,14 +295,14 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
                 <img
                   src={image.url}
                   alt="Recipe"
-                  className={`w-full h-[400px] object-cover rounded-md ${
-                    isSaving ? 'grayscale brightness-50' : ''
+                  className={`h-[400px] w-full rounded-md object-cover ${
+                    isSaving ? 'brightness-50 grayscale' : ''
                   }`}
                 />
               )}
               {isSaving && (
                 <motion.div
-                  className="absolute inset-0 flex justify-center items-center"
+                  className="absolute inset-0 flex items-center justify-center"
                   variants={robotVariants}
                   initial={{ scale: 1, rotate: 0 }} // Start from a non-scaled, non-rotated state
                   animate="animate" // Reference to the animate variant
@@ -390,7 +313,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
             </div>
           )}
           {activeTab === 'recipe-converter' && (
-            <div className="flex flex-col min-h-[450px]">
+            <div className="flex min-h-[450px] flex-col">
               <Typography variant="bold">
                 Use your own ChatGPT plus account (free)
               </Typography>
@@ -424,6 +347,14 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
               disabled={isSaving || !textInput || success}
             >
               {isSaving ? 'Analyzing text...' : 'AI Upload'}
+            </Button>
+          )}
+          {activeTab === 'url' && (
+            <Button
+              onClick={onSaveUrl}
+              disabled={isSaving || !urlInput || success}
+            >
+              {isSaving ? 'Analyzing URL...' : 'AI Upload'}
             </Button>
           )}
           {activeTab === 'image' && (

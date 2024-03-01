@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 import { recipes, users } from '@/lib/db/schema'
 import { getCurrentUser } from '@/lib/session'
 import { GetRecipesResult } from '@/types'
-import { eq, sql, ilike, or, and, asc, desc } from 'drizzle-orm'
+import { eq, sql, like, or, and, asc, desc } from 'drizzle-orm'
 
 interface GetRecipes {
   search?: string
@@ -59,8 +59,8 @@ const getRecipes = async ({
       .where(
         and(
           or(
-            search ? ilike(recipes.title, `%${search}%`) : undefined,
-            search ? ilike(recipes.description, `%${search}%`) : undefined
+            search ? like(recipes.title, `%${search}%`) : undefined,
+            search ? like(recipes.description, `%${search}%`) : undefined
           ),
           or(
             eq(recipes.isPrivate, false),
@@ -86,8 +86,8 @@ const getRecipes = async ({
       .where(
         and(
           or(
-            search ? ilike(recipes.title, `%${search}%`) : undefined,
-            search ? ilike(recipes.description, `%${search}%`) : undefined
+            search ? like(recipes.title, `%${search}%`) : undefined,
+            search ? like(recipes.description, `%${search}%`) : undefined
           ),
           authorId ? eq(recipes.authorId, authorId) : undefined
         )

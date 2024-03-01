@@ -1,12 +1,14 @@
 import convert, { Volume } from 'convert'
-import { Ingredient, MenuWithRecipes, CombinedIngredient } from '@/types'
+import { RecipeIngredient, MenuWithRecipes, CombinedIngredient } from '@/types'
 import { abbToUnit, floatToFraction } from '@/lib/utils'
 
 // I want to start with the list of ingredients from the menu
 //
 
-export const getIngredientsFromMenu = (menu: MenuWithRecipes): Ingredient[] => {
-  const ingredients: Ingredient[] = []
+export const getIngredientsFromMenu = (
+  menu: MenuWithRecipes
+): RecipeIngredient[] => {
+  const ingredients: RecipeIngredient[] = []
 
   if (!menu.recipeInfo) return ingredients
 
@@ -54,7 +56,7 @@ export const AddIngredients = (ingredient: CombinedIngredient) => {
   }
 }
 
-export const processIngredients = (ingredients: Ingredient[]) => {
+export const processIngredients = (ingredients: RecipeIngredient[]) => {
   const processedIngredients: CombinedIngredient[] = []
 
   ingredients.forEach((ingredient) => {
