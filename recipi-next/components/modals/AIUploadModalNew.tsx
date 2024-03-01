@@ -3,7 +3,7 @@
 import { PropsWithChildren, useCallback, useState } from 'react'
 import { Variants, motion } from 'framer-motion'
 import { useFormContext } from 'react-hook-form'
-import _, { set } from 'lodash'
+import _ from 'lodash'
 import { useToast } from '@/components/ui/use-toast'
 import { abbToUnit } from '@/lib/utils'
 import {
@@ -11,7 +11,6 @@ import {
   recipeAIUploadImage,
   recipeAIUploadUrl,
 } from '@/app/_actions/recipeAIUpload'
-import { RecipeIngredient } from '@/types'
 import { UploadDropzone } from '@uploadthing/react'
 import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
 import { UploadFileResponse } from 'uploadthing/client'

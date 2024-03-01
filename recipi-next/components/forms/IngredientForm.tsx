@@ -5,7 +5,6 @@ import _ from 'lodash'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { createIngredient, updateIngredient } from '@/lib/db/api'
 import {
   IngredientFormValues,
   ingredientFormSchema,
@@ -14,23 +13,8 @@ import { Form } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { FormInput } from '@/components/FormInput'
-import { PlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
 import { AddPortionModal } from '../modals/AddPortionModal'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { AddUnitModal } from '@/components/modals/AddUnitModal'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '@/components/ui/command'
-import { Plus } from 'lucide-react'
-import { f } from 'nuqs/dist/serializer-RqlbYgUW'
+import { Edit2, Plus } from 'lucide-react'
 import upsertIngredient from '@/lib/db/api/ingredient/upsertIngredient'
 
 interface IngredientFormProps {
@@ -122,9 +106,8 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
         title: `Ingredient ${upsertedIngredient.id}
             ${upsertedIngredient.description} created`,
       })
+      form.reset()
       router.refresh()
-      // Go to previous page
-      router.back()
     } catch (error) {
       toast({
         title: `Error ${initialValues} creating ingredient`,
@@ -183,14 +166,24 @@ export const IngredientForm = ({ initialValues }: IngredientFormProps) => {
             placeholder="0.0"
           />
           <div className="flex flex-row items-end gap-2">
-            <AddPortionModal index={form.getValues('portions').length - 1}>
-              <Button
-                variant="ghost"
-                className="flex flex-row items-center gap-1"
-              >
-                <Plus width={15} className="mb-px" />
-                Add Portion
-              </Button>
+            <AddPortionModal>
+              {form.formState.dirtyFields.portions ? (
+                <Button
+                  variant="outline"
+                  className="flex flex-row items-center gap-1"
+                >
+                  <Edit2 width={15} className="mb-px" />
+                  Edit Portions
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  className="flex flex-row items-center gap-1"
+                >
+                  <Plus width={15} className="mb-px" />
+                  Add Portions
+                </Button>
+              )}
             </AddPortionModal>
             <Button variant="ghost" type="reset" onClick={() => form.reset()}>
               {initialValues ? 'Reset' : 'Clear'}
