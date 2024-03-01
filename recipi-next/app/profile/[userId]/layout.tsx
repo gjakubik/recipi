@@ -3,15 +3,16 @@ import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/lib/session'
 import { defaultNavConfig } from '@/config/default'
 import { getUser } from '@/lib/db/api'
+import { getInitials } from '@/lib/utils'
 
 import { Container } from '@/components/ui/container'
 import { Button } from '@/components/ui/button'
 import { Typography } from '@/components/ui/typography'
 import { MainNav } from '@/components/MainNav'
 import { TabLink } from '@/components/TabLink'
-import { Mail, Calendar, Camera } from 'lucide-react'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { EditProfileImage } from '../EditProfileImage'
+import { Mail, Calendar, Camera, User } from 'lucide-react'
 
 interface ProfilePageProps extends PropsWithChildren {
   params: {
@@ -39,13 +40,33 @@ export default async function ProfilePageLayout({
       <MainNav config={defaultNavConfig} />
       {profile ? (
         <Container className="flex-col space-y-4 pb-8 md:w-5/6 lg:w-2/3">
-          <div className="flex flex-row justify-start gap-6">
-            <EditProfileImage image={image} name={name} />
+          <div className="flex flex-row items-center justify-start gap-6">
+            {userId === user?.id ? (
+              <EditProfileImage image={image} name={name} />
+            ) : (
+              <Avatar className="h-20 w-20">
+                <AvatarImage
+                  src={image || undefined}
+                  alt={name || "User Name's profile image"}
+                  className=""
+                />
+                <AvatarFallback>
+                  {name ? getInitials(name) : 'ME'}
+                </AvatarFallback>
+              </Avatar>
+            )}
             <div>
               <Typography variant="h3">
                 {isMyProfile ? 'My Profile' : name}
               </Typography>
-              {isMyProfile && <Typography>Name: {name}</Typography>}
+              {isMyProfile && (
+                <Typography
+                  variant="pn"
+                  className="flex flex-row items-center gap-2"
+                >
+                  <User className="h-5 w-5" /> {name}
+                </Typography>
+              )}
               <Typography
                 variant="pn"
                 className="flex flex-row items-center gap-2"
