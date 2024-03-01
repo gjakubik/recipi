@@ -2,16 +2,11 @@
 
 import 'react-image-crop/dist/ReactCrop.css'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { cn, getInitials } from '@/lib/utils'
-import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
-import type { Crop, PixelCrop } from 'react-image-crop'
-import ReactCrop from 'react-image-crop'
 
-import { UploadButton, useUploadThing } from '@/utils/uploadthing'
-import { Button } from '@/components/ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { Camera, Save } from 'lucide-react'
+import { Camera } from 'lucide-react'
 import { ProfileImageCropper } from './ProfileImageCropper'
 
 interface EditProfileImageProps {
