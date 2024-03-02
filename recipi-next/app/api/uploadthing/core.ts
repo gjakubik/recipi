@@ -27,6 +27,22 @@ export const uploadThingFileRouter = {
       console.log('file info', file)
       console.log('file url', file.url)
     }),
+
+  profileImage: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
+    .middleware(async ({ req }) => {
+      const user = await getCurrentUser()
+      if (!user) throw new Error('Unauthorized')
+      return { userId: user.id }
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      // This code RUNS ON YOUR SERVER after upload
+      console.log('Upload complete for userId:', metadata.userId)
+
+      // TODO: This is where we want db code saving the file info to the db
+
+      console.log('file info', file)
+      console.log('file url', file.url)
+    }),
 } satisfies FileRouter
 
 export type UploadThingFileRouter = typeof uploadThingFileRouter

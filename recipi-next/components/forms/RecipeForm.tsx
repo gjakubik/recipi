@@ -274,7 +274,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 render={({ field }) => (
                   <>
                     {!field.value ? (
-                      <UploadDropzone<UploadThingFileRouter>
+                      <UploadDropzone<UploadThingFileRouter, 'titleImage'>
                         className="h-[246px] drop-shadow-md"
                         appearance={{
                           container: 'rounded-3xl',

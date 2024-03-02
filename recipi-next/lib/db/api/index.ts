@@ -21,6 +21,7 @@ export { default as updateFeatureFlag } from './featureFlag/updateFeatureFlag'
 export { default as deleteFeatureFlag } from './featureFlag/deleteFeatureFlag'
 
 export { default as getUser } from './user/getUser'
+export { default as updateProfilePicture } from './user/updateProfilePicture'
 
 export { default as getIngredients } from './ingredient/getIngredients'
 export { default as createIngredient } from './ingredient/createIngredient'
