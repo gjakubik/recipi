@@ -50,7 +50,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
   const { toast } = useToast()
   const [open, setOpen] = useState(false)
   const [textInput, setTextInput] = useState('')
-  const [image, setImage] = useState<UploadFileResponse | null>(null)
+  const [image, setImage] = useState<UploadFileResponse<null> | null>(null)
   const [inputJSON, setInputJSON] = useState('')
   const [urlInput, setUrlInput] = useState('')
   const [isSaving, setIsSaving] = useState(false)
@@ -98,9 +98,9 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
 
   const handleSave = async (
     uploadFunction: (
-      data: string | UploadFileResponse
+      data: string | UploadFileResponse<null>
     ) => Promise<string | undefined>,
-    data: string | UploadFileResponse
+    data: string | UploadFileResponse<null>
   ) => {
     setIsSaving(true)
     try {
@@ -128,7 +128,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
     e.preventDefault()
     handleSave(
       recipeAIUploadText as (
-        data: string | UploadFileResponse
+        data: string | UploadFileResponse<null>
       ) => Promise<string | undefined>,
       textInput
     )
@@ -139,7 +139,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
     if (!image) return
     handleSave(
       recipeAIUploadImage as (
-        data: string | UploadFileResponse
+        data: string | UploadFileResponse<null>
       ) => Promise<string | undefined>,
       image
     )
@@ -149,7 +149,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
     e.preventDefault()
     handleSave(
       recipeAIUploadUrl as (
-        data: string | UploadFileResponse
+        data: string | UploadFileResponse<null>
       ) => Promise<string | undefined>,
       urlInput
     )
@@ -265,7 +265,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
             <div className="relative flex flex-col gap-2">
               <Typography variant="p">Upload the recipe image here:</Typography>
               {!image && (
-                <UploadDropzone<UploadThingFileRouter>
+                <UploadDropzone<UploadThingFileRouter, 'titleImage'>
                   className="h-[400px] drop-shadow-md"
                   endpoint="titleImage"
                   onClientUploadComplete={(res) => {

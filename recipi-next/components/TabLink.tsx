@@ -18,7 +18,7 @@ export const TabLink = ({ tabId, children }: TabLinkProps) => {
   return (
     <Link
       href={`${pathBase}/${tabId}`}
-      className={cn('dashed-border-hover px-4 pb-3', isActive && 'font-bold')}
+      className={cn('dashed-border-hover px-4 py-3', isActive && 'font-bold')}
     >
       {children}
     </Link>
