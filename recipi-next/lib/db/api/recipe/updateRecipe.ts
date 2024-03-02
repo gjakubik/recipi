@@ -5,10 +5,57 @@ import { recipes } from '@/lib/db/schema'
 import { RecipeForm } from '@/types'
 import { eq } from 'drizzle-orm'
 import getRecipe from './getRecipe'
+import getIngredients from '../ingredient/getIngredients'
+import { IngredientPortion } from '@/types'
 
 const updateRecipe = async (recipe: RecipeForm) => {
   if (!recipe.id) {
     throw new Error('Recipe ID is required')
+  }
+
+  // ----------- stub out to wire together ingredients db and ingredients in recipe ------------
+  let best_matches: [string, { name: string; diff: number }][] = []
+  for (const ingredient of recipe.ingredients ? recipe.ingredients : []) {
+    let db_ings: {
+      id: string
+      description: string | null
+      calories: number | null
+      protein: number | null
+      fat: number | null
+      carbs: number | null
+      portions: IngredientPortion[]
+      processed: boolean | null
+      fdc_id: number
+    }[] = []
+    if (ingredient.name) {
+      db_ings = await getIngredients({ search: ingredient.name })
+      console.log(db_ings.map((i) => i.description))
+    }
+
+    // ------ now we have a list of potential matches and we need to figure out the best one ------
+    // NAIVE APPROACH: pick the option that has the lowest num diff chars
+    let diffs = db_ings.map((i) => {
+      let diff = 0
+      if (!i.description) {
+        return { name: i.id, diff: 999 }
+      }
+      for (let j = 0; j < i.description.length; j++) {
+        if (
+          i.description[j].toLowerCase() != ingredient.name[j]?.toLowerCase()
+        ) {
+          diff++
+        }
+      }
+      return { name: i.description, diff: diff }
+    })
+    let best_match = diffs?.reduce((prev, current) =>
+      prev.diff < current.diff ? prev : current
+    )
+    best_matches.push([ingredient.name ? ingredient.name : 'N/A', best_match])
+    console.log(
+      `ingredient: ${ingredient.name}`,
+      `best match -- name: ${best_match.name}, diff: ${best_match.diff}`
+    )
   }
 
   await db

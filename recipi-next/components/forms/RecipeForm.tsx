@@ -99,7 +99,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
     setCustomUnitOptions([unit, ...customUnitOptions])
   }
 
-  // calculate unit optons based on UNIT_OPTIONS + [{ label: 'unit', value: 'unit' } for each ingredient unit]
+  // calculate unit options based on UNIT_OPTIONS + [{ label: 'unit', value: 'unit' } for each ingredient unit]
   const unitOptions = useMemo(() => {
     const unitOptions = UNITS
     const ingunits = form.getValues('ingredients')

@@ -4,8 +4,17 @@ import { db } from '@/lib/db'
 import { recipes } from '@/lib/db/schema'
 import { RecipeForm } from '@/types'
 import getRecipe from './getRecipe'
+import getIngredients from '../ingredient/getIngredients'
 
 const createRecipe = async (recipe: RecipeForm) => {
+  // stub out to wire together ingredients db and ingredients in recipe
+  for (const ingredient of recipe.ingredients ? recipe.ingredients : []) {
+    if (ingredient.name) {
+      let db_ings = await getIngredients({ search: ingredient.name })
+      console.log(db_ings)
+    }
+  }
+
   const newRecipeExec = await db.insert(recipes).values({
     title: recipe.title,
     titleImage: recipe.titleImage,
