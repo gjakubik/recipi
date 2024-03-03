@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
@@ -18,6 +18,9 @@ import {
   Cross1Icon,
   Pencil1Icon,
 } from '@radix-ui/react-icons'
+import { Ingredient, RecipeIngredientForm, RecipeIngredient } from '@/types'
+import { RowSelectionState } from '@tanstack/react-table'
+import { IngredientSearchBar } from './IngredientSearchBar'
 
 interface EditIngredientItemProps {
   id: string
@@ -41,6 +44,7 @@ export const EditIngredientItem = ({
   const form = useFormContext()
   const { attributes, listeners, node, setNodeRef, transform, transition } =
     useSortable({ id })
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
   const isTinyScreen = useMediaQuery(475)
 
@@ -66,12 +70,12 @@ export const EditIngredientItem = ({
       key={id}
       suppressHydrationWarning
     >
-      <div className="flex flex-row gap-2 items-center sm:items-end max-w-[600px] m-auto  mt-6 sm:mt-0">
+      <div className="m-auto mt-6 flex w-full flex-row items-center gap-2  sm:mt-0 sm:items-end">
         <div {...listeners} className="p-2.5">
           <HamburgerMenuIcon />
         </div>
-        <div className="grow flex flex-col sm:flex-row gap-2 items-start sm:items-end w-full">
-          <div className="flex flex-row gap-2 items-end w-full">
+        <div className="flex w-full grow flex-col items-start gap-2 sm:flex-row sm:items-end">
+          <div className="flex w-full flex-row items-end gap-2">
             <FormInput
               name={`ingredients.${index}.amount`}
               className="w-[40px] xs:w-[60px]"
@@ -115,23 +119,24 @@ export const EditIngredientItem = ({
               </Button>
             </AddNoteModal>
           </div>
-          <div className="grow w-full">
-            <FormInput
+          <div className="w-full grow">
+            <FormField
+              control={form.control}
               name={`ingredients.${index}.name`}
-              placeholder="Ingredient name..."
-              label="Name"
-              labelClassName={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
-              className="w-full"
-              onBlur={() => {
-                updateIngredient(index, {
-                  ...form.getValues(`ingredients.${index}`),
-                  name: form.getValues(`ingredients.${index}.name`),
-                })
-              }}
+              render={({}) => (
+                <FormItem>
+                  <FormLabel
+                    className={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
+                  >
+                    Name
+                  </FormLabel>
+                  <IngredientSearchBar index={index} />
+                </FormItem>
+              )}
             />
           </div>
           <AddNoteModal index={index} updateIngredient={updateIngredient}>
-            <Button variant="ghost" className="flex xs:hidden sm:flex p-0">
+            <Button variant="ghost" className="flex p-0 xs:hidden sm:flex">
               <div className="pr-2">
                 {hasNote ? <Pencil1Icon /> : <PlusIcon />}
               </div>{' '}

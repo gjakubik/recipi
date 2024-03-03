@@ -52,6 +52,8 @@ export type RecipeIngredient = {
   note?: string
   amount?: string
   unit?: string
+  db_uuid?: string
+  db_name?: string
 }
 
 export type CombinedIngredient = RecipeIngredient &

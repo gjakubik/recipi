@@ -27,6 +27,12 @@ export const ingredients = mysqlTable(
       .notNull(),
     processed: boolean('processed').default(false),
     fdc_id: int('fdc_id').notNull().default(0),
+    /*nice_names: [
+      {
+        nice_name: string,
+        count: number,
+      },
+    ],*/
   },
   (table) => {
     return {

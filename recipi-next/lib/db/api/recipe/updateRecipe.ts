@@ -32,8 +32,6 @@ const updateRecipe = async (recipe: RecipeForm) => {
       console.log(db_ings.map((i) => i.description))
     }
 
-    // ------ now we have a list of potential matches and we need to figure out the best one ------
-    // NAIVE APPROACH: pick the option that has the lowest num diff chars
     let diffs = db_ings.map((i) => {
       let diff = 0
       if (!i.description) {

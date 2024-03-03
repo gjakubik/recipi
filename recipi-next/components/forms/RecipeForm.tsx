@@ -27,6 +27,7 @@ import { RecipeFormValues, recipeFormSchema } from '@/lib/validations/recipe'
 import { UNITS } from '@/lib/constants'
 import { abbToUnit } from '@/lib/utils'
 import { useFeatureFlags } from '@/hooks/use-feature-flags'
+import { IngredientSearchBar } from '@/components/recipe/IngredientSearchBar'
 
 import {
   Form,

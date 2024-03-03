@@ -7,8 +7,9 @@ import { like, asc, or, eq, and } from 'drizzle-orm'
 
 interface GetIngredients {
   search?: string
+  get_all?: boolean
 }
-
+// TODO add 'or' version to this and control with that bool
 const getIngredients = async ({
   search,
 }: GetIngredients): Promise<Ingredient[]> => {
