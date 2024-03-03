@@ -27,6 +27,7 @@ import { RecipeFormValues, recipeFormSchema } from '@/lib/validations/recipe'
 import { UNITS } from '@/lib/constants'
 import { abbToUnit } from '@/lib/utils'
 import { useFeatureFlags } from '@/hooks/use-feature-flags'
+import { IngredientSearchBar } from '@/components/recipe/IngredientSearchBar'
 
 import {
   Form,
@@ -99,7 +100,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
     setCustomUnitOptions([unit, ...customUnitOptions])
   }
 
-  // calculate unit optons based on UNIT_OPTIONS + [{ label: 'unit', value: 'unit' } for each ingredient unit]
+  // calculate unit options based on UNIT_OPTIONS + [{ label: 'unit', value: 'unit' } for each ingredient unit]
   const unitOptions = useMemo(() => {
     const unitOptions = UNITS
     const ingunits = form.getValues('ingredients')

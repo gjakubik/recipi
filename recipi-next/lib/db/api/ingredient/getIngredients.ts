@@ -3,12 +3,13 @@
 import { db } from '@/lib/db'
 import { ingredients } from '@/lib/db/schema'
 import { Ingredient } from '@/types'
-import { like, asc, or, eq } from 'drizzle-orm'
+import { like, asc, or, eq, and } from 'drizzle-orm'
 
 interface GetIngredients {
   search?: string
+  get_all?: boolean
 }
-
+// TODO add 'or' version to this and control with that bool
 const getIngredients = async ({
   search,
 }: GetIngredients): Promise<Ingredient[]> => {
@@ -37,6 +38,9 @@ const getIngredients = async ({
     searchStr = undefined
   }
 
+  search = search.replaceAll(',', ' ')
+  let search_list = search.trim().split(' ')
+  console.log(`SEARCH LIST: ${search_list}`)
   return await db
     .select({
       id: ingredients.id,
@@ -52,7 +56,11 @@ const getIngredients = async ({
     .from(ingredients)
     .where(
       or(
-        search ? like(ingredients.description, `%${search}%`) : undefined,
+        search
+          ? and(
+              ...search_list.map((i) => like(ingredients.description, `%${i}%`))
+            )
+          : undefined,
         searchStr ? eq(ingredients.id, searchStr) : undefined
       )
     )
