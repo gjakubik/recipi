@@ -11,6 +11,7 @@ import {
   accounts,
   menus,
   featureFlags,
+  savedRecipes,
 } from '../lib/db/schema'
 import { FEATURE_FLAG_OPTIONS } from '../lib/constants'
 
@@ -92,6 +93,8 @@ export type Recipe = InferModel<typeof recipes> & {
 export type InsertRecipe = InferModel<typeof recipes, 'insert'>
 
 export type RecipeForm = InsertRecipe
+
+export type InsertSavedRecipe = InferModel<typeof savedRecipes, 'insert'>
 
 export type User = InferModel<typeof users>
 

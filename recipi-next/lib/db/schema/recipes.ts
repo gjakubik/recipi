@@ -5,7 +5,6 @@ import {
   varchar,
   text,
   int,
-  primaryKey,
   json,
   index,
   time,

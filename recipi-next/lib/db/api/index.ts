@@ -8,6 +8,11 @@ export { default as updateRecipe } from './recipe/updateRecipe'
 export { default as deleteRecipe } from './recipe/deleteRecipe'
 export { default as updateRecipePrivacy } from './recipe/updateRecipePrivacy'
 
+export { default as saveRecipe } from './savedRecipe/saveRecipe'
+export { default as unsaveRecipe } from './savedRecipe/unsaveRecipe'
+export { default as isSavedRecipe } from './savedRecipe/isSavedRecipe'
+export { default as getSavedRecipes } from './savedRecipe/getSavedRecipes'
+
 export { default as createMenu } from './menu/createMenu'
 export { default as getMenu } from './menu/getMenu'
 export { default as getMenus } from './menu/getMenus'
