@@ -1,6 +1,11 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getRecipe, getMenus, isSavedRecipe } from '@/lib/db/api'
+import {
+  getRecipe,
+  getMenus,
+  isSavedRecipe,
+  getRecipeReviews,
+} from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
 import { timeValueToLabel, isZero } from '@/lib/utils'
 import { MENU_QUERY } from '@/lib/constants'
@@ -14,8 +19,8 @@ import { RecipeActionsDropdown } from './RecipeActionsDropdown'
 import { RecipePrivacyButton } from './RecipePrivacyButton'
 import { Clock, Users } from 'lucide-react'
 import { SaveUnsaveButton } from './SaveUnsaveButton'
-import { RatingStars } from './RatingStars'
-import { AddReview } from './AddReview'
+import { AddReview } from '@/components/reviews/AddReview'
+import { ReviewList } from '@/components/reviews/ReviewList'
 
 interface RecipePageProps {
   params: { recipeID: string }
@@ -24,10 +29,13 @@ interface RecipePageProps {
 export default async function RecipePage({ params }: RecipePageProps) {
   const user = await getCurrentUser()
   const recipe = await getRecipe(parseInt(params.recipeID))
+  const reviews = await getRecipeReviews(params.recipeID)
   const initialMenus = await getMenus({ authorId: user?.id, ...MENU_QUERY })
   const isSaved = user
     ? await isSavedRecipe({ recipeId: parseInt(params.recipeID) })
     : false
+
+  const hasReviewed = reviews.some((review) => review.userId === user?.id)
 
   if (!recipe) {
     redirect('/')
@@ -110,7 +118,9 @@ export default async function RecipePage({ params }: RecipePageProps) {
       <IngredientsList ingredients={recipe.ingredients} v2 />
       <Typography variant="h4">Instructions</Typography>
       <InstructionsList className="pl-2" instructions={recipe.instructions} />
-      <AddReview recipeId={params.recipeID} />
+      {user && !hasReviewed && <AddReview recipeId={params.recipeID} />}
+      {reviews.length > 0 && <Typography variant="h4">Reviews</Typography>}
+      <ReviewList reviews={reviews} />
     </>
   )
 }

@@ -1,7 +1,7 @@
 import { InferModel } from 'drizzle-orm'
 import {
   categories,
-  comments,
+  reviews,
   ingredients,
   likes,
   recipes,
@@ -34,7 +34,14 @@ export type InsertMenu = InferModel<typeof menus, 'insert'>
 
 export type Category = InferModel<typeof categories>
 
-export type Comment = InferModel<typeof comments>
+export type Review = InferModel<typeof reviews>
+
+export type ReviewWithUser = Review & {
+  name: string | null
+  image: string | null
+}
+
+export type InsertReview = InferModel<typeof reviews, 'insert'>
 
 export type Ingredient = InferModel<typeof ingredients>
 

@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card'
 
 export const LoadingCards = (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+  <>
     {Array.from({ length: 6 }).map((_, i) => (
       <Card key={i}>
         <CardHeader className="pb-2">
@@ -39,19 +39,31 @@ export const LoadingCards = (
           </div>
           <Skeleton className="h-3 w-6" />
           <Separator className="mb-4" />
-          <div className="flex flex-row w-full justify-between items-center">
-            <div className="flex flex-row gap-1 items-center">
+          <div className="flex w-full flex-row items-center justify-between">
+            <div className="flex flex-row items-center gap-1">
               <Skeleton className="h-8 w-8 rounded-full" />
               <Skeleton className="h-4 w-24" />
             </div>
             <Skeleton className="h-4 w-24" />
           </div>
         </CardContent>
-        <CardFooter className="flex flex-row gap-2 justify-end">
+        <CardFooter className="flex flex-row justify-end gap-2">
           <Skeleton className="h-8 w-24" />
           <Skeleton className="h-8 w-24" />
         </CardFooter>
       </Card>
     ))}
+  </>
+)
+
+export const WideLoadingCards = (
+  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    {LoadingCards}
+  </div>
+)
+
+export const SkinnyLoadingCards = (
+  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
+    {LoadingCards}
   </div>
 )

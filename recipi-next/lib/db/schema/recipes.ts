@@ -39,6 +39,7 @@ export const recipes = mysqlTable(
       .defaultNow()
       .onUpdateNow()
       .notNull(),
+    rating: int('rating').notNull().default(0),
     authorId: varchar('author_id', { length: 255 }).notNull(),
   },
   (table) => {

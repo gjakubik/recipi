@@ -1,22 +1,36 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useCurrentUser } from '@/hooks/use-current-user'
+import { createReview } from '@/lib/db/api'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Typography } from '@/components/ui/typography'
 import { Textarea } from '@/components/ui/textarea'
-import { RatingStars } from './RatingStars'
+import { RatingStars } from '../RatingStars'
 
 interface AddReviewProps {
   recipeId: string
 }
 
 export const AddReview = ({ recipeId }: AddReviewProps) => {
+  const router = useRouter()
   const user = useCurrentUser()
   const [rating, setRating] = useState(0)
   const [review, setReview] = useState('')
+
+  const handlePost = async () => {
+    if (!user) return
+    await createReview({
+      recipeId,
+      userId: user.id,
+      rating,
+      text: review,
+    })
+    router.refresh()
+  }
 
   return (
     <div className="flex flex-row items-end gap-4">
@@ -45,7 +59,7 @@ export const AddReview = ({ recipeId }: AddReviewProps) => {
           />
         </div>
       </div>
-      <Button>Post</Button>
+      <Button onClick={handlePost}>Post</Button>
     </div>
   )
 }

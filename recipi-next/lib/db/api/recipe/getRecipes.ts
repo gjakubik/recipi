@@ -38,6 +38,7 @@ const getRecipes = async ({
         difficultyLevel: recipes.difficultyLevel,
         instructions: recipes.instructions,
         ingredients: recipes.ingredients,
+        rating: recipes.rating,
         isPrivate: recipes.isPrivate,
         creationDate: recipes.creationDate,
         updatedAt: recipes.updatedAt,
