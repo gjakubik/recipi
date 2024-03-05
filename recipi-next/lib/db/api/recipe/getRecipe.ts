@@ -20,6 +20,7 @@ const getRecipe = async (recipeID: number): Promise<Recipe | undefined> => {
         difficultyLevel: recipes.difficultyLevel,
         ingredients: recipes.ingredients,
         instructions: recipes.instructions,
+        rating: recipes.rating,
         isPrivate: recipes.isPrivate,
         creationDate: recipes.creationDate,
         updatedAt: recipes.updatedAt,

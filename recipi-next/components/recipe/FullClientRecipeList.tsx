@@ -17,6 +17,7 @@ interface FullClientRecipeListProps {
   }
   initialMenus?: GetMenusResult
   gridClassName?: string
+  title?: string
 }
 
 export const FullClientRecipeList = ({
@@ -24,6 +25,7 @@ export const FullClientRecipeList = ({
   paramNames,
   initialMenus,
   gridClassName,
+  title = 'Recipes',
 }: FullClientRecipeListProps) => {
   const { page: pageParam, limit: limitParam } = paramNames
   const [forceUpdate, setForceUpdate] = useState(0)
@@ -44,7 +46,7 @@ export const FullClientRecipeList = ({
     <div className="flex flex-col gap-2">
       <UrlPagination
         mode="client"
-        title="Recipes"
+        title={title}
         count={recipes.length}
         paramNames={paramNames}
         defaultLimit={6}

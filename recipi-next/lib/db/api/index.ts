@@ -8,6 +8,18 @@ export { default as updateRecipe } from './recipe/updateRecipe'
 export { default as deleteRecipe } from './recipe/deleteRecipe'
 export { default as updateRecipePrivacy } from './recipe/updateRecipePrivacy'
 
+export { default as createReview } from './review/createReview'
+export { default as getRecipeReviews } from './review/getRecipeReviews'
+export { default as getReview } from './review/getReview'
+export { default as editReview } from './review/editReview'
+export { default as deleteReview } from './review/deleteReview'
+export { default as getUserReviews } from './review/getUserReviews'
+
+export { default as saveRecipe } from './savedRecipe/saveRecipe'
+export { default as unsaveRecipe } from './savedRecipe/unsaveRecipe'
+export { default as isSavedRecipe } from './savedRecipe/isSavedRecipe'
+export { default as getSavedRecipes } from './savedRecipe/getSavedRecipes'
+
 export { default as createMenu } from './menu/createMenu'
 export { default as getMenu } from './menu/getMenu'
 export { default as getMenus } from './menu/getMenus'
