@@ -64,10 +64,10 @@ export const IngredientSearchBar = ({ index }: IngredientSearchBarProps) => {
 
   const searchIngredients = useMemo(async () => {
     if (debouncedSearch) {
-      const ingredients = await getIngredients({
+      const db_ingredients = await getIngredients({
         search: debouncedSearch,
       })
-      setSearchResults(ingredients.slice(0, 100))
+      setSearchResults(db_ingredients.slice(0, 100))
     }
   }, [debouncedSearch])
 
@@ -80,8 +80,8 @@ export const IngredientSearchBar = ({ index }: IngredientSearchBarProps) => {
           aria-expanded={open}
           className="w-full min-w-[100px] justify-between"
         >
-          {form.getValues(`ingredients.${index}.description`)
-            ? form.getValues(`ingredients.${index}.description`)
+          {form.getValues(`ingredients.${index}.name`)
+            ? form.getValues(`ingredients.${index}.name`)
             : 'Search ingredients...'}
         </Button>
       </PopoverTrigger>
@@ -101,10 +101,7 @@ export const IngredientSearchBar = ({ index }: IngredientSearchBarProps) => {
                 key={ing.id}
                 value={ing.description ? ing.description : ''}
                 onSelect={(currentValue) => {
-                  form.setValue(
-                    `ingredients.${index}.description`,
-                    currentValue
-                  )
+                  form.setValue(`ingredients.${index}.name`, currentValue)
                   setOpen(false)
                 }}
               >
