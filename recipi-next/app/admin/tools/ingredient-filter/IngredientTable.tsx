@@ -41,6 +41,8 @@ export const IngredientTable = ({ ingredients }: IngredientTableProps) => {
     [ingredients, ingredientName]
   )
 
+  console.log('ingredients', ingredients)
+
   return (
     <>
       <DataTable
@@ -51,6 +53,40 @@ export const IngredientTable = ({ ingredients }: IngredientTableProps) => {
         searchColumn="description"
       />
       <div className="flex flex-row justify-end gap-4">
+        <Button
+          variant="outline"
+          onClick={() => {
+            // copy current selection to clipboard
+            const descriptionList = selectedIngredients
+              .map(
+                (id) => ingredients.find((ing) => ing.id === id)?.description
+              )
+              .join('\n')
+            navigator.clipboard.writeText(descriptionList)
+            toast({
+              title: 'Success',
+              description: 'Description List Copied',
+            })
+          }}
+        >
+          Copy Selected
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            // copy all to clipboard
+            const descriptionList = ingredients
+              .map((ing) => ing.description)
+              .join('\n')
+            navigator.clipboard.writeText(descriptionList)
+            toast({
+              title: 'Success',
+              description: 'All Descriptions Copied',
+            })
+          }}
+        >
+          Copy all
+        </Button>
         <Button
           onClick={async () => {
             if (selectedIngredients.length === 0) return
@@ -63,6 +99,7 @@ export const IngredientTable = ({ ingredients }: IngredientTableProps) => {
                 title: 'Success',
                 description: `Ingredients Deleted: ${toastDescription}${selectedIngredients.length > 3 ? '...' : ''}`,
               })
+              setRowSelection({})
               router.refresh()
             } catch (error) {
               console.log(error)

@@ -78,24 +78,32 @@ export const columns: ColumnDef<Ingredient>[] = [
       {
         header: 'Unit',
         cell: ({ row }) =>
-          row.original.portions.map((portion, i) => (
-            <div
-              key={portion.unit}
-              className="mb-1 mt-1 flex w-full flex-col gap-1 p-0"
-            >
-              {portion.unit}
-              {i < row.original.portions.length - 1 && (
-                <Separator className="w-full" />
-              )}
-            </div>
-          )),
+          row.original.portions.map((portion, i) => {
+            if (!portion.value) return null
+            return (
+              <div
+                key={`unit-${i}`}
+                className="mb-1 mt-1 flex w-full flex-col gap-1 p-0"
+              >
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div className="line-clamp-1">{portion.unit}</div>
+                  </TooltipTrigger>
+                  <TooltipContent>{portion.unit}</TooltipContent>
+                </Tooltip>
+                {i < row.original.portions.length - 1 && (
+                  <Separator className="w-full" />
+                )}
+              </div>
+            )
+          }),
       },
       {
         header: 'Abbreviation',
         cell: ({ row }) =>
           row.original.portions.map((portion, i) => (
             <div
-              key={portion.unit}
+              key={`abb-${i}`}
               className="mb-1 mt-1 flex w-full flex-col gap-1 p-0"
             >
               {['undetermined', ''].includes(portion.abbreviation || '')
@@ -112,7 +120,7 @@ export const columns: ColumnDef<Ingredient>[] = [
         cell: ({ row }) =>
           row.original.portions.map((portion, i) => (
             <div
-              key={portion.unit}
+              key={`val-${i}`}
               className="mb-1 mt-1 flex w-full flex-col gap-1 p-0"
             >
               {portion.value}
@@ -127,7 +135,7 @@ export const columns: ColumnDef<Ingredient>[] = [
         cell: ({ row }) =>
           row.original.portions.map((portion, i) => (
             <div
-              key={portion.unit}
+              key={`gram-${i}`}
               className="mb-1 mt-1 flex w-full flex-col gap-1 p-0"
             >
               {portion.gram_weight}
@@ -142,7 +150,7 @@ export const columns: ColumnDef<Ingredient>[] = [
         cell: ({ row }) =>
           row.original.portions.map((portion, i) => (
             <div
-              key={portion.unit}
+              key={`gpu-${i}`}
               className="mb-1 mt-1 flex w-full flex-col gap-1 p-0"
             >
               {portion.gram_per_unit}

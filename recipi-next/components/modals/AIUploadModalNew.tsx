@@ -266,7 +266,14 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
               <Typography variant="p">Upload the recipe image here:</Typography>
               {!image && (
                 <UploadDropzone<UploadThingFileRouter, 'titleImage'>
-                  className="h-[400px] drop-shadow-md"
+                  className="h-[400px]"
+                  appearance={{
+                    container: 'rounded-3xl',
+                    label: 'text-primary hover:text-slate-500',
+                    allowedContent: 'text-slate-400',
+                    button:
+                      'bg-primary text-primary-foreground shadow hover:bg-primary/90 hover:pointer-cursor rounded-md px-3 text-sm',
+                  }}
                   endpoint="titleImage"
                   onClientUploadComplete={(res) => {
                     if (!res) {
