@@ -162,7 +162,7 @@ export const recipeAIIngestIngredients = async (recipe: string) => {
     name: string
     notes?: string
     dbSearchName?: string
-    dbMatchId: string
+    db_uuid: string
   }[] = []
 
   for (const ingredient of ingredients) {
@@ -178,7 +178,7 @@ export const recipeAIIngestIngredients = async (recipe: string) => {
         name: ingredient.name,
         notes: ingredient.notes,
         dbSearchName: ingredient.dbSearchName,
-        dbMatchId: 'N/A',
+        db_uuid: 'N/A',
       })
       continue
     }
@@ -227,7 +227,7 @@ export const recipeAIIngestIngredients = async (recipe: string) => {
       name: ingredient.name,
       notes: ingredient.notes ? ingredient.notes : '',
       dbSearchName: ingredient.dbSearchName,
-      dbMatchId:
+      db_uuid:
         matchedIngredientJson.name != 'None'
           ? matchedIngredientId
             ? matchedIngredientId
