@@ -21,6 +21,7 @@ import {
 import { Ingredient, RecipeIngredientForm, RecipeIngredient } from '@/types'
 import { RowSelectionState } from '@tanstack/react-table'
 import { IngredientSearchBar } from './IngredientSearchBar'
+import IngredientSelector from '../IngredientSelect'
 
 interface EditIngredientItemProps {
   id: string
@@ -120,7 +121,7 @@ export const EditIngredientItem = ({
             </AddNoteModal>
           </div>
           <div className="w-full grow">
-            <FormField
+            {/* <FormField
               control={form.control}
               name={`ingredients.${index}.name`}
               render={({}) => (
@@ -131,6 +132,33 @@ export const EditIngredientItem = ({
                     Name
                   </FormLabel>
                   <IngredientSearchBar index={index} />
+                </FormItem>
+              )}
+            /> */}
+            <FormField
+              control={form.control}
+              name={`ingredients.${index}.name`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel
+                    className={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
+                  >
+                    Name
+                  </FormLabel>
+                  <IngredientSelector
+                    field={field}
+                    index={index}
+                    onIngredientSelect={(ingredient) => {
+                      form.setValue(
+                        `ingredients.${index}.db_name`,
+                        ingredient?.description
+                      )
+                      form.setValue(
+                        `ingredients.${index}.db_uuid`,
+                        ingredient?.id
+                      )
+                    }}
+                  />
                 </FormItem>
               )}
             />

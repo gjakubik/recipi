@@ -1,17 +1,15 @@
 import { getIngredients, getNextIngredient } from '@/lib/db/api'
+import { PropsWithSearchParams } from '@/types'
 
 import { Typography } from '@/components/ui/typography'
 import { UrlSearch } from '@/components/UrlSearch'
 import { IngredientTable } from './IngredientTable'
 import { IngredientForm } from '@/components/forms/IngredientForm'
-
-interface IngredietntFilterPageProps {
-  searchParams: { [key: string]: string | string[] | undefined }
-}
+import IngredientSelector from '@/components/IngredientSelect'
 
 export default async function IngredientFilterPage({
   searchParams,
-}: IngredietntFilterPageProps) {
+}: PropsWithSearchParams) {
   const { allSearch: searchParam } = searchParams
 
   const search = typeof searchParam === 'string' ? searchParam : ''
@@ -31,6 +29,7 @@ export default async function IngredientFilterPage({
       <Typography variant="h4">Add Ingredient</Typography>
       <IngredientForm />
       <IngredientTable ingredients={ingredients} />
+      {/* <IngredientSelector /> */}
     </>
   )
 }

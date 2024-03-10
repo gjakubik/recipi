@@ -17,7 +17,6 @@ const createReview = async (review: InsertReview) => {
     .execute()
   const totalRating = recipeReviews.reduce((acc, curr) => acc + curr.rating, 0)
   const averageRating = totalRating / recipeReviews.length
-  console.log('averageRating', averageRating)
   await db
     .update(recipes)
     .set({ rating: averageRating })
