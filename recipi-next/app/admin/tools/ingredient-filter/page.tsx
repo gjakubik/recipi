@@ -29,7 +29,7 @@ export default async function IngredientFilterPage({
       <Typography variant="h4">Add Ingredient</Typography>
       <IngredientForm />
       <IngredientTable ingredients={ingredients} />
-      <IngredientSelector />
+      {/* <IngredientSelector /> */}
     </>
   )
 }

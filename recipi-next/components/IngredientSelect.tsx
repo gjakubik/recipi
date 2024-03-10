@@ -1,6 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import {
+  ControllerRenderProps,
+  FieldValues,
+  useFormContext,
+} from 'react-hook-form'
 import { cn } from '@/lib/utils'
 import { Ingredient } from '@/types'
 import { Button } from '@/components/ui/button'
@@ -16,26 +21,40 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { Typography } from '@/components/ui/typography'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
-import { Check, ChevronsUpDown, X, ChevronLeft } from 'lucide-react'
+import { Check, X, ChevronLeft } from 'lucide-react'
 import { useIngredientQuery } from '@/hooks/use-ingredient-query'
 import { useDebouncedCallback } from 'use-debounce'
 
 interface IngredientSelectorProps {
+  field: ControllerRenderProps<FieldValues, `ingredients.${number}.name`>
+  index: number
   onIngredientSelect?: (ingredient: Ingredient | null) => void
+  withClear?: boolean
 }
 
 const IngredientSelector: React.FC<IngredientSelectorProps> = ({
+  field,
+  index,
   onIngredientSelect,
+  withClear = false,
 }) => {
-  const [inputValue, setInputValue] = useState('')
+  const { watch } = useFormContext()
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedIngredient, setSelectedIngredient] =
-    useState<Ingredient | null>(null)
   const [currentSelectionParts, setCurrentSelectionParts] = useState<string[]>(
     []
   )
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+
+  const db_name = watch(`ingredients.${index}.db_name`)
+  const isSelected = db_name !== undefined && db_name !== ''
 
   const { data: ingredientList, isLoading } = useIngredientQuery({
     search: searchTerm,
@@ -43,14 +62,16 @@ const IngredientSelector: React.FC<IngredientSelectorProps> = ({
 
   const handleSearch = useDebouncedCallback((value) => {
     setSearchTerm(value)
-  }, 700)
+  }, 1000)
 
+  // call handleSearch when the input value changes
   useEffect(() => {
-    // Clear the selected ingredient and current selection parts when the search term changes
-    setSelectedIngredient(null)
-    setCurrentSelectionParts([])
-    onIngredientSelect?.(null)
-  }, [searchTerm, onIngredientSelect])
+    if (isSelected && searchTerm !== field.value) {
+      onIngredientSelect?.(null)
+      setIsPopoverOpen(false)
+    }
+    handleSearch(field.value)
+  }, [field.value])
 
   const getUniqueIngredients = (parts: string[]) => {
     const uniqueIngredients = new Set<string>()
@@ -91,9 +112,9 @@ const IngredientSelector: React.FC<IngredientSelectorProps> = ({
       const selectedIngredient = ingredientList?.find(
         (ingredient) => ingredient.description === selectedIngredientDescription
       )
-      setSelectedIngredient(selectedIngredient || null)
       onIngredientSelect?.(selectedIngredient || null)
       setCurrentSelectionParts([])
+      setIsPopoverOpen(false)
     }
   }
 
@@ -113,50 +134,58 @@ const IngredientSelector: React.FC<IngredientSelectorProps> = ({
 
   const handleClearSelection = () => {
     setCurrentSelectionParts([])
-    setSelectedIngredient(null)
     onIngredientSelect?.(null)
+    setIsPopoverOpen(false)
   }
 
   return (
     <div className="relative">
-      <Popover open={searchTerm !== '' && !selectedIngredient}>
+      <Popover open={isPopoverOpen}>
         <PopoverTrigger asChild>
           <div className="flex flex-col gap-1">
+            {isSelected && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Typography
+                    variant="light"
+                    className="line-clamp-1 text-xs text-green-500"
+                  >
+                    Selected: {db_name}
+                  </Typography>
+                </TooltipTrigger>
+                <TooltipContent>{db_name}</TooltipContent>
+              </Tooltip>
+            )}
             <div className="relative">
               <Input
                 placeholder="Search ingredients..."
-                value={inputValue}
-                onChange={(e) => {
-                  setInputValue(e.target.value)
-                  handleSearch(e.target.value)
-                }}
+                {...field}
+                // onBlur={() => setIsPopoverOpen(false)}
                 className={cn(
                   'flex w-full items-center rounded-md border px-3 py-2',
-                  selectedIngredient ? 'border-green-500' : 'border-red-500',
+                  isSelected ? 'border-green-500' : 'border-red-500',
                   'pr-10' // Add padding to the right to make space for the icon
                 )}
               />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                {selectedIngredient ? (
+              <div
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+              >
+                {isSelected ? (
                   <Check className="h-4 w-4 text-green-500" />
                 ) : (
                   <X className="h-4 w-4 text-red-500" />
                 )}
               </div>
             </div>
-            {selectedIngredient && (
-              <Typography variant="light" className="text-xs text-green-500">
-                Selected: {selectedIngredient.description}
-              </Typography>
-            )}
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
           <Command>
             <CommandEmpty>
-              {isLoading ? 'Loading...' : 'No ingredients found.'}
+              <Typography className="px-8">No ingredients found.</Typography>
             </CommandEmpty>
-            <div className="max-h-60 overflow-y-auto">
+            <div className="max-h-60 w-fit min-w-[100px] max-w-[300px] overflow-auto">
               <CommandGroup>
                 {currentSelectionParts.length > 0 && (
                   <CommandItem onSelect={handleBackClick}>
@@ -170,16 +199,14 @@ const IngredientSelector: React.FC<IngredientSelectorProps> = ({
                     value={option}
                     onSelect={() => handleOptionSelect(option)}
                   >
-                    <Check
+                    {/* <Check
                       className={cn(
                         'mr-2 h-4 w-4',
-                        currentSelectionParts[
-                          currentSelectionParts.length - 1
-                        ] === option
+                        currentSelectionParts.includes(option)
                           ? 'opacity-100'
                           : 'opacity-0'
                       )}
-                    />
+                    /> */}
                     {option}
                   </CommandItem>
                 ))}
@@ -188,9 +215,11 @@ const IngredientSelector: React.FC<IngredientSelectorProps> = ({
           </Command>
         </PopoverContent>
       </Popover>
-      <Button onClick={handleClearSelection} className="mt-2">
-        Clear
-      </Button>
+      {withClear && (
+        <Button onClick={handleClearSelection} className="mt-2">
+          Clear
+        </Button>
+      )}
     </div>
   )
 }

@@ -94,6 +94,8 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         },
   })
 
+  console.log('formValues', form.getValues())
+
   const [customUnitOptions, setCustomUnitOptions] = React.useState<string[]>([])
 
   const addCustomUnit = (unit: string) => {

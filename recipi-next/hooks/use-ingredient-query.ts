@@ -11,6 +11,6 @@ interface UseIngredientQueryProps {
 export const useIngredientQuery = ({ search }: UseIngredientQueryProps) => {
   return useQuery({
     queryKey: ['ingredients', search],
-    queryFn: () => getIngredients({ search }),
+    queryFn: () => (search ? getIngredients({ search }) : undefined),
   })
 }
