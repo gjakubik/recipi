@@ -66,6 +66,7 @@ export const IngredientSearchBar = ({ index }: IngredientSearchBarProps) => {
     if (debouncedSearch) {
       const ingredients = await getIngredients({
         search: debouncedSearch,
+        get_and: true,
       })
       setSearchResults(ingredients.slice(0, 100))
     }

@@ -7,7 +7,11 @@ import {
   TEXT_PROMPT,
   IMAGE_PROMPT,
   URL_PROMPT,
+  INGREDIENT_PROMPT,
 } from '@/lib/constants/AIPrompts'
+import { getIngredients } from '@/lib/db/api'
+import { text } from 'stream/consumers'
+import { receiveMessageOnPort } from 'worker_threads'
 
 const ai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -36,8 +40,7 @@ export const recipeAIUploadText = async (inputText: string) => {
   const recipeJSON = dirtyResponse?.replace(/```json/g, '').replace(/```/g, '')
 
   console.log(recipeJSON)
-
-  return recipeJSON
+  return await recipeAIIngestIngredients(recipeJSON ? recipeJSON : '')
 }
 
 export const recipeAIUploadUrl = async (url: string) => {
@@ -88,8 +91,7 @@ export const recipeAIUploadUrl = async (url: string) => {
   const recipeJSON = dirtyResponse?.replace(/```json/g, '').replace(/```/g, '')
 
   console.log(recipeJSON)
-
-  return recipeJSON
+  return await recipeAIIngestIngredients(recipeJSON ? recipeJSON : '')
 }
 
 export const recipeAIUploadImage = async (image: UploadFileResponse<null>) => {
@@ -146,5 +148,96 @@ export const recipeAIUploadImage = async (image: UploadFileResponse<null>) => {
 
   console.log('parsed json', recipeJSON)
 
-  return recipeJSON
+  return await recipeAIIngestIngredients(recipeJSON ? recipeJSON : '')
+}
+
+export const recipeAIIngestIngredients = async (recipe: string) => {
+  const recipeJson = JSON.parse(recipe)
+  const ingredients = recipeJson.ingredients
+  console.log('INGREDIENTS: ', ingredients)
+
+  let ingested_ingredients: {
+    amount: string
+    unit: string
+    name: string
+    notes?: string
+    dbSearchName?: string
+    dbMatchId: string
+  }[] = []
+
+  for (const ingredient of ingredients) {
+    let db_ings = await getIngredients({
+      search: ingredient.dbSearchName,
+      get_and: true,
+    })
+
+    if (db_ings.length == 0) {
+      ingested_ingredients.push({
+        amount: ingredient.amount,
+        unit: ingredient.unit,
+        name: ingredient.name,
+        notes: ingredient.notes,
+        dbSearchName: ingredient.dbSearchName,
+        dbMatchId: 'N/A',
+      })
+      continue
+    }
+
+    let db_ings_names = db_ings.map((i) => i.description).join(';')
+    const prompt = `
+    ${INGREDIENT_PROMPT}
+    source ingredient: ${{
+      name: ingredient.name,
+      dbSearchName: ingredient.dbSearchName,
+    }}
+    database ingredients: ${db_ings_names}
+  `
+
+    const ingredientMatchResponse = await ai.chat.completions.create({
+      model: 'gpt-3.5-turbo-0125',
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+    })
+
+    const dirtyResponse = ingredientMatchResponse.choices[0].message.content
+    // Process the html text to JSON, similar to how it's done in recipeAIUploadText
+    const matchedIngredientString = dirtyResponse
+      ?.replace(/```json/g, '')
+      .replace(/```/g, '')
+
+    const matchedIngredientJson = JSON.parse(
+      matchedIngredientString ? matchedIngredientString : '{}'
+    )
+
+    console.log(
+      `source ingredient: ${ingredient.name}\nbest match: ${matchedIngredientString}\n\n`
+    )
+
+    const matchedIngredientId = db_ings.find(
+      (i) => i.description == matchedIngredientJson.name
+    )?.id
+
+    ingested_ingredients.push({
+      amount: ingredient.amount,
+      unit: ingredient.unit,
+      name: ingredient.name,
+      notes: ingredient.notes ? ingredient.notes : '',
+      dbSearchName: ingredient.dbSearchName,
+      dbMatchId:
+        matchedIngredientJson.name != 'None'
+          ? matchedIngredientId
+            ? matchedIngredientId
+            : 'N/A'
+          : 'N/A',
+    })
+  }
+  console.log('ingested ingredients: ', ingested_ingredients)
+
+  recipeJson.ingredients = ingested_ingredients
+  console.log('recipe json: ', recipeJson)
+  return recipeJson
 }

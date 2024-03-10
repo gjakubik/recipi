@@ -10,6 +10,7 @@ import {
   recipeAIUploadText,
   recipeAIUploadImage,
   recipeAIUploadUrl,
+  recipeAIIngestIngredients,
 } from '@/app/_actions/recipeAIUpload'
 import { UploadDropzone } from '@uploadthing/react'
 import { UploadThingFileRouter } from '@/app/api/uploadthing/core'
@@ -107,7 +108,7 @@ export const AIUploadModalNew = ({ children }: PropsWithChildren) => {
       const res = await uploadFunction(data)
       if (!res) throw new Error('Upload failed')
 
-      const parsedData = JSON.parse(res)
+      const parsedData = res
       setFormValues(parsedData)
 
       setIsSaving(false)

@@ -3,12 +3,15 @@
 import { db } from '@/lib/db'
 import { ingredients } from '@/lib/db/schema'
 import { Ingredient } from '@/types'
-import { eq, like, and, asc } from 'drizzle-orm'
+import { eq, like, and, asc, or } from 'drizzle-orm'
 
-const getNextIngredient = async (): Promise<Ingredient[] | undefined> => {
+const getNextIngredient = async (
+  get_and = true
+): Promise<Ingredient[] | undefined> => {
   // Get the next ingredient that has not been processed
   // Parse the description for the first phrase before a ,
   // Get all ingredients that have this same exact first phrase and are not processed
+  const joinFunc = get_and ? and : or
 
   const nextIngredientRes = await db
     .select({
@@ -51,7 +54,7 @@ const getNextIngredient = async (): Promise<Ingredient[] | undefined> => {
     })
     .from(ingredients)
     .where(
-      and(
+      joinFunc(
         eq(ingredients.processed, false),
         nextIngredientPhrase
           ? like(
