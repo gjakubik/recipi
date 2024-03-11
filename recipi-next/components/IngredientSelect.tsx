@@ -13,7 +13,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
 } from '@/components/ui/command'
 import {
@@ -40,38 +39,49 @@ interface IngredientSelectorProps {
   withClear?: boolean
 }
 
-const IngredientSelector: React.FC<IngredientSelectorProps> = ({
+export const IngredientSelector = ({
   field,
   index,
   onIngredientSelect,
   withClear = false,
-}) => {
+}: IngredientSelectorProps) => {
   const { watch } = useFormContext()
+  const db_name = watch(`ingredients.${index}.db_name`)
   const [searchTerm, setSearchTerm] = useState('')
+  const [initialLoad, setInitialLoad] = useState(true)
   const [currentSelectionParts, setCurrentSelectionParts] = useState<string[]>(
     []
   )
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
-  const db_name = watch(`ingredients.${index}.db_name`)
   const isSelected = db_name !== undefined && db_name !== ''
 
   const { data: ingredientList, isLoading } = useIngredientQuery({
     search: searchTerm,
+    enabled: !isSelected && searchTerm !== '',
   })
 
   const handleSearch = useDebouncedCallback((value) => {
     setSearchTerm(value)
   }, 1000)
 
+  useEffect(() => {
+    if (!isLoading && ingredientList && ingredientList.length > 0) {
+      setIsPopoverOpen(true)
+    }
+  }, [isLoading, ingredientList])
   // call handleSearch when the input value changes
   useEffect(() => {
-    if (isSelected && searchTerm !== field.value) {
+    if (isSelected && searchTerm !== field.value && !initialLoad) {
       onIngredientSelect?.(null)
       setIsPopoverOpen(false)
     }
     handleSearch(field.value)
   }, [field.value])
+
+  useEffect(() => {
+    setInitialLoad(false)
+  }, [])
 
   const getUniqueIngredients = (parts: string[]) => {
     const uniqueIngredients = new Set<string>()
@@ -142,45 +152,51 @@ const IngredientSelector: React.FC<IngredientSelectorProps> = ({
     <div className="relative">
       <Popover open={isPopoverOpen}>
         <PopoverTrigger asChild>
-          <div className="flex flex-col gap-1">
+          <div className="flex w-full flex-col items-start gap-1">
+            <div className="relative w-full">
+              <Input
+                placeholder="Search ingredients..."
+                autoComplete="off"
+                {...field}
+                // onBlur={() => setIsPopoverOpen(false)}
+                className={cn(
+                  'flex w-full items-center rounded-md border px-3 py-2 pr-10',
+                  field.value && isSelected && 'border-green-500',
+                  field.value && !isSelected && 'border-red-500'
+                )}
+              />
+              {field.value && (
+                <div
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                  onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+                >
+                  {isSelected ? (
+                    <Check className="h-4 w-4 text-green-500" />
+                  ) : (
+                    <X className="h-4 w-4 text-red-500" />
+                  )}
+                </div>
+              )}
+            </div>
             {isSelected && (
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger>
                   <Typography
                     variant="light"
                     className="line-clamp-1 text-xs text-green-500"
                   >
-                    Selected: {db_name}
+                    {db_name}
                   </Typography>
                 </TooltipTrigger>
-                <TooltipContent>{db_name}</TooltipContent>
+                <TooltipContent side="bottom">{db_name}</TooltipContent>
               </Tooltip>
             )}
-            <div className="relative">
-              <Input
-                placeholder="Search ingredients..."
-                {...field}
-                // onBlur={() => setIsPopoverOpen(false)}
-                className={cn(
-                  'flex w-full items-center rounded-md border px-3 py-2',
-                  isSelected ? 'border-green-500' : 'border-red-500',
-                  'pr-10' // Add padding to the right to make space for the icon
-                )}
-              />
-              <div
-                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                onClick={() => setIsPopoverOpen(!isPopoverOpen)}
-              >
-                {isSelected ? (
-                  <Check className="h-4 w-4 text-green-500" />
-                ) : (
-                  <X className="h-4 w-4 text-red-500" />
-                )}
-              </div>
-            </div>
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0">
+        <PopoverContent
+          className="w-full p-0"
+          onPointerDownOutside={() => setIsPopoverOpen(false)}
+        >
           <Command>
             <CommandEmpty>
               <Typography className="px-8">No ingredients found.</Typography>
@@ -199,14 +215,6 @@ const IngredientSelector: React.FC<IngredientSelectorProps> = ({
                     value={option}
                     onSelect={() => handleOptionSelect(option)}
                   >
-                    {/* <Check
-                      className={cn(
-                        'mr-2 h-4 w-4',
-                        currentSelectionParts.includes(option)
-                          ? 'opacity-100'
-                          : 'opacity-0'
-                      )}
-                    /> */}
                     {option}
                   </CommandItem>
                 ))}
@@ -223,5 +231,3 @@ const IngredientSelector: React.FC<IngredientSelectorProps> = ({
     </div>
   )
 }
-
-export default IngredientSelector
