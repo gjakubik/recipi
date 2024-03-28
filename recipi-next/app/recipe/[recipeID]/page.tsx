@@ -60,7 +60,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
           </Typography>
           {recipe.updatedAt && (
             <Typography variant="light">
-              Updated: {new Date(recipe.updatedAt).toLocaleDateString()}
+              Updated: {recipe.updatedAt?.toLocaleDateString()}
             </Typography>
           )}
         </div>

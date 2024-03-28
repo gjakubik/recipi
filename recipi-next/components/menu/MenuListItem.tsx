@@ -39,7 +39,9 @@ export const MenuListItem = ({ index, menu }: MenuListItemProps) => {
               </Typography>
             </div>
             <div className="grid grid-cols-[140px_90px] items-center">
-              <Typography variant="light">Updated {menu.updatedAt}</Typography>
+              <Typography variant="light">
+                Updated {menu.updatedAt?.toLocaleDateString()}
+              </Typography>
               <Typography variant="pn">
                 {menu.recipes ? menu.recipes.length : '0'} recipe
                 {(menu.recipes?.length !== 1 || !menu.recipes) && 's'}
@@ -173,7 +175,9 @@ export const CheckedMenuListItem = ({
               </Typography>
             </div>
             <div className="grid grid-cols-[140px_90px] items-center">
-              <Typography variant="light">Updated {menu.updatedAt}</Typography>
+              <Typography variant="light">
+                Updated {menu.updatedAt?.toLocaleDateString()}
+              </Typography>
               <Typography variant="pn">
                 {menu.recipes ? menu.recipes.length : '0'} recipe
                 {(menu.recipes?.length !== 1 || !menu.recipes) && 's'}
