@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { ingredients } from '@/lib/db/schema'
+import { ingredients } from '@/lib/db/schema-pg'
 import { Ingredient } from '@/types'
 import { like, asc, or, eq, and } from 'drizzle-orm'
 
@@ -19,7 +19,7 @@ const getIngredients = async ({
     return await db
       .select({
         id: ingredients.id,
-        fdc_id: ingredients.fdc_id,
+        fdcId: ingredients.fdcId,
         description: ingredients.description,
         calories: ingredients.calories,
         protein: ingredients.protein,
@@ -46,7 +46,7 @@ const getIngredients = async ({
   return await db
     .select({
       id: ingredients.id,
-      fdc_id: ingredients.fdc_id,
+      fdcId: ingredients.fdcId,
       description: ingredients.description,
       calories: ingredients.calories,
       protein: ingredients.protein,

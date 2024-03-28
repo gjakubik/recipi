@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { menus, users } from '@/lib/db/schema'
+import { menus, users } from '@/lib/db/schema-pg'
 import { eq, sql } from 'drizzle-orm'
 import { getRecipe } from '@/lib/db/api'
 
@@ -18,8 +18,8 @@ const getMenuQuery = db
       email: users.email,
       image: users.image,
       role: users.role,
-      updated_at: users.updated_at,
-      created_at: users.created_at,
+      updatedAt: users.updatedAt,
+      createdAt: users.createdAt,
       emailVerified: users.emailVerified,
     },
     creationDate: menus.creationDate,
@@ -28,7 +28,7 @@ const getMenuQuery = db
   .from(menus)
   .where(eq(menus.id, sql.placeholder('menuId')))
   .innerJoin(users, eq(menus.authorId, users.id))
-  .prepare()
+  .prepare('getMenuQuery')
 
 const getMenu = async (menuId: number) => {
   const [menu] = await getMenuQuery.execute({ menuId })

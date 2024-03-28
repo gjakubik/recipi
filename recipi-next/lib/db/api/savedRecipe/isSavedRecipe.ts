@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { savedRecipes } from '@/lib/db/schema'
+import { savedRecipes } from '@/lib/db/schema-pg'
 import { getCurrentUser } from '@/lib/session'
 import { eq, and } from 'drizzle-orm'
 

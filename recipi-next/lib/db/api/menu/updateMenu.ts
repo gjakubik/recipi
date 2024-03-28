@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { menus } from '@/lib/db/schema'
+import { menus } from '@/lib/db/schema-pg'
 import { eq } from 'drizzle-orm'
 import getMenu from './getMenu'
 import { MenuFormValues } from '@/lib/validations/menu'
@@ -12,7 +12,7 @@ const updateMenu = async (menu: MenuFormValues | MenuWithRecipes) => {
     throw new Error('Menu id is required')
   }
 
-  await db
+  const updatedMenu = await db
     .update(menus)
     .set({
       title: menu.title,
@@ -21,8 +21,7 @@ const updateMenu = async (menu: MenuFormValues | MenuWithRecipes) => {
       authorId: menu.authorId,
     })
     .where(eq(menus.id, menu.id))
-
-  const updatedMenu = await getMenu(menu.id)
+    .returning({ updatedId: menus.id })
 
   if (!updatedMenu) {
     throw new Error('Failed to update menu')

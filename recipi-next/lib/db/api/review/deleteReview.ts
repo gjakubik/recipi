@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { reviews } from '@/lib/db/schema'
+import { reviews } from '@/lib/db/schema-pg'
 import { eq } from 'drizzle-orm'
 
 const deleteReview = async (id: number) => {

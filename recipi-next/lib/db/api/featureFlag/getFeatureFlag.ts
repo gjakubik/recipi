@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { featureFlags } from '@/lib/db/schema'
+import { featureFlags } from '@/lib/db/schema-pg'
 import { eq, sql } from 'drizzle-orm'
 
 const getFeatureFlagQuery = db
@@ -13,7 +13,7 @@ const getFeatureFlagQuery = db
   })
   .from(featureFlags)
   .where(eq(featureFlags.id, sql.placeholder('featureFlagId')))
-  .prepare()
+  .prepare('getFeatureFlagQuery')
 
 const getFeatureFlag = async (featureFlagId: number) => {
   const [featureFlag] = await getFeatureFlagQuery.execute({ featureFlagId })

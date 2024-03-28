@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { ingredients } from '@/lib/db/schema'
+import { ingredients } from '@/lib/db/schema-pg'
 import { InsertIngredient } from '@/types'
 import getIngredient from './getIngredient'
 import { v4 as uuidv4 } from 'uuid'
@@ -15,7 +15,7 @@ const createIngredient = async (ingredient: InsertIngredient) => {
       await db
         .select({
           id: ingredients.id,
-          fdc_id: ingredients.fdc_id,
+          fdcId: ingredients.fdcId,
           description: ingredients.description,
           calories: ingredients.calories,
           protein: ingredients.protein,
@@ -44,7 +44,7 @@ const createIngredient = async (ingredient: InsertIngredient) => {
       await db
         .select({
           id: ingredients.id,
-          fdc_id: ingredients.fdc_id,
+          fdcId: ingredients.fdcId,
           description: ingredients.description,
           calories: ingredients.calories,
           protein: ingredients.protein,
@@ -62,25 +62,27 @@ const createIngredient = async (ingredient: InsertIngredient) => {
     )
   }
 
-  const newIngredientExec = await db.insert(ingredients).values({
-    id: uuid,
-    description: ingredient.description,
-    calories: ingredient.calories ? ingredient.calories : 0,
-    protein: ingredient.protein ? ingredient.protein : 0,
-    fat: ingredient.fat ? ingredient.fat : 0,
-    carbs: ingredient.carbs ? ingredient.carbs : 0,
-    portions: ingredient.portions?.map((portion) => ({
-      unit: portion.unit,
-      abbreviation: portion.abbreviation,
-      value: portion.value ? portion.value : 0,
-      gram_weight: portion.gram_weight ? portion.gram_weight : 0,
-      gram_per_unit: portion.gram_per_unit ? portion.gram_per_unit : 0,
-    })),
-    fdc_id: ingredient.fdc_id ? ingredient.fdc_id : 0,
-  })
+  const newIngredient = await db
+    .insert(ingredients)
+    .values({
+      id: uuid,
+      description: ingredient.description,
+      calories: ingredient.calories ? ingredient.calories : 0,
+      protein: ingredient.protein ? ingredient.protein : 0,
+      fat: ingredient.fat ? ingredient.fat : 0,
+      carbs: ingredient.carbs ? ingredient.carbs : 0,
+      portions: ingredient.portions?.map((portion) => ({
+        unit: portion.unit,
+        abbreviation: portion.abbreviation,
+        value: portion.value ? portion.value : 0,
+        gram_weight: portion.gram_weight ? portion.gram_weight : 0,
+        gram_per_unit: portion.gram_per_unit ? portion.gram_per_unit : 0,
+      })),
+      fdcId: ingredient.fdcId ? ingredient.fdcId : 0,
+    })
+    .returning({ insertedId: ingredients.id })
 
-  console.log('about to insert new ingredient: ', newIngredientExec)
-  const newIngredient = await getIngredient(uuid)
+  console.log('Inserted new ingredient: ', newIngredient)
 
   return newIngredient
 }

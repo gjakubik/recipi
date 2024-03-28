@@ -1,5 +1,7 @@
+'use server'
+
 import { db } from '@/lib/db'
-import { recipes, users } from '@/lib/db/schema'
+import { recipes, users } from '@/lib/db/schema-pg'
 import { getCurrentUser } from '@/lib/session'
 import { eq, and, or } from 'drizzle-orm'
 
@@ -33,8 +35,8 @@ const getAuthorRecipes = async ({ userId }: GetAuthorRecipes) => {
         email: users.email,
         image: users.image,
         role: users.role,
-        updated_at: users.updated_at,
-        created_at: users.created_at,
+        updatedAt: users.updatedAt,
+        createdAt: users.createdAt,
         emailVerified: users.emailVerified,
       },
     })

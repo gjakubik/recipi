@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { reviews, users } from '@/lib/db/schema'
+import { reviews, users } from '@/lib/db/schema-pg'
 import { eq, desc } from 'drizzle-orm'
 
 const getUserReviews = async (userId: string) => {

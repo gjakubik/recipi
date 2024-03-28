@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { ingredients } from '@/lib/db/schema'
+import { ingredients } from '@/lib/db/schema-pg'
 import { InsertIngredient } from '@/types'
 import getIngredient from './getIngredient'
 import { v4 as uuidv4 } from 'uuid'
@@ -23,7 +23,7 @@ const upsertIngredient = async (ingredient: InsertIngredient) => {
       await db
         .select({
           id: ingredients.id,
-          fdc_id: ingredients.fdc_id,
+          fdcId: ingredients.fdcId,
           description: ingredients.description,
           calories: ingredients.calories,
           protein: ingredients.protein,

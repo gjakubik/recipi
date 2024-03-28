@@ -2,7 +2,7 @@ import { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db } from './db'
-import { users } from './db/schema'
+import { users } from './db/schema-pg'
 import { eq } from 'drizzle-orm'
 
 export const authOptions: NextAuthOptions = {

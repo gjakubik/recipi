@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db'
 import { InsertIngredient } from '@/types'
-import { ingredients } from '@/lib/db/schema'
+import { ingredients } from '@/lib/db/schema-pg'
 import { eq } from 'drizzle-orm'
 import getIngredient from './getIngredient'
 
@@ -34,7 +34,7 @@ const updateIngredient = async (ingredient: InsertIngredient) => {
   await db
     .update(ingredients)
     .set({
-      fdc_id: ingredient.fdc_id ? ingredient.fdc_id : 0,
+      fdcId: ingredient.fdcId ? ingredient.fdcId : 0,
       description: ingredient.description,
       calories: ingredient.calories ? ingredient.calories : 0,
       protein: ingredient.protein ? ingredient.protein : 0,

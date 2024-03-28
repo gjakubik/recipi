@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { featureFlags } from '@/lib/db/schema'
+import { featureFlags } from '@/lib/db/schema-pg'
 import { FeatureFlag } from '@/types'
 
 const getFeatureFlagQuery = db
@@ -12,7 +12,7 @@ const getFeatureFlagQuery = db
     isActive: featureFlags.isActive,
   })
   .from(featureFlags)
-  .prepare()
+  .prepare('getFeatureFlagQuery')
 
 const getFeatureFlag = async (): Promise<FeatureFlag[]> => {
   const featureFlags = await getFeatureFlagQuery.execute()

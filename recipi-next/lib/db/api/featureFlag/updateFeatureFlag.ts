@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { featureFlags } from '@/lib/db/schema'
+import { featureFlags } from '@/lib/db/schema-pg'
 import getFeatureFlag from './getFeatureFlag'
 import { eq } from 'drizzle-orm'
 import { FeatureFlagFormValues } from '@/lib/validations/featureFlag'
@@ -19,6 +19,7 @@ const updateFeatureFlag = async (ff: FeatureFlagFormValues) => {
       isActive: ff.isActive,
     })
     .where(eq(featureFlags.id, ff.id))
+    .returning({ insertedId: featureFlags.id })
 
   const updatedFeatureFlag = await getFeatureFlag(ff.id)
 
