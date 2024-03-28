@@ -78,7 +78,7 @@ export default async function ProfilePageLayout({
                 className="flex flex-row items-center gap-2"
               >
                 <Calendar className="h-5 w-5" />
-                Joined {new Date(createdAt!).toLocaleDateString()}
+                Joined {createdAt?.toLocaleDateString()}
               </Typography>
             </div>
           </div>

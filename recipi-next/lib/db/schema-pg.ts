@@ -29,8 +29,8 @@ export const accounts = pgTable(
     refreshToken: text('refresh_token'),
     scope: varchar('scope', { length: 255 }),
     tokenType: varchar('token_type', { length: 255 }),
-    createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
-    updatedAt: timestamp('updated_at', { mode: 'string' }).defaultNow(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow(),
     sessionState: varchar('session_state', { length: 255 }),
   },
   (table) => {
@@ -83,7 +83,7 @@ export const likes = pgTable(
     id: serial('id').primaryKey().notNull(),
     userId: varchar('user_id', { length: 255 }).notNull(),
     recipeId: varchar('recipe_id', { length: 255 }).notNull(),
-    createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
   },
   (table) => {
     return {
@@ -100,8 +100,8 @@ export const menus = pgTable(
     title: varchar('title', { length: 255 }).notNull(),
     description: text('description'),
     recipes: json('recipes').$type<number[] | undefined>(),
-    creationDate: timestamp('creation_date', { mode: 'string' }).defaultNow(),
-    updatedAt: timestamp('updated_at', { mode: 'string' }).defaultNow(),
+    creationDate: timestamp('creation_date', { mode: 'date' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow(),
     authorId: varchar('author_id', { length: 255 }).notNull(),
   },
   (table) => {
@@ -137,15 +137,13 @@ export const recipes = pgTable(
     servings: varchar('servings', { length: 50 }).notNull(),
     difficultyLevel: varchar('difficulty_level', { length: 50 }).notNull(),
     instructions: json('instructions').$type<string[]>().notNull(),
-    creationDate: timestamp('creation_date', { mode: 'string' })
+    creationDate: timestamp('creation_date', { mode: 'date' })
       .defaultNow()
       .notNull(),
     authorId: varchar('author_id', { length: 255 }).notNull(),
     titleImage: json('title_image').$type<StoredFile | null>(),
     helperImages: json('helper_images').$type<StoredFile[] | null>(),
-    updatedAt: timestamp('updated_at', { mode: 'string' })
-      .defaultNow()
-      .notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
     ingredients: json('ingredients')
       .$type<RecipeIngredient[]>()
       .default([])
@@ -182,8 +180,8 @@ export const reviews = pgTable(
     recipeId: varchar('recipe_id', { length: 255 }).notNull(),
     rating: integer('rating').default(0).notNull(),
     text: text('text'),
-    postedAt: timestamp('posted_at', { mode: 'string' }).defaultNow(),
-    updatedAt: timestamp('updated_at', { mode: 'string' }).defaultNow(),
+    postedAt: timestamp('posted_at', { mode: 'date' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow(),
   },
   (table) => {
     return {
@@ -200,7 +198,7 @@ export const savedRecipes = pgTable(
     id: serial('id').primaryKey().notNull(),
     recipeId: integer('recipe_id').notNull(),
     userId: varchar('user_id', { length: 255 }).notNull(),
-    savedAt: timestamp('saved_at', { mode: 'string' }).defaultNow().notNull(),
+    savedAt: timestamp('saved_at', { mode: 'date' }).defaultNow().notNull(),
   },
   (table) => {
     return {
@@ -249,8 +247,8 @@ export const users = pgTable(
     email: varchar('email', { length: 255 }).notNull(),
     emailVerified: timestamp('emailVerified', { mode: 'string' }),
     image: varchar('image', { length: 255 }),
-    createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
-    updatedAt: timestamp('updated_at', { mode: 'string' }).defaultNow(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow(),
     role: varchar('role', { length: 255 }).default('basic'),
   },
   (table) => {
@@ -266,8 +264,8 @@ export const verificationTokens = pgTable(
     identifier: varchar('identifier', { length: 255 }).primaryKey().notNull(),
     token: varchar('token', { length: 255 }).notNull(),
     expires: timestamp('expires', { mode: 'string' }),
-    createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
-    updatedAt: timestamp('updated_at', { mode: 'string' }).defaultNow(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow(),
   },
   (table) => {
     return {
