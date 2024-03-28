@@ -62,7 +62,7 @@ const createIngredient = async (ingredient: InsertIngredient) => {
     )
   }
 
-  const newIngredient = await db
+  const [newIngredient] = await db
     .insert(ingredients)
     .values({
       id: uuid,
@@ -80,7 +80,7 @@ const createIngredient = async (ingredient: InsertIngredient) => {
       })),
       fdcId: ingredient.fdcId ? ingredient.fdcId : 0,
     })
-    .returning({ insertedId: ingredients.id })
+    .returning()
 
   console.log('Inserted new ingredient: ', newIngredient)
 

@@ -6,10 +6,10 @@ import { InsertReview } from '@/types/schema'
 import { eq } from 'drizzle-orm'
 
 const createReview = async (review: InsertReview) => {
-  const newReview = await db
+  const [newReview] = await db
     .insert(reviews)
     .values(review)
-    .returning({ insertedId: reviews.id })
+    .returning()
     .execute()
 
   // Now that we have created the review, we should update the recipe average rating

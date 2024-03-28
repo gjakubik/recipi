@@ -154,7 +154,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
   const onFormSubmit = async (data: RecipeFormValues) => {
     const prepRecipe = {
       ...data,
-      instructions: data.instructions?.map((i) => i.instruction),
+      instructions: data.instructions?.map((i) => i.instruction) || [],
     }
 
     try {

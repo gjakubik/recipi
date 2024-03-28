@@ -136,13 +136,13 @@ export const recipes = pgTable(
     cookingTime: varchar('cooking_time').default('00:00:00').notNull(),
     servings: varchar('servings', { length: 50 }).notNull(),
     difficultyLevel: varchar('difficulty_level', { length: 50 }).notNull(),
-    instructions: json('instructions').notNull(),
+    instructions: json('instructions').$type<string[]>().notNull(),
     creationDate: timestamp('creation_date', { mode: 'string' })
       .defaultNow()
       .notNull(),
     authorId: varchar('author_id', { length: 255 }).notNull(),
     titleImage: json('title_image').$type<StoredFile | null>(),
-    helperImages: json('helper_images').$type<StoredFile | null>(),
+    helperImages: json('helper_images').$type<StoredFile[] | null>(),
     updatedAt: timestamp('updated_at', { mode: 'string' })
       .defaultNow()
       .notNull(),

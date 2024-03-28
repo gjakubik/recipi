@@ -12,7 +12,7 @@ const updateMenu = async (menu: MenuFormValues | MenuWithRecipes) => {
     throw new Error('Menu id is required')
   }
 
-  const updatedMenu = await db
+  const [updatedMenu] = await db
     .update(menus)
     .set({
       title: menu.title,
@@ -21,7 +21,7 @@ const updateMenu = async (menu: MenuFormValues | MenuWithRecipes) => {
       authorId: menu.authorId,
     })
     .where(eq(menus.id, menu.id))
-    .returning({ updatedId: menus.id })
+    .returning()
 
   if (!updatedMenu) {
     throw new Error('Failed to update menu')

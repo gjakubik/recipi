@@ -6,11 +6,11 @@ import getUser from './getUser'
 import { eq } from 'drizzle-orm'
 
 const updateProfilePicture = async (userId: string, image: string) => {
-  const updatedUser = await db
+  const [updatedUser] = await db
     .update(users)
     .set({ image })
     .where(eq(users.id, userId))
-    .returning({ id: users.id })
+    .returning()
     .execute()
 
   if (!updatedUser) {

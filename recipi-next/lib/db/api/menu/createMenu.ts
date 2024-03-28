@@ -5,7 +5,7 @@ import { menus } from '@/lib/db/schema-pg'
 import { InsertMenu } from '@/types'
 
 const createMenu = async (menu: InsertMenu) => {
-  const newMenu = await db
+  const [newMenu] = await db
     .insert(menus)
     .values({
       title: menu.title,
@@ -13,7 +13,7 @@ const createMenu = async (menu: InsertMenu) => {
       recipes: menu.recipes,
       authorId: menu.authorId,
     })
-    .returning({ insertedId: menus.id })
+    .returning()
 
   if (!newMenu) {
     throw new Error('Failed to create menu')

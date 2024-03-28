@@ -14,7 +14,7 @@ const createRecipe = async (recipe: RecipeForm) => {
     }
   }
 
-  const newRecipe = await db
+  const [newRecipe] = await db
     .insert(recipes)
     .values({
       title: recipe.title,
@@ -30,7 +30,7 @@ const createRecipe = async (recipe: RecipeForm) => {
       isPrivate: recipe.isPrivate,
       authorId: recipe.authorId,
     })
-    .returning({ insertedId: recipes.id })
+    .returning()
 
   if (!newRecipe) {
     throw new Error('Failed to create recipe')

@@ -11,7 +11,7 @@ const updateFeatureFlag = async (ff: FeatureFlagFormValues) => {
     throw new Error('FeatureFlag id is required')
   }
 
-  await db
+  const [updatedFeatureFlag] = await db
     .update(featureFlags)
     .set({
       name: ff.name,
@@ -19,9 +19,7 @@ const updateFeatureFlag = async (ff: FeatureFlagFormValues) => {
       isActive: ff.isActive,
     })
     .where(eq(featureFlags.id, ff.id))
-    .returning({ insertedId: featureFlags.id })
-
-  const updatedFeatureFlag = await getFeatureFlag(ff.id)
+    .returning()
 
   if (!updatedFeatureFlag) {
     throw new Error('Failed to update featureFlag')
