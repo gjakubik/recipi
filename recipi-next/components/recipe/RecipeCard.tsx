@@ -167,7 +167,7 @@ export const RecipeCard = ({
                   <UserAvatar user={recipe.author} />
                   <Typography variant="light">
                     {recipe.creationDate
-                      ? new Date(recipe.creationDate).toLocaleDateString()
+                      ? recipe.creationDate.toLocaleDateString()
                       : ''}
                   </Typography>
                 </div>
