@@ -3,12 +3,9 @@ import { cn } from '@/lib/utils'
 import { getRecipes, getMenus } from '@/lib/db/api'
 import { RECIPE_QUERY, MENU_QUERY } from '@/lib/constants'
 
-import { Typography } from '@/components/ui/typography'
-import { ServerPagination } from '@/components/ServerPagination'
 import { RecipeList } from './RecipeList'
-import { getRecipeQueryString } from '@/lib/utils'
 import { Suspense } from 'react'
-import { LoadingCards } from './LoadingCards'
+import { SkinnyLoadingCards, WideLoadingCards } from './LoadingCards'
 import { UrlPagination } from '../UrlPagination'
 
 interface ServerRecipeListProps {
@@ -71,17 +68,6 @@ export const ServerRecipeList = async ({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* <ServerPagination
-        title={title}
-        mode="recipe"
-        basePath={pagePath}
-        page={page}
-        limit={limit}
-        sort={sort}
-        sortBy={sortBy}
-        count={count}
-        getQueryString={getRecipeQueryString}
-      /> */}
       <UrlPagination
         mode="server"
         count={count}
@@ -94,7 +80,9 @@ export const ServerRecipeList = async ({
           gridClassName
         )}
       >
-        <Suspense fallback={LoadingCards}>
+        <Suspense
+          fallback={gridClassName ? SkinnyLoadingCards : WideLoadingCards}
+        >
           <RecipeList recipes={recipes} initialMenus={initialMenus} />
         </Suspense>
       </div>
@@ -105,17 +93,6 @@ export const ServerRecipeList = async ({
         defaultLimit={6}
         withPageInfo
       />
-      {/* <ServerPagination
-        mode="recipe"
-        basePath={pagePath}
-        page={page}
-        limit={limit}
-        sort={sort}
-        sortBy={sortBy}
-        count={count}
-        getQueryString={getRecipeQueryString}
-        withPageInfo
-      /> */}
     </div>
   )
 }

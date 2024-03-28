@@ -61,6 +61,7 @@ export const UrlPagination = ({
   const showPreviousEllipsis = page > 1
   const showNextEllipsis = page < totalPages - 2
   const showNext = page < totalPages - 1
+  const isSinglePage = totalPages === 1
 
   const isServer = mode === 'server'
 
@@ -71,85 +72,91 @@ export const UrlPagination = ({
           <Typography variant="pn">
             {page * limit}-{Math.min(page * limit + limit, count)} of {count}
           </Typography>
-          <Separator orientation="vertical" />
-          <div className="flex flex-row items-center gap-2">
-            <Typography variant="pn">Per Page: </Typography>
-            <Input
-              type="number"
-              min="1"
-              max="100"
-              value={clientLimitState}
-              onChange={(e) => setClientLimitState(parseInt(e.target.value))}
-              onKeyDown={async (e) => {
-                if (e.key === 'Enter') {
+          {count > 6 && <Separator orientation="vertical" />}
+          {count > 6 && (
+            <div className="flex flex-row items-center gap-2">
+              <Typography variant="pn">Per Page: </Typography>
+              <Input
+                type="number"
+                min="1"
+                max="100"
+                value={clientLimitState}
+                onChange={(e) => setClientLimitState(parseInt(e.target.value))}
+                onKeyDown={async (e) => {
+                  if (e.key === 'Enter') {
+                    await setLimitState(clientLimitState)
+                    isServer && router.refresh()
+                  }
+                }}
+                onBlur={async () => {
                   await setLimitState(clientLimitState)
                   isServer && router.refresh()
-                }
-              }}
-              onBlur={async () => {
-                await setLimitState(clientLimitState)
-                isServer && router.refresh()
-              }}
-              className="w-16"
-            />
-          </div>
+                }}
+                className="w-16"
+              />
+            </div>
+          )}
         </div>
       ) : title ? (
         <Typography variant="h3">{title}</Typography>
       ) : (
         <div />
       )}
-      <Pagination className="mx-0 w-fit">
-        <PaginationContent>
-          {page !== 0 && (
-            <ClientPaginationPrevious
-              disabled={page === 0}
-              onClick={async () => {
-                await setPageState(page - 1)
-                isServer && router.refresh()
-              }}
-            />
-          )}
+      {!isSinglePage ? (
+        <Pagination className="mx-0 w-fit">
+          <PaginationContent>
+            {page !== 0 && (
+              <ClientPaginationPrevious
+                disabled={page === 0}
+                onClick={async () => {
+                  await setPageState(page - 1)
+                  isServer && router.refresh()
+                }}
+              />
+            )}
 
-          {page !== 0 && (
-            <ClientPaginationButton
-              onClick={async () => {
-                await setPageState(0)
-                isServer && router.refresh()
-              }}
-            >
-              0
-            </ClientPaginationButton>
-          )}
+            {page !== 0 && (
+              <ClientPaginationButton
+                onClick={async () => {
+                  await setPageState(0)
+                  isServer && router.refresh()
+                }}
+              >
+                0
+              </ClientPaginationButton>
+            )}
 
-          {showPreviousEllipsis && <PaginationEllipsis />}
+            {showPreviousEllipsis && <PaginationEllipsis />}
 
-          <ClientPaginationButton isActive>{page}</ClientPaginationButton>
+            <ClientPaginationButton isActive>{page}</ClientPaginationButton>
 
-          {showNextEllipsis && <PaginationEllipsis />}
+            {showNextEllipsis && <PaginationEllipsis />}
 
-          {page !== totalPages - 1 && (
-            <ClientPaginationButton
-              onClick={async () => {
-                await setPageState(totalPages - 1)
-                isServer && router.refresh()
-              }}
-            >
-              {totalPages - 1}
-            </ClientPaginationButton>
-          )}
+            {page !== totalPages - 1 && (
+              <ClientPaginationButton
+                onClick={async () => {
+                  await setPageState(totalPages - 1)
+                  isServer && router.refresh()
+                }}
+              >
+                {totalPages - 1}
+              </ClientPaginationButton>
+            )}
 
-          {showNext && (
-            <ClientPaginationNext
-              disabled={!showNext}
-              onClick={async () => {
-                await setPageState(page + 1)
-                isServer && router.refresh()
-              }}
-            />
-          )}
-        </PaginationContent>
-      </Pagination>
+            {showNext && (
+              <ClientPaginationNext
+                disabled={!showNext}
+                onClick={async () => {
+                  await setPageState(page + 1)
+                  isServer && router.refresh()
+                }}
+              />
+            )}
+          </PaginationContent>
+        </Pagination>
+      ) : (
+        <div />
+      )}
     </div>
   )
 }

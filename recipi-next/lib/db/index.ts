@@ -1,10 +1,8 @@
-import { drizzle } from 'drizzle-orm/planetscale-serverless'
-import { connect } from '@planetscale/database'
-import * as schema from './schema'
+import { neon } from '@neondatabase/serverless'
+import { drizzle } from 'drizzle-orm/neon-http'
+import * as schema from './schema-pg'
 
-const connection = connect({
-  url: process.env.DATABASE_URL,
-})
+const connection = neon(process.env.DATABASE_URL!)
 
 // @ts-ignore
 export const db = drizzle(connection, { schema })

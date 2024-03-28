@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { User } from 'next-auth'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { signIn, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 import { NavConfig, NavGroup, NavItem } from '@/types'
@@ -42,7 +42,8 @@ export interface HeaderProps {
   children?: React.ReactNode
 }
 export const MainNav = ({ config, children }: HeaderProps) => {
-  const { setTheme } = useTheme()
+  const { setTheme: setThemeState } = useTheme()
+  const router = useRouter()
   const pathname = usePathname()
   const user = useCurrentUser()
   const [isLoading, setIsLoading] = useState(false)
@@ -75,6 +76,11 @@ export const MainNav = ({ config, children }: HeaderProps) => {
     signIn(provider).then(() => {
       setIsLoading(false)
     })
+  }
+
+  const setTheme = (theme: string) => {
+    setThemeState(theme)
+    router.refresh()
   }
 
   return (
@@ -131,7 +137,13 @@ export const MainNav = ({ config, children }: HeaderProps) => {
                     }`}
                   >
                     <PopoverAnchor
-                      className={`flex h-full w-full flex-row items-center gap-2`}
+                      className={cn(
+                        `flex h-full w-full flex-row items-center justify-center gap-2`,
+                        {
+                          'w-[120px]': group.minWidth === 'small',
+                          'w-[150px]': group.minWidth === 'medium',
+                        }
+                      )}
                       onMouseEnter={() => handleMouseEnter(ix)}
                       onMouseLeave={() => handleMouseLeave(ix)}
                     >
@@ -160,6 +172,7 @@ export const MainNav = ({ config, children }: HeaderProps) => {
                       `flex flex-col gap-2 rounded-none border-none bg-neutral-100 px-4 pt-0 shadow-lg dark:bg-secondary`,
                       {
                         'w-[120px]': group.minWidth === 'small',
+                        'w-[150px]': group.minWidth === 'medium',
                       }
                     )}
                   >

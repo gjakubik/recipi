@@ -1,5 +1,6 @@
 export { recipes } from './schema/recipes'
-export { comments } from './schema/comments'
+export { savedRecipes } from './schema/savedRecipes'
+export { reviews } from './schema/reviews'
 export { likes } from './schema/likes'
 export { recipeTags } from './schema/recipeTags'
 export { featureFlags } from './schema/featureFlag'

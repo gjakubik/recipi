@@ -1,7 +1,7 @@
 import { InferModel } from 'drizzle-orm'
 import {
   categories,
-  comments,
+  reviews,
   ingredients,
   likes,
   recipes,
@@ -11,7 +11,8 @@ import {
   accounts,
   menus,
   featureFlags,
-} from '../lib/db/schema'
+  savedRecipes,
+} from '../lib/db/schema-pg'
 import { FEATURE_FLAG_OPTIONS } from '../lib/constants'
 
 export type FeatureFlagOtions = (typeof FEATURE_FLAG_OPTIONS)[number]
@@ -33,7 +34,14 @@ export type InsertMenu = InferModel<typeof menus, 'insert'>
 
 export type Category = InferModel<typeof categories>
 
-export type Comment = InferModel<typeof comments>
+export type Review = InferModel<typeof reviews>
+
+export type ReviewWithUser = Review & {
+  name: string | null
+  image: string | null
+}
+
+export type InsertReview = InferModel<typeof reviews, 'insert'>
 
 export type Ingredient = InferModel<typeof ingredients>
 
@@ -52,6 +60,8 @@ export type RecipeIngredient = {
   note?: string
   amount?: string
   unit?: string
+  db_uuid?: string
+  db_name?: string
 }
 
 export type CombinedIngredient = RecipeIngredient &
@@ -90,6 +100,8 @@ export type Recipe = InferModel<typeof recipes> & {
 export type InsertRecipe = InferModel<typeof recipes, 'insert'>
 
 export type RecipeForm = InsertRecipe
+
+export type InsertSavedRecipe = InferModel<typeof savedRecipes, 'insert'>
 
 export type User = InferModel<typeof users>
 

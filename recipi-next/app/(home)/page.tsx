@@ -18,7 +18,7 @@ const HomePage = async ({ searchParams }: HomePageProps) => {
 
   const { recipes } = await getExploreRecipes({ search })
   const initialMenus = await getMenus({ authorId: user?.id, ...MENU_QUERY })
-
+  console.log(recipes)
   return (
     <div className="flex flex-col gap-8">
       <FullClientRecipeList

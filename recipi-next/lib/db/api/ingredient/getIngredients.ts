@@ -1,22 +1,25 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { ingredients } from '@/lib/db/schema'
+import { ingredients } from '@/lib/db/schema-pg'
 import { Ingredient } from '@/types'
-import { like, asc, or, eq } from 'drizzle-orm'
+import { like, asc, or, eq, and } from 'drizzle-orm'
 
 interface GetIngredients {
   search?: string
+  get_and?: boolean
 }
-
 const getIngredients = async ({
   search,
+  get_and = true,
 }: GetIngredients): Promise<Ingredient[]> => {
+  const joinFunc = get_and ? and : or
+
   if (!search) {
     return await db
       .select({
         id: ingredients.id,
-        fdc_id: ingredients.fdc_id,
+        fdcId: ingredients.fdcId,
         description: ingredients.description,
         calories: ingredients.calories,
         protein: ingredients.protein,
@@ -37,10 +40,13 @@ const getIngredients = async ({
     searchStr = undefined
   }
 
+  search = search.replaceAll(',', ' ')
+  let search_list = search.trim().split(' ')
+  // console.log(`SEARCH LIST: ${search_list}`)
   return await db
     .select({
       id: ingredients.id,
-      fdc_id: ingredients.fdc_id,
+      fdcId: ingredients.fdcId,
       description: ingredients.description,
       calories: ingredients.calories,
       protein: ingredients.protein,
@@ -52,7 +58,11 @@ const getIngredients = async ({
     .from(ingredients)
     .where(
       or(
-        search ? like(ingredients.description, `%${search}%`) : undefined,
+        search
+          ? joinFunc(
+              ...search_list.map((i) => like(ingredients.description, `%${i}%`))
+            )
+          : undefined,
         searchStr ? eq(ingredients.id, searchStr) : undefined
       )
     )

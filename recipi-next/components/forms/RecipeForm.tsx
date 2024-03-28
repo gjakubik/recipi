@@ -27,6 +27,7 @@ import { RecipeFormValues, recipeFormSchema } from '@/lib/validations/recipe'
 import { UNITS } from '@/lib/constants'
 import { abbToUnit } from '@/lib/utils'
 import { useFeatureFlags } from '@/hooks/use-feature-flags'
+import { IngredientSearchBar } from '@/components/recipe/IngredientSearchBar'
 
 import {
   Form,
@@ -93,13 +94,15 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
         },
   })
 
+  console.log('formValues', form.getValues())
+
   const [customUnitOptions, setCustomUnitOptions] = React.useState<string[]>([])
 
   const addCustomUnit = (unit: string) => {
     setCustomUnitOptions([unit, ...customUnitOptions])
   }
 
-  // calculate unit optons based on UNIT_OPTIONS + [{ label: 'unit', value: 'unit' } for each ingredient unit]
+  // calculate unit options based on UNIT_OPTIONS + [{ label: 'unit', value: 'unit' } for each ingredient unit]
   const unitOptions = useMemo(() => {
     const unitOptions = UNITS
     const ingunits = form.getValues('ingredients')
@@ -151,7 +154,7 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
   const onFormSubmit = async (data: RecipeFormValues) => {
     const prepRecipe = {
       ...data,
-      instructions: data.instructions?.map((i) => i.instruction),
+      instructions: data.instructions?.map((i) => i.instruction) || [],
     }
 
     try {
@@ -274,14 +277,14 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
                 render={({ field }) => (
                   <>
                     {!field.value ? (
-                      <UploadDropzone<UploadThingFileRouter>
+                      <UploadDropzone<UploadThingFileRouter, 'titleImage'>
                         className="h-[246px] drop-shadow-md"
                         appearance={{
                           container: 'rounded-3xl',
                           label: 'text-primary hover:text-slate-500',
                           allowedContent: 'text-slate-400',
                           button:
-                            'bg-primary text-primary-foreground shadow hover:bg-primary/90 rounded-md px-3 text-sm',
+                            'bg-primary text-primary-foreground shadow hover:bg-primary/90 hover:pointer-cursor rounded-md px-3 text-sm',
                         }}
                         endpoint="titleImage"
                         onClientUploadComplete={(res) => {
@@ -421,12 +424,12 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
             </DndContext>
             <div className="m-auto flex w-full max-w-[600px] flex-row justify-end">
               <Button
-                variant="default"
+                variant="secondary"
                 onClick={handleAddIngredient}
-                className="mt-4"
+                className="mt-4 flex gap-1"
                 type="button"
               >
-                <PlusIcon /> Add
+                <PlusIcon /> Ingredient
               </Button>
             </div>
           </TabsContent>
@@ -477,11 +480,12 @@ export const RecipeForm = ({ initialValues, user }: RecipeFormProps) => {
             </DndContext>
             <div className="m-auto flex w-full max-w-[600px] justify-end">
               <Button
-                className="mt-4"
+                variant="secondary"
+                className="mt-4 flex gap-1"
                 onClick={handleAddInstruction}
                 type="button"
               >
-                <PlusIcon /> Add
+                <PlusIcon /> Instruction
               </Button>
             </div>
           </TabsContent>

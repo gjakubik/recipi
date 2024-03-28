@@ -77,8 +77,10 @@ export function DataTable<TData, TValue>({
       if (typeof getNewPagination !== 'function') return
 
       const newPagination = getNewPagination(pagination)
-      setPage(newPagination.pageIndex)
-      setPageSize(newPagination.pageSize)
+      if (newPagination.pageIndex !== pagination.pageIndex)
+        setPage(newPagination.pageIndex)
+      if (newPagination.pageSize !== pagination.pageSize)
+        setPageSize(newPagination.pageSize)
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
