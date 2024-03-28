@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth/next'
 import { db } from '@/lib/db'
-import { sessions, users } from '@/lib/db/schema'
+import { sessions, users } from '@/lib/db/schema-pg'
 import { authOptions } from '@/lib/auth'
 import { eq } from 'drizzle-orm'
 
@@ -16,5 +16,6 @@ export async function getSessionToken(userId: string) {
     .from(sessions)
     .where(eq(sessions.userId, userId))
     .limit(1)
+  console.log(session)
   return session?.sessionToken
 }

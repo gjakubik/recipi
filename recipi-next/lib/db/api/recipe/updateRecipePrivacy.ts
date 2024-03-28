@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { recipes } from '@/lib/db/schema'
+import { recipes } from '@/lib/db/schema-pg'
 import { eq } from 'drizzle-orm'
 import getRecipe from './getRecipe'
 

@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { menus, users } from '@/lib/db/schema'
+import { menus, users } from '@/lib/db/schema-pg'
 import { getRecipe } from '@/lib/db/api/'
 import { GetMenusResult } from '@/types'
 import { eq, sql, ilike, or, and, asc, desc } from 'drizzle-orm'
@@ -23,91 +23,89 @@ const getMenus = async ({
   limit = 10,
   page = 0,
 }: GetMenus): Promise<GetMenusResult> => {
-  return await db.transaction(async (tx) => {
-    const menuList = await tx
-      .select({
-        id: menus.id,
-        title: menus.title,
-        description: menus.description,
-        recipes: menus.recipes,
-        authorId: menus.authorId,
-        author: {
-          id: users.id,
-          name: users.name,
-          email: users.email,
-          image: users.image,
-          role: users.role,
-          updated_at: users.updated_at,
-          created_at: users.created_at,
-          emailVerified: users.emailVerified,
-        },
-        creationDate: menus.creationDate,
-        updatedAt: menus.updatedAt,
-      })
-      .from(menus)
-      .limit(limit)
-      .offset(page * limit)
-      .where(
-        and(
-          or(
-            search ? ilike(menus.title, `%${search}%`) : undefined,
-            search ? ilike(menus.description, `%${search}%`) : undefined
-          ),
-          authorId ? eq(menus.authorId, authorId) : undefined
-        )
+  const menuList = await db
+    .select({
+      id: menus.id,
+      title: menus.title,
+      description: menus.description,
+      recipes: menus.recipes,
+      authorId: menus.authorId,
+      author: {
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        image: users.image,
+        role: users.role,
+        updatedAt: users.updatedAt,
+        createdAt: users.createdAt,
+        emailVerified: users.emailVerified,
+      },
+      creationDate: menus.creationDate,
+      updatedAt: menus.updatedAt,
+    })
+    .from(menus)
+    .limit(limit)
+    .offset(page * limit)
+    .where(
+      and(
+        or(
+          search ? ilike(menus.title, `%${search}%`) : undefined,
+          search ? ilike(menus.description, `%${search}%`) : undefined
+        ),
+        authorId ? eq(menus.authorId, authorId) : undefined
       )
-      .innerJoin(users, eq(menus.authorId, users.id))
-      .orderBy(
-        sortBy && sortBy in menus
-          ? sort === 'asc'
-            ? asc(menus[sortBy])
-            : desc(menus[sortBy])
-          : desc(menus.updatedAt)
-      )
+    )
+    .innerJoin(users, eq(menus.authorId, users.id))
+    .orderBy(
+      sortBy && sortBy in menus
+        ? sort === 'asc'
+          ? asc(menus[sortBy])
+          : desc(menus[sortBy])
+        : desc(menus.updatedAt)
+    )
 
-    const result = []
-    // Get recipes for each menu
-    for (const menu of menuList) {
-      const recipes = []
-      if (!menu.recipes || menu.recipes?.length === 0) {
-        result.push(menu)
-        continue
-      }
-      for (const recipeId of menu.recipes) {
-        const recipe = await getRecipe(recipeId)
-        if (recipe) {
-          recipes.push(recipe)
-        }
-      }
-      result.push({
-        ...menu,
-        recipeInfo: recipes,
-      })
+  const result = []
+  // Get recipes for each menu
+  for (const menu of menuList) {
+    const recipes = []
+    if (!menu.recipes || menu.recipes?.length === 0) {
+      result.push(menu)
+      continue
     }
-
-    // Get total count
-    const countQuery = await tx
-      .select({
-        count: sql<number>`count(${menus.id})`,
-      })
-      .from(menus)
-      .where(
-        and(
-          or(
-            search ? ilike(menus.title, `%${search}%`) : undefined,
-            search ? ilike(menus.description, `%${search}%`) : undefined
-          ),
-          authorId ? eq(menus.authorId, authorId) : undefined
-        )
-      )
-
-    const count = countQuery[0].count
-
-    return {
-      menus: result,
-      count,
+    for (const recipeId of menu.recipes) {
+      const recipe = await getRecipe(recipeId)
+      if (recipe) {
+        recipes.push(recipe)
+      }
     }
-  })
+    result.push({
+      ...menu,
+      recipeInfo: recipes,
+    })
+  }
+
+  // Get total count
+  const countQuery = await db
+    .select({
+      count: sql<number>`count(${menus.id})`,
+    })
+    .from(menus)
+    .where(
+      and(
+        or(
+          search ? ilike(menus.title, `%${search}%`) : undefined,
+          search ? ilike(menus.description, `%${search}%`) : undefined
+        ),
+        authorId ? eq(menus.authorId, authorId) : undefined
+      )
+    )
+
+  const count = countQuery[0].count
+
+  return {
+    menus: result,
+    count,
+  }
 }
 
 export default getMenus

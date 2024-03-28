@@ -1,0 +1,5 @@
+INSERT INTO `user`(`id`,`name`,`email`,`emailVerified`,`image`,`created_at`,`updated_at`,`role`) VALUES
+("2af48327-e256-48c0-8283-d24a46bfb70a","Gavin Jakubik","gavito8800@gmail.com",NULL,"https://utfs.io/f/0db1a0a1-bc9a-4fda-9847-65c4320eab7f-h64xhb.png","2024-02-10 07:39:56","2024-03-02 00:00:41","admin"),
+("4c76b2f5-033e-4156-b143-447f12dc7f41","Michael Lee","michaeldlee3@gmail.com",NULL,"https://lh3.googleusercontent.com/a/ACg8ocKhspzcVpX1trAPgoONkpehny50uZ6TK3HjuB2Gm_81=s96-c","2024-02-24 18:48:53","2024-02-24 18:59:23","admin"),
+("cc417f16-7861-483f-b22b-4fcad9adca7b","Gavin Jakubik","gavin.jakubik@gmail.com",NULL,"https://lh3.googleusercontent.com/a/ACg8ocLqAWZFJtXJg5CReaRcYAJqzgpCBG7sreVE3fQu13VgFOY=s96-c","2024-02-14 02:18:32","2024-02-14 02:18:32","basic"),
+("d03709c5-9b6e-4bf5-b570-fe94feb1ce31","Sara","atassisara@gmail.com",NULL,"https://lh3.googleusercontent.com/a/ACg8ocL3pqLzsN3oBBrQtHZCoHs5W_gzCamKQvivM3q8OR4Xdyc=s96-c","2024-03-04 15:16:23","2024-03-04 15:16:23","basic");

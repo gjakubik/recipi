@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { recipes, users } from '@/lib/db/schema'
+import { recipes, users } from '@/lib/db/schema-pg'
 import { Recipe } from '@/types'
 import { eq } from 'drizzle-orm'
 
@@ -31,8 +31,8 @@ const getRecipe = async (recipeID: number): Promise<Recipe | undefined> => {
           email: users.email,
           image: users.image,
           role: users.role,
-          updated_at: users.updated_at,
-          created_at: users.created_at,
+          updatedAt: users.updatedAt,
+          createdAt: users.createdAt,
           emailVerified: users.emailVerified,
         },
       })

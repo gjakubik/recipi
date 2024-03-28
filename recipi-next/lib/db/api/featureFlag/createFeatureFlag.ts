@@ -1,24 +1,22 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { featureFlags } from '@/lib/db/schema'
+import { featureFlags } from '@/lib/db/schema-pg'
 import getFeatureFlag from './getFeatureFlag'
 import { FeatureFlagFormValues } from '@/lib/validations/featureFlag'
 
 const createFeatureFlag = async (featureFlag: FeatureFlagFormValues) => {
-  const newFeatureFlagExec = await db
+  const [newFeatureFlag] = await db
     .insert(featureFlags)
     .values({
       name: featureFlag.name,
       description: featureFlag.description,
       isActive: featureFlag.isActive,
     })
+    .returning()
     .execute()
 
-  // Get newly created featureFlag
-  const newFeatureFlag = await getFeatureFlag(
-    parseInt(newFeatureFlagExec.insertId)
-  )
+  console.log('newFeatureFlag', newFeatureFlag)
 
   if (!newFeatureFlag) {
     throw new Error('Failed to create featureFlag')

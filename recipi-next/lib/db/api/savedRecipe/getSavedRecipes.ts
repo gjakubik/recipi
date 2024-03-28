@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db'
 import { Recipe } from '@/types'
-import { savedRecipes } from '@/lib/db/schema'
+import { savedRecipes } from '@/lib/db/schema-pg'
 import { getRecipe } from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
 import { eq, desc } from 'drizzle-orm'

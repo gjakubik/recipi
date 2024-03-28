@@ -1,12 +1,16 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { reviews, recipes } from '@/lib/db/schema'
+import { reviews, recipes } from '@/lib/db/schema-pg'
 import { InsertReview } from '@/types/schema'
 import { eq } from 'drizzle-orm'
 
 const createReview = async (review: InsertReview) => {
-  const reviewExec = await db.insert(reviews).values(review).execute()
+  const [newReview] = await db
+    .insert(reviews)
+    .values(review)
+    .returning()
+    .execute()
 
   // Now that we have created the review, we should update the recipe average rating
   const recipeId = review.recipeId
@@ -22,7 +26,7 @@ const createReview = async (review: InsertReview) => {
     .set({ rating: averageRating })
     .where(eq(recipes.id, parseInt(recipeId)))
 
-  return reviewExec.insertId
+  return newReview
 }
 
 export default createReview

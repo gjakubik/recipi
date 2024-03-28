@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { ingredients } from '@/lib/db/schema'
+import { ingredients } from '@/lib/db/schema-pg'
 import { Ingredient } from '@/types'
 import { eq } from 'drizzle-orm'
 
@@ -10,7 +10,7 @@ const getIngredient = async (id: string): Promise<Ingredient | undefined> => {
     const ingredient = await db
       .select({
         id: ingredients.id,
-        fdc_id: ingredients.fdc_id,
+        fdcId: ingredients.fdcId,
         description: ingredients.description,
         calories: ingredients.calories,
         protein: ingredients.protein,

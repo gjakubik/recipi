@@ -30,6 +30,8 @@ export const recipeFormSchema = z.object({
       note: z.string().optional(),
       amount: z.string(),
       unit: z.string(),
+      db_name: z.string().optional(),
+      db_uuid: z.string().optional(),
     })
   ),
   authorId: z.string(),

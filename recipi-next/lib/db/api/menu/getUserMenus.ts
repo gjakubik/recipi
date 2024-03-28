@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { menus } from '@/lib/db/schema'
+import { menus } from '@/lib/db/schema-pg'
 import { eq, sql } from 'drizzle-orm'
 
 interface GetUserMenus {
@@ -12,7 +12,7 @@ const getMenusQuery = db
   .select()
   .from(menus)
   .where(eq(menus.authorId, sql.placeholder('userId')))
-  .prepare()
+  .prepare('getMenusQuery')
 
 const getUserMenus = ({ userId }: GetUserMenus) => {
   return getMenusQuery.execute({ userId })

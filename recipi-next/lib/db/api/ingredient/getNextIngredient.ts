@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { ingredients } from '@/lib/db/schema'
+import { ingredients } from '@/lib/db/schema-pg'
 import { Ingredient } from '@/types'
 import { eq, like, and, asc, or } from 'drizzle-orm'
 
@@ -23,7 +23,7 @@ const getNextIngredient = async (
       carbs: ingredients.carbs,
       portions: ingredients.portions,
       processed: ingredients.processed,
-      fdc_id: ingredients.fdc_id,
+      fdcId: ingredients.fdcId,
     })
     .from(ingredients)
     .where(eq(ingredients.processed, false))
@@ -50,7 +50,7 @@ const getNextIngredient = async (
       carbs: ingredients.carbs,
       portions: ingredients.portions,
       processed: ingredients.processed,
-      fdc_id: ingredients.fdc_id,
+      fdcId: ingredients.fdcId,
     })
     .from(ingredients)
     .where(

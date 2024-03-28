@@ -6,11 +6,16 @@ import { getIngredients } from '@/lib/db/api'
 
 interface UseIngredientQueryProps {
   search?: string
+  enabled?: boolean
 }
 
-export const useIngredientQuery = ({ search }: UseIngredientQueryProps) => {
+export const useIngredientQuery = ({
+  search,
+  enabled,
+}: UseIngredientQueryProps) => {
   return useQuery({
     queryKey: ['ingredients', search],
-    queryFn: () => (search ? getIngredients({ search }) : undefined),
+    queryFn: () => getIngredients({ search }),
+    enabled,
   })
 }

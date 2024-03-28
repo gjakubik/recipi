@@ -146,6 +146,7 @@ export const BulkUploadForm = ({ user, mode }: BulkUploadFormProps) => {
           ...recipe,
           authorId: user.id,
           difficultyLevel: _.toLower(recipe.difficultyLevel),
+          instructions: recipe.instructions || [],
         }
         await createRecipe(withAuthor)
         const progress = (100 / recipes.length) * (i + 1)

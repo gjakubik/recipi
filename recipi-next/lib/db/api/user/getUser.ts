@@ -1,6 +1,8 @@
+'use server'
+
 import { db } from '@/lib/db'
 import { User } from '@/types'
-import { users } from '@/lib/db/schema'
+import { users } from '@/lib/db/schema-pg'
 import { eq } from 'drizzle-orm'
 
 const getUser = async (userId: string): Promise<User | undefined> => {

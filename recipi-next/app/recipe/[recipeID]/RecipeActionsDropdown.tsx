@@ -40,7 +40,7 @@ export const RecipeActionsDropdown = ({
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           {user?.id === recipe.author.id && (
             <>
-              <DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <Link href={`/recipe/${recipe.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setDeleteConfOpen(true)}>

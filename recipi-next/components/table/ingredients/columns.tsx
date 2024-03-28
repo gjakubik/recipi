@@ -43,7 +43,7 @@ export const columns: ColumnDef<Ingredient>[] = [
     accessorKey: 'fdc_id',
     cell: ({ row }) => (
       <Typography variant="pn" className="mr-2 px-2">
-        {row.original.fdc_id}
+        {row.original.fdcId}
       </Typography>
     ),
   },

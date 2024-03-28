@@ -6,9 +6,9 @@ if (!process.env.DATABASE_URL) {
 }
 
 const config: Config = {
-  schema: './lib/db/schema.ts',
+  schema: './lib/db/schema-pg.ts',
   out: './lib/db/migrations',
-  driver: 'mysql2',
+  driver: 'pg',
   dbCredentials: {
     connectionString: process.env.DATABASE_URL,
   },

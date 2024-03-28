@@ -12,7 +12,7 @@ import {
   menus,
   featureFlags,
   savedRecipes,
-} from '../lib/db/schema'
+} from '../lib/db/schema-pg'
 import { FEATURE_FLAG_OPTIONS } from '../lib/constants'
 
 export type FeatureFlagOtions = (typeof FEATURE_FLAG_OPTIONS)[number]
