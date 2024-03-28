@@ -33,7 +33,7 @@ export default async function ProfilePageLayout({
   }
 
   const isMyProfile = user?.id === userId
-  const { name, email, created_at, image } = profile
+  const { name, email, createdAt, image } = profile
 
   return (
     <div className="h-min-screen flex flex-col">
@@ -78,7 +78,7 @@ export default async function ProfilePageLayout({
                 className="flex flex-row items-center gap-2"
               >
                 <Calendar className="h-5 w-5" />
-                Joined {created_at?.toLocaleDateString()}
+                Joined {new Date(createdAt!).toLocaleDateString()}
               </Typography>
             </div>
           </div>
