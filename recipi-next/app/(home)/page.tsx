@@ -23,7 +23,7 @@ const HomePage = async ({ searchParams }: HomePageProps) => {
     <div className="flex flex-col gap-8">
       <FullClientRecipeList
         recipes={recipes}
-        paramNames={{ page: 'rcp_page', limit: 'rcp_pageSize' }}
+        paramNames={{ page: 'page', limit: 'pageSize', search: 'search' }}
         initialMenus={initialMenus}
         gridClassName="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
       />

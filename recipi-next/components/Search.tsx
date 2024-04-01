@@ -1,14 +1,20 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { Options } from 'nuqs'
 import useSearch from '@/app/store/useSearch'
 
 import { Input } from '@/components/ui/input'
+import { Icons } from '@/components/CustomIcons'
 
 interface SearchProps {
   className?: string
   placeholder?: string
   value: string
+  setValue?: <Shallow>(
+    value: string | ((old: string | null) => string | null) | null,
+    options?: Options<Shallow> | undefined
+  ) => Promise<URLSearchParams>
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -16,6 +22,7 @@ export function Search({
   className,
   placeholder = 'Filter data...',
   value,
+  setValue,
   onChange,
 }: SearchProps) {
   return (
@@ -41,6 +48,12 @@ export function Search({
         onChange={onChange}
         value={value}
       />
+      {value?.length > 0 && (
+        <Icons.circlex
+          onClick={() => setValue?.(null)}
+          className="absolute bottom-0 right-3 top-0 my-auto h-6 w-6 cursor-pointer text-gray-500 hover:h-[25px] hover:w-[25px]"
+        />
+      )}
     </div>
   )
 }

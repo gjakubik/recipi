@@ -10,28 +10,13 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { MENU_QUERY } from '@/lib/constants'
 
 import { useToast } from '@/components/ui/use-toast'
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/components/ui/dialog'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
 import { Button } from '@/components/ui/button'
 import { SelectingClientMenuList } from '@/components/menu/ClientMenuList'
 import { UpsertMenuModal } from '@/components/modals/UpsertMenuModal'
+import {
+  DrawerOrDialog,
+  DrawerOrDialogFooter,
+} from '@/components/DrawerOrDialog'
 
 interface AddRecipeToMenusModalProps extends PropsWithChildren {
   recipe: Recipe
@@ -110,95 +95,40 @@ export const AddRecipeToMenusModal = ({
     isParentControlled ? setCtlIsOpen(false) : setIsOpen(false)
   }
 
-  if (isSmallScreen) {
-    return (
-      <Drawer
-        modal
-        open={isParentControlled ? ctlIsOpen : isOpen}
-        onOpenChange={isParentControlled ? setCtlIsOpen : setIsOpen}
-      >
-        <DrawerTrigger asChild>{children}</DrawerTrigger>
-        <DrawerContent>
-          <DrawerClose />
-          <DrawerHeader>
-            <DrawerTitle>Add Recipe to Menu</DrawerTitle>
-            <DrawerDescription>
-              Select a menu to add your recipe to
-            </DrawerDescription>
-          </DrawerHeader>
-          <SelectingClientMenuList
-            className="w-full px-6 md:px-12 py-4"
-            initialData={initialMenus}
-            recipe={recipe}
-            params={{
-              authorId: menuParams.authorId,
-              limit: menuParams.limit,
-              page: menuParams.page,
-              sort: menuParams.sort,
-              sortBy: menuParams.sortBy,
-              setPage: (value) => setMenuParams({ ...menuParams, page: value }),
-              setLimit: (value) =>
-                setMenuParams({ ...menuParams, limit: value }),
-            }}
-            selectedMenuIds={selectedMenuIds}
-            setSelectedMenuIds={setSelectedMenuIds}
-          />
-          <DrawerFooter>
-            <div className="w-full flex flex-row items-center justify-end gap-4">
-              <UpsertMenuModal user={user}>
-                <Button variant="ghost">Create Menu</Button>
-              </UpsertMenuModal>
-              <Button onClick={onSave}>
-                {isSubmitting ? 'Saving...' : 'Save'}
-              </Button>
-            </div>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    )
-  }
-
   return (
-    <Dialog
-      modal
-      open={isParentControlled ? ctlIsOpen : isOpen}
-      onOpenChange={isParentControlled ? setCtlIsOpen : setIsOpen}
+    <DrawerOrDialog
+      title="Add Recipe to Menu"
+      description="Select a menu to add your recipe to"
+      isOpen={isParentControlled ? ctlIsOpen || false : isOpen}
+      setIsOpen={isParentControlled ? setCtlIsOpen : setIsOpen}
+      triggerChildren={children}
     >
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="w-full max-w-[900px]">
-        <DialogHeader>
-          <DialogTitle>Add Recipe to Menu</DialogTitle>
-        </DialogHeader>
-        <DialogDescription>
-          Select a menu to add your recipe to
-        </DialogDescription>
-        <SelectingClientMenuList
-          className="w-full px-6 md:px-12 py-4"
-          initialData={initialMenus}
-          recipe={recipe}
-          params={{
-            authorId: menuParams.authorId,
-            limit: menuParams.limit,
-            page: menuParams.page,
-            sort: menuParams.sort,
-            sortBy: menuParams.sortBy,
-            setPage: (value) => setMenuParams({ ...menuParams, page: value }),
-            setLimit: (value) => setMenuParams({ ...menuParams, limit: value }),
-          }}
-          selectedMenuIds={selectedMenuIds}
-          setSelectedMenuIds={setSelectedMenuIds}
-        />
-        <DialogFooter>
-          <div className="w-full flex flex-row items-center justify-end gap-4">
-            <UpsertMenuModal user={user}>
-              <Button variant="ghost">Create Menu</Button>
-            </UpsertMenuModal>
-            <Button onClick={onSave}>
-              {isSubmitting ? 'Saving...' : 'Save'}
-            </Button>
-          </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <SelectingClientMenuList
+        className="w-full px-6 py-4 md:px-12"
+        initialData={initialMenus}
+        recipe={recipe}
+        params={{
+          authorId: menuParams.authorId,
+          limit: menuParams.limit,
+          page: menuParams.page,
+          sort: menuParams.sort,
+          sortBy: menuParams.sortBy,
+          setPage: (value) => setMenuParams({ ...menuParams, page: value }),
+          setLimit: (value) => setMenuParams({ ...menuParams, limit: value }),
+        }}
+        selectedMenuIds={selectedMenuIds}
+        setSelectedMenuIds={setSelectedMenuIds}
+      />
+      <DrawerOrDialogFooter>
+        <div className="flex w-full flex-row items-center justify-end gap-4">
+          <UpsertMenuModal user={user}>
+            <Button variant="ghost">Create Menu</Button>
+          </UpsertMenuModal>
+          <Button onClick={onSave}>
+            {isSubmitting ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
+      </DrawerOrDialogFooter>
+    </DrawerOrDialog>
   )
 }

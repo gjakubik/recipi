@@ -19,7 +19,7 @@ export default async function ProfileRecipesTab({
     <>
       <FullClientRecipeList
         recipes={recipes}
-        paramNames={{ page: 'page', limit: 'pageSize' }}
+        paramNames={{ page: 'page', limit: 'pageSize', search: 'search' }}
         initialMenus={initialMenus}
       />
     </>

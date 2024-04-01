@@ -19,6 +19,7 @@ export interface TypographyProps
     | 'small'
     | 'light'
     | 'extralight'
+    | 'tinyextralight'
   className?: string
 }
 
@@ -43,6 +44,7 @@ const Typography = ({
     small: 'text-sm font-medium leading-none',
     light: 'text-sm dark:text-gray-400 font-light',
     extralight: 'text-sm dark:text-gray-400 font-extralight',
+    tinyextralight: 'text-xs dark:text-gray-400 font-extralight',
   }
 
   return (

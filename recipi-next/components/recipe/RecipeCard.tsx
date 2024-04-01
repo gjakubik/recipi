@@ -28,7 +28,7 @@ import { Typography } from '@/components/ui/typography'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
-import { Clock, Users } from 'lucide-react'
+import { Clock, Users, GraduationCap } from 'lucide-react'
 import { AddRecipeToMenusModal } from '@/components/modals/AddRecipeToMenusModal'
 import { UserAvatar } from '@/components/UserAvatar'
 import { User } from 'next-auth'
@@ -71,7 +71,7 @@ export const RecipeCard = ({
   return (
     <Card
       key={cardKey}
-      className="flex h-full flex-col shadow transition-all duration-200 ease-in-out hover:cursor-pointer hover:shadow-xl dark:hover:bg-gray-900"
+      className="flex h-full flex-col shadow transition-all duration-200 ease-in-out hover:cursor-pointer hover:shadow-xl dark:hover:bg-accent"
       onClick={() => onClick?.()}
     >
       <Tooltip>
@@ -100,9 +100,16 @@ export const RecipeCard = ({
             </CardHeader>
             <CardContent className="flex grow flex-col justify-between gap-2">
               <div className="flex flex-col gap-1">
+                <div className="flex flex-row gap-1">
+                  <GraduationCap className="h-4 w-4" />
+                  <Typography variant="light">Difficulty</Typography>
+                  <Typography variant="extralight" className="ml-1">
+                    {_.capitalize(recipe.difficultyLevel)}
+                  </Typography>
+                </div>
                 {!isZero(recipe.preparationTime) && (
                   <div className="flex flex-row gap-1">
-                    <Clock className="mt-1 h-3 w-3" />
+                    <Clock className=" h-4 w-4" />
                     <Typography variant="light">Prep</Typography>
                     <Typography variant="extralight" className="ml-1">
                       {timeValueToLabel(recipe.preparationTime || '')}
@@ -111,7 +118,7 @@ export const RecipeCard = ({
                 )}
                 {!isZero(recipe.cookingTime) && (
                   <div className="flex flex-row gap-1">
-                    <Clock className="mt-1 h-3 w-3" />
+                    <Clock className=" h-4 w-4" />
                     <Typography variant="light">Cook</Typography>
                     <Typography variant="extralight" className="ml-1">
                       {timeValueToLabel(recipe.cookingTime || '')}
@@ -120,7 +127,7 @@ export const RecipeCard = ({
                 )}
                 {recipe.servings && (
                   <div className="flex flex-row gap-1">
-                    <Users className="mt-1 h-3 w-3" />
+                    <Users className="h-4 w-4" />
                     <Typography variant="light">Servings</Typography>
                     <Typography variant="extralight" className="ml-1">
                       {removeServings(recipe.servings)}
@@ -166,9 +173,7 @@ export const RecipeCard = ({
                 <div className="flex flex-row items-center justify-between">
                   <UserAvatar user={recipe.author} />
                   <Typography variant="light">
-                    {recipe.creationDate
-                      ? recipe.creationDate.toLocaleDateString()
-                      : ''}
+                    {recipe.updatedAt.toLocaleDateString()}
                   </Typography>
                 </div>
                 {/* <RecipePreviewCard recipe={recipe} /> */}

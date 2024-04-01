@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Typography } from '@/components/ui/typography'
 import { Separator } from '@/components/ui/separator'
+import { DEFAULT_PARAM_NAMES } from '@/lib/constants'
 
 /*
  * mode: determines wether the pagination will refresh the page to get new data, or let another client component take care of it
@@ -28,9 +29,9 @@ interface UrlPaginationProps {
   mode?: 'client' | 'server'
   title?: string
   count: number
-  paramNames: {
-    page: string
-    limit: string
+  paramNames?: {
+    page?: string
+    limit?: string
   }
   defaultLimit?: number
   withPageInfo?: boolean
@@ -45,10 +46,15 @@ export const UrlPagination = ({
   withPageInfo,
 }: UrlPaginationProps) => {
   const router = useRouter()
-  const { page: pageParam, limit: limitParam } = paramNames
 
-  const [pageState, setPageState] = useQueryState(pageParam, parseAsInteger)
-  const [limitState, setLimitState] = useQueryState(limitParam, parseAsInteger)
+  const [pageState, setPageState] = useQueryState(
+    paramNames?.page || DEFAULT_PARAM_NAMES.page,
+    parseAsInteger
+  )
+  const [limitState, setLimitState] = useQueryState(
+    paramNames?.limit || DEFAULT_PARAM_NAMES.limit,
+    parseAsInteger
+  )
 
   const page = pageState || 0
   const limit = limitState || defaultLimit
