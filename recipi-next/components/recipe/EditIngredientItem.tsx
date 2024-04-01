@@ -20,9 +20,7 @@ import {
   Cross1Icon,
   Pencil1Icon,
 } from '@radix-ui/react-icons'
-import { Ingredient, RecipeIngredientForm, RecipeIngredient } from '@/types'
 import { RowSelectionState } from '@tanstack/react-table'
-import { IngredientSearchBar } from './IngredientSearchBar'
 import { IngredientSelector } from '../IngredientSelect'
 
 interface EditIngredientItemProps {
@@ -128,19 +126,16 @@ export const EditIngredientItem = ({
           </div>
           <div className="w-full grow">
             {!useIngredientSelector ? (
-              <FormField
-                control={form.control}
+              <FormInput
                 name={`ingredients.${index}.name`}
-                render={({}) => (
-                  <FormItem>
-                    <FormLabel
-                      className={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
-                    >
-                      Name
-                    </FormLabel>
-                    <IngredientSearchBar index={index} />
-                  </FormItem>
-                )}
+                label="Name"
+                labelClassName={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
+                onBlur={() => {
+                  updateIngredient(index, {
+                    ...form.getValues(`ingredients.${index}`),
+                    name: form.getValues(`ingredients.${index}.name`),
+                  })
+                }}
               />
             ) : (
               <FormField
