@@ -12,7 +12,7 @@ export const RecipeListLoader = async () => {
   return (
     <FullClientRecipeList
       recipes={initialData.recipes}
-      paramNames={{ page: 'rcp_page', limit: 'rcp_pageSize' }}
+      paramNames={{ page: 'rcp_page', limit: 'rcp_pageSize', search: 'search' }}
       initialMenus={initialMenus}
     />
   )

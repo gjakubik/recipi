@@ -1,0 +1,53 @@
+import { Recipe } from '@/types'
+import { timeInSeconds } from '@/lib/utils'
+
+export function recipeSearchFilter(search: string | null) {
+  return (recipe: Recipe) => {
+    if (!search) return true
+
+    const searchLower = search.toLowerCase()
+    const inTitle = recipe.title.toLowerCase().includes(searchLower)
+    const inIngredients = recipe.ingredients.some((ingredient) =>
+      ingredient.name.toLowerCase().includes(searchLower)
+    )
+    const inInstructions = recipe.instructions.some((instruction) =>
+      instruction.toLowerCase().includes(searchLower)
+    )
+    const inDescription = recipe.description
+      ?.toLowerCase()
+      .includes(searchLower)
+    const inAuthor = recipe.author.name?.toLowerCase().includes(searchLower)
+
+    return (
+      inTitle || inIngredients || inInstructions || inDescription || inAuthor
+    )
+  }
+}
+
+export function recipeFilterUnderMaxPrepTime(maxPrepTime: string) {
+  return (recipe: Recipe) => {
+    if (maxPrepTime === 'INF') return true
+    const maxPrepSeconds = timeInSeconds(maxPrepTime)
+    const prepTimeSeconds = timeInSeconds(recipe.preparationTime)
+
+    return prepTimeSeconds <= maxPrepSeconds
+  }
+}
+
+export function recipeFilterUnderMaxCookTime(maxCookTime: string) {
+  return (recipe: Recipe) => {
+    if (maxCookTime === 'INF') return true
+    const maxCookSeconds = timeInSeconds(maxCookTime)
+    const cookTimeSeconds = timeInSeconds(recipe.cookingTime)
+
+    return cookTimeSeconds <= maxCookSeconds
+  }
+}
+
+export function recipeFilterDifficultyLevel(difficultyLevel: string | null) {
+  return (recipe: Recipe) => {
+    if (!difficultyLevel) return true
+
+    return recipe.difficultyLevel === difficultyLevel
+  }
+}

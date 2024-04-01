@@ -5,6 +5,22 @@ export const FEATURE_FLAG_OPTIONS = [
   'canSeeNewAIRecipeUpload',
 ] as const
 
+export const DEFAULT_PARAM_NAMES = {
+  page: 'page',
+  limit: 'pageSize',
+  order: 'order',
+  orderBy: 'orderBy',
+  search: 'search',
+  maxPrepTime: 'maxPrepTime',
+  maxCookTime: 'maxCookTime',
+  maxTotalTime: 'maxTotalTime',
+  minServings: 'minServings',
+  maxServings: 'maxServings',
+  servings: 'servings',
+  difficultyLevel: 'difficultyLevel',
+  rating: 'rating',
+}
+
 export const RECIPE_QUERY: RecipeQuery = {
   limit: 6,
   page: 0,
@@ -59,40 +75,4 @@ export const UNITS = [
   'Gram',
   'Kilogram',
   'Pint',
-]
-
-const TIMES = {
-  '5-min': '5-min',
-  '10-min': '10-min',
-  '15-min': '15-min',
-  '30-min': '30-min',
-  '45-min': '45-min',
-  '1-hr': '1-hr',
-  '1-hr-30-min': '1-hr-30-min',
-  '2-hr': '2-hr',
-  '3-hr': '3-hr',
-}
-
-export const TIME_TO_LABEL = {
-  [TIMES['5-min']]: '5 Minutes',
-  [TIMES['10-min']]: '10 Minutes',
-  [TIMES['15-min']]: '15 Minutes',
-  [TIMES['30-min']]: '30 Minutes',
-  [TIMES['45-min']]: '45 Minutes',
-  [TIMES['1-hr']]: '1 Hour',
-  [TIMES['1-hr-30-min']]: '1 Hour 30 Minutes',
-  [TIMES['2-hr']]: '2 Hours',
-  [TIMES['3-hr']]: '3 Hours',
-}
-
-export const TIME_OPTIONS = [
-  { value: TIMES['5-min'], label: TIME_TO_LABEL[TIMES['5-min']] },
-  { value: TIMES['10-min'], label: TIME_TO_LABEL[TIMES['10-min']] },
-  { value: TIMES['15-min'], label: TIME_TO_LABEL[TIMES['15-min']] },
-  { value: TIMES['30-min'], label: TIME_TO_LABEL[TIMES['30-min']] },
-  { value: TIMES['45-min'], label: TIME_TO_LABEL[TIMES['45-min']] },
-  { value: TIMES['1-hr'], label: TIME_TO_LABEL[TIMES['1-hr']] },
-  { value: TIMES['1-hr-30-min'], label: TIME_TO_LABEL[TIMES['1-hr-30-min']] },
-  { value: TIMES['2-hr'], label: TIME_TO_LABEL[TIMES['2-hr']] },
-  { value: TIMES['3-hr'], label: TIME_TO_LABEL[TIMES['3-hr']] },
 ]
