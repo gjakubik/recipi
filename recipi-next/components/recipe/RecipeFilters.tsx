@@ -1,36 +1,20 @@
 'use client'
 
+import { PropsWithChildren, useState, useMemo, useCallback } from 'react'
 import {
-  PropsWithChildren,
-  useEffect,
-  useState,
-  useMemo,
-  useCallback,
-} from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import {
+  parseAsArrayOf,
   parseAsInteger,
   parseAsString,
-  parseAsStringLiteral,
   useQueryState,
 } from 'nuqs'
+import _ from 'lodash'
 import { parseAsStarRating } from '@/utils/urlParsing'
 import { Recipe } from '@/types'
 import { DEFAULT_PARAM_NAMES } from '@/lib/constants'
-import { secondsToTime, timeInSeconds, timeValueToLabel, cn } from '@/lib/utils'
 import { recipeSortByCookTime, recipeSortByPrepTime } from '@/utils/sorting'
 
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  Select,
-} from '@/components/ui/select'
-import { Typography } from '@/components/ui/typography'
-import { RangeSlider } from '@/components/ui/range-slider'
 
 import {
   DrawerOrDialog,
@@ -38,6 +22,7 @@ import {
 } from '@/components/DrawerOrDialog'
 import { MaxTimeFilter } from '@/components/MaxTimeFilter'
 import { ServingsRangeFilter } from '@/components/ServingsRangeFilter'
+import { Checkbox, CheckboxArea } from '../ui/checkbox'
 
 export interface RecipeFiltersProps extends PropsWithChildren {
   recipes: Recipe[]
@@ -51,6 +36,8 @@ export interface RecipeFiltersProps extends PropsWithChildren {
     rating?: string
   }
 }
+
+const defaultDifficulties = ['easy', 'medium', 'hard']
 
 export const RecipeFilters = ({
   recipes,
@@ -69,6 +56,23 @@ export const RecipeFilters = ({
       recipes.sort(recipeSortByCookTime('desc'))[0]?.cookingTime || '1:00:00',
     [recipes]
   )
+
+  const { numEasy, numMedium, numHard } = useMemo(() => {
+    const difficulties = recipes.reduce(
+      (acc, recipe) => {
+        if (recipe.difficultyLevel === 'easy') {
+          acc.numEasy += 1
+        } else if (recipe.difficultyLevel === 'medium') {
+          acc.numMedium += 1
+        } else if (recipe.difficultyLevel === 'hard') {
+          acc.numHard += 1
+        }
+        return acc
+      },
+      { numEasy: 0, numMedium: 0, numHard: 0 }
+    )
+    return difficulties
+  }, [recipes])
 
   // TODO: get largest servings from recipes to replace magic number 25
   // need to handle null servings and range servings
@@ -94,7 +98,8 @@ export const RecipeFilters = ({
     parseAsInteger.withDefault(25)
   )
   const [difficultyLevel, setDifficultyLevelQuery] = useQueryState(
-    paramNames?.difficultyLevel || DEFAULT_PARAM_NAMES.difficultyLevel
+    paramNames?.difficultyLevel || DEFAULT_PARAM_NAMES.difficultyLevel,
+    parseAsArrayOf(parseAsString).withDefault(defaultDifficulties)
   )
   const [rating, setRating] = useQueryState(
     paramNames?.rating || DEFAULT_PARAM_NAMES.rating,
@@ -103,17 +108,13 @@ export const RecipeFilters = ({
 
   const [isOpen, setIsOpen] = useState(false)
 
-  // See https://github.com/radix-ui/primitives/issues/1569#issuecomment-1420810427 to understand why we need this
-  const [forceDropdownReset, setForceDropdownReset] = useState(0)
-
   // Create local state for filter inputs
   const [maxPrepTimeState, setMaxPrepTimeState] = useState(maxPrepTime)
   const [maxCookTimeState, setMaxCookTimeState] = useState(maxCookTime)
   const [minServingsState, setMinServingsState] = useState(minServings)
   const [maxServingsState, setMaxServingsState] = useState(maxServings)
-  const [difficultyLevelState, setDifficultyLevelState] = useState<
-    string | undefined
-  >(difficultyLevel ? difficultyLevel : undefined)
+  const [difficultyLevelState, setDifficultyLevelState] =
+    useState(difficultyLevel)
 
   const setMaxPrepTime = useCallback(
     () =>
@@ -153,16 +154,32 @@ export const RecipeFilters = ({
 
   const setDifficultyLevel = useCallback(() => {
     setDifficultyLevelQuery(
-      difficultyLevelState !== difficultyLevel && difficultyLevelState !== ''
-        ? difficultyLevelState
-          ? difficultyLevelState
-          : null
+      !_.isEqual(difficultyLevelState, defaultDifficulties) &&
+        difficultyLevelState?.length !== 0
+        ? difficultyLevelState.filter((level) => {
+            if (level === 'easy' && numEasy === 0) return false
+            if (level === 'medium' && numMedium === 0) return false
+            if (level === 'hard' && numHard === 0) return false
+            return true
+          })
         : null
     )
   }, [difficultyLevelState, setDifficultyLevelState])
 
-  //Add onClose function that resets the filter values to whatever is in the query state
+  const handleDifficultyCheckboxChange = useCallback(
+    (level: string) => {
+      setDifficultyLevelState((prev) => {
+        if (prev?.includes(level)) {
+          return prev?.filter((l) => l !== level)
+        } else {
+          return prev ? [...prev, level] : [level]
+        }
+      })
+    },
+    [setDifficultyLevelState]
+  )
 
+  //Add onClose function that resets the filter values to whatever is in the query state
   return (
     <DrawerOrDialog
       title="Filters"
@@ -195,23 +212,44 @@ export const RecipeFilters = ({
         </div>
 
         <div className="flex flex-grow flex-col gap-4">
-          <div className="flex flex-col gap-3 pt-2">
-            <Label>Difficulty Level</Label>
-            <Select
-              key={`difficulty-level-${forceDropdownReset}`}
-              value={difficultyLevelState}
-              onValueChange={setDifficultyLevelState}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select difficulty level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All</SelectItem>
-                <SelectItem value="easy">Easy</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="hard">Hard</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex w-full flex-col gap-2">
+            <div className="flex w-full flex-row items-baseline justify-between">
+              <Label>Difficulty Levels</Label>
+              <Button
+                className="py-0"
+                size="xxs"
+                variant="text"
+                onClick={() => setDifficultyLevelState(defaultDifficulties)}
+              >
+                Reset
+              </Button>
+            </div>
+            <CheckboxArea disabled={numEasy === 0}>
+              <Checkbox
+                disabled={numEasy === 0}
+                checked={difficultyLevelState?.includes('easy') && numEasy > 0}
+                onCheckedChange={() => handleDifficultyCheckboxChange('easy')}
+              />
+              <span className="ml-2">Easy</span>
+            </CheckboxArea>
+            <CheckboxArea disabled={numMedium === 0}>
+              <Checkbox
+                disabled={numMedium === 0}
+                checked={
+                  difficultyLevelState?.includes('medium') && numMedium > 0
+                }
+                onCheckedChange={() => handleDifficultyCheckboxChange('medium')}
+              />
+              <span className="ml-2">Medium</span>
+            </CheckboxArea>
+            <CheckboxArea disabled={numHard === 0}>
+              <Checkbox
+                disabled={numHard === 0}
+                checked={difficultyLevelState?.includes('hard') && numHard > 0}
+                onCheckedChange={() => handleDifficultyCheckboxChange('hard')}
+              />
+              <span className="ml-2">Hard</span>
+            </CheckboxArea>
           </div>
         </div>
       </div>
@@ -224,11 +262,8 @@ export const RecipeFilters = ({
             setMaxCookTimeState(largestCookTime)
             setMinServingsState(0)
             setMaxServingsState(25)
-            setDifficultyLevelState(undefined)
+            setDifficultyLevelState(defaultDifficulties)
             setRating(null)
-
-            //force dropdown reset
-            setForceDropdownReset((prev) => prev + 1)
           }}
         >
           Clear Filters

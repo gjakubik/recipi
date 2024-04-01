@@ -8,6 +8,7 @@ import {
   parseAsInteger,
   parseAsString,
   parseAsStringLiteral,
+  parseAsArrayOf,
 } from 'nuqs'
 import { GetMenusResult, Recipe } from '@/types'
 import { DEFAULT_PARAM_NAMES, RECIPE_QUERY } from '@/lib/constants'
@@ -99,7 +100,7 @@ export const FullClientRecipeList = ({
 
   const [difficultyLevel] = useQueryState(
     paramNames?.difficultyLevel || DEFAULT_PARAM_NAMES.difficultyLevel,
-    parseAsString
+    parseAsArrayOf(parseAsString).withDefault([])
   )
 
   const numFiltersApplied = useMemo(() => {
@@ -108,7 +109,7 @@ export const FullClientRecipeList = ({
       (maxCookTime !== 'INF' ? 1 : 0) +
       (minServings ? 1 : 0) +
       (maxServings !== 25 ? 1 : 0) +
-      (difficultyLevel ? 1 : 0)
+      (difficultyLevel.length > 0 ? 1 : 0)
     )
   }, [maxPrepTime, maxCookTime, minServings, maxServings, difficultyLevel])
 

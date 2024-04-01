@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { secondsToTime, timeInSeconds } from '@/lib/utils'
 
@@ -35,23 +35,18 @@ export const MaxTimeFilter = ({
       onOpenChange={setMaxManualOpen}
     >
       <div className="flex w-full flex-row items-end gap-3">
-        <CollapsibleTrigger className="[&>svg]:mb-2" />
+        <CollapsibleTrigger
+          className={maxManualOpen ? '[&>svg]:mb-3' : '[&>svg]:mb-[1.375rem]'}
+        />
         <div className="flex w-full flex-grow flex-col gap-2">
           <div>
             <Label htmlFor={label}>{label}</Label>
-            {!maxManualOpen && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex cursor-pointer items-center gap-1"
-                onClick={() => setMaxManualOpen((prev) => !prev)}
-              >
-                <Typography variant="tinyextralight">
-                  Expand to input numbers
-                </Typography>
-              </motion.div>
+            {maxManualOpen ? (
+              <Typography variant="tinyextralight">Collapse</Typography>
+            ) : (
+              <Typography variant="tinyextralight">
+                Expand to input numbers
+              </Typography>
             )}
           </div>
           <Slider
