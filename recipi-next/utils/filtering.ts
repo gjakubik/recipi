@@ -44,10 +44,10 @@ export function recipeFilterUnderMaxCookTime(maxCookTime: string) {
   }
 }
 
-export function recipeFilterDifficultyLevel(difficultyLevel: string | null) {
+export function recipeFilterDifficultyLevel(difficultyLevels: string[]) {
   return (recipe: Recipe) => {
-    if (!difficultyLevel) return true
+    if (difficultyLevels.length === 0) return true
 
-    return recipe.difficultyLevel === difficultyLevel
+    return difficultyLevels.includes(recipe.difficultyLevel)
   }
 }
