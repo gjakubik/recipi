@@ -3,6 +3,7 @@ import { RecipeQuery, MenuQuery } from '@/types'
 export const FEATURE_FLAG_OPTIONS = [
   'canSeeGroceryList',
   'canSeeNewAIRecipeUpload',
+  'useIngredientSelector',
 ] as const
 
 export const DEFAULT_PARAM_NAMES = {
