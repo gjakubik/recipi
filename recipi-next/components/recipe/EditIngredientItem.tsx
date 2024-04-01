@@ -7,6 +7,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { UseFieldArrayUpdate, useFormContext } from 'react-hook-form'
 import { RecipeFormValues } from '@/lib/validations/recipe'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { useFeatureFlags } from '@/hooks/use-feature-flags'
 
 import { Button } from '@/components/ui/button'
 import { FormField, FormItem, FormLabel } from '@/components/ui/form'
@@ -44,6 +45,7 @@ export const EditIngredientItem = ({
   hasNote,
 }: EditIngredientItemProps) => {
   const form = useFormContext()
+  const { useIngredientSelector } = useFeatureFlags()
   const { attributes, listeners, node, setNodeRef, transform, transition } =
     useSortable({ id })
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
@@ -125,47 +127,50 @@ export const EditIngredientItem = ({
             </AddNoteModal>
           </div>
           <div className="w-full grow">
-            {/* <FormField
-              control={form.control}
-              name={`ingredients.${index}.name`}
-              render={({}) => (
-                <FormItem>
-                  <FormLabel
-                    className={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
-                  >
-                    Name
-                  </FormLabel>
-                  <IngredientSearchBar index={index} />
-                </FormItem>
-              )}
-            /> */}
-            <FormField
-              control={form.control}
-              name={`ingredients.${index}.name`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel
-                    className={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
-                  >
-                    Name
-                  </FormLabel>
-                  <IngredientSelector
-                    field={field}
-                    index={index}
-                    onIngredientSelect={(ingredient) => {
-                      form.setValue(
-                        `ingredients.${index}.db_name`,
-                        ingredient?.description
-                      )
-                      form.setValue(
-                        `ingredients.${index}.db_uuid`,
-                        ingredient?.id
-                      )
-                    }}
-                  />
-                </FormItem>
-              )}
-            />
+            {!useIngredientSelector ? (
+              <FormField
+                control={form.control}
+                name={`ingredients.${index}.name`}
+                render={({}) => (
+                  <FormItem>
+                    <FormLabel
+                      className={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
+                    >
+                      Name
+                    </FormLabel>
+                    <IngredientSearchBar index={index} />
+                  </FormItem>
+                )}
+              />
+            ) : (
+              <FormField
+                control={form.control}
+                name={`ingredients.${index}.name`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel
+                      className={`flex ${index !== 0 ? 'sm:hidden' : ''}`}
+                    >
+                      Name
+                    </FormLabel>
+                    <IngredientSelector
+                      field={field}
+                      index={index}
+                      onIngredientSelect={(ingredient) => {
+                        form.setValue(
+                          `ingredients.${index}.db_name`,
+                          ingredient?.description
+                        )
+                        form.setValue(
+                          `ingredients.${index}.db_uuid`,
+                          ingredient?.id
+                        )
+                      }}
+                    />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
           <AddNoteModal index={index} updateIngredient={updateIngredient}>
             <Button
