@@ -28,6 +28,7 @@ import {
 import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
 // import { Search } from '@/components/Search'
 import { MobileNav } from '@/components/MobileNav'
+import { Icons } from '@/components/CustomIcons'
 import {
   ActivityLogIcon,
   HamburgerMenuIcon,
@@ -89,6 +90,7 @@ export const MainNav = ({ config, children }: HeaderProps) => {
         <Link href="/">
           <div className="hidden items-center justify-center gap-4 px-4 py-4 sm:pl-12 md:flex">
             <ActivityLogIcon className="h-6 w-6" />
+            {/* <Icons.logo className="mb-1 h-8 w-8" /> */}
             <Typography variant="h3">Recipi</Typography>
           </div>
         </Link>

@@ -1,5 +1,6 @@
 import { Recipe } from '@/types'
 import { timeInSeconds } from '@/lib/utils'
+import { parseServings } from '@/utils/servings'
 
 export function recipeSearchFilter(search: string | null) {
   return (recipe: Recipe) => {
@@ -49,5 +50,18 @@ export function recipeFilterDifficultyLevel(difficultyLevels: string[]) {
     if (difficultyLevels.length === 0) return true
 
     return difficultyLevels.includes(recipe.difficultyLevel)
+  }
+}
+
+export function recipeFilterServings(minServings: number, maxServings: number) {
+  return (recipe: Recipe) => {
+    const [min, max] = parseServings(recipe.servings)
+
+    // If any of the ranges overlap, return true
+    return (
+      (min >= minServings && min <= maxServings) ||
+      (max >= minServings && max <= maxServings) ||
+      (min <= minServings && max >= maxServings)
+    )
   }
 }

@@ -26,6 +26,7 @@ interface DrawerOrDialogProps extends PropsWithChildren {
   isOpen: boolean
   setIsOpen: (value: boolean) => void
   triggerChildren: React.ReactNode
+  onClose?: () => void
 }
 
 export const DrawerOrDialog = ({
@@ -34,13 +35,19 @@ export const DrawerOrDialog = ({
   isOpen,
   setIsOpen,
   triggerChildren,
+  onClose,
   children,
 }: DrawerOrDialogProps) => {
   const isSmallScreen = useMediaQuery(840)
 
   if (isSmallScreen) {
     return (
-      <Drawer modal open={isOpen} onOpenChange={setIsOpen}>
+      <Drawer
+        modal
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        onClose={() => onClose?.()}
+      >
         <DrawerTrigger asChild>{triggerChildren}</DrawerTrigger>
         <DrawerContent>
           <DrawerClose />
@@ -55,7 +62,14 @@ export const DrawerOrDialog = ({
   }
 
   return (
-    <Dialog modal open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      modal
+      open={isOpen}
+      onOpenChange={(open) => {
+        !open && onClose?.()
+        setIsOpen(open)
+      }}
+    >
       <DialogTrigger asChild>{triggerChildren}</DialogTrigger>
       <DialogContent className="w-full max-w-[900px]">
         <DialogHeader>

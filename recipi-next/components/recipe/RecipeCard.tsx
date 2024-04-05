@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useLayoutEffect, useRef } from 'react'
 import _ from 'lodash'
 import Link from 'next/link'
 import Image from 'next/image'
 import { GetMenusResult, Recipe } from '@/types'
 import { useResizableRef } from '@/hooks/use-resizable-observer'
 import useSearch from '@/app/store/useSearch'
-import { isZero, removeServings, timeValueToLabel } from '@/lib/utils'
+import { cn, isZero, removeServings, timeValueToLabel } from '@/lib/utils'
 import { useCurrentUser } from '@/hooks/use-current-user'
 
 import {
@@ -28,10 +28,9 @@ import { Typography } from '@/components/ui/typography'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { IngredientsList } from '@/components/recipe/IngredientsList'
-import { Clock, Users, GraduationCap } from 'lucide-react'
 import { AddRecipeToMenusModal } from '@/components/modals/AddRecipeToMenusModal'
 import { UserAvatar } from '@/components/UserAvatar'
-import { User } from 'next-auth'
+import { Clock, Users, GraduationCap, Lock } from 'lucide-react'
 
 interface RecipeCardProps {
   recipe: Recipe
@@ -56,6 +55,106 @@ export const RecipeCard = ({
 
   const { targetRef, dimensions } = useResizableRef()
 
+  const titleRef = useRef<HTMLParagraphElement>(null)
+
+  // If performance becomes an issue, consider refactoring this to be a bit more efficient
+  const getWordClasses = (index: number, wordsLength: number) => {
+    if (titleRef.current) {
+      const words = titleRef.current.getElementsByTagName('span')
+      const threshold = 10
+      const word = words[index]
+      const prevWord = index > 0 ? words[index - 1] : null
+      const nextWord = index < wordsLength - 1 ? words[index + 1] : null
+
+      const isFirstWord = index === 0
+      const isLastWord = index === wordsLength - 1
+      const isFirstWordOfLine =
+        !prevWord ||
+        Math.abs(
+          word.getBoundingClientRect().top -
+            prevWord.getBoundingClientRect().top
+        ) > threshold
+      const isLastWordOfLine =
+        !nextWord ||
+        Math.abs(
+          word.getBoundingClientRect().top -
+            nextWord.getBoundingClientRect().top
+        ) > threshold
+
+      let aboveLineExists = false
+      let belowLineExists = false
+      let aboveLineIsLonger = false
+      let belowLineIsLonger = false
+
+      for (let findAboveIdx = index - 1; findAboveIdx >= 0; findAboveIdx--) {
+        const aboveWord = words[findAboveIdx]
+        if (
+          Math.abs(
+            aboveWord.getBoundingClientRect().top -
+              word.getBoundingClientRect().top
+          ) > threshold
+        ) {
+          aboveLineExists = true
+          aboveLineIsLonger =
+            aboveWord.getBoundingClientRect().x +
+              aboveWord.getBoundingClientRect().width >
+            word.getBoundingClientRect().x + word.getBoundingClientRect().width
+          break
+        }
+      }
+
+      for (
+        let findBelowIdx = index + 1;
+        findBelowIdx < wordsLength;
+        findBelowIdx++
+      ) {
+        const belowWord = words[findBelowIdx]
+        if (
+          Math.abs(
+            belowWord.getBoundingClientRect().top -
+              word.getBoundingClientRect().top
+          ) > threshold
+        ) {
+          belowLineExists = true
+          if (
+            Math.abs(
+              words[findBelowIdx + 1]?.getBoundingClientRect().top -
+                belowWord.getBoundingClientRect().top
+            ) > threshold
+          ) {
+            belowLineIsLonger =
+              belowWord.getBoundingClientRect().x +
+                belowWord.getBoundingClientRect().width >
+              word.getBoundingClientRect().x +
+                word.getBoundingClientRect().width
+            break
+          }
+        }
+      }
+
+      const isWordOnLastLine =
+        Math.abs(
+          word.getBoundingClientRect().top -
+            words[wordsLength - 1].getBoundingClientRect().top
+        ) < threshold
+      const isFirstWordOfLastLine = isWordOnLastLine && isFirstWordOfLine
+
+      return cn(
+        'inline bg-black bg-opacity-50 pt-0.5 pb-1',
+        aboveLineExists ? 'pt-0' : '',
+        belowLineExists ? 'pb-0' : '',
+        isFirstWord || isFirstWordOfLine ? 'pl-2' : '',
+        isLastWord || isLastWordOfLine ? 'pr-2' : '',
+        isFirstWord ? 'rounded-tl-sm' : '',
+        isLastWord ? 'rounded-br-sm' : '',
+        isFirstWordOfLastLine ? 'rounded-bl-sm' : '',
+        isLastWordOfLine && !aboveLineIsLonger ? 'rounded-tr-sm' : '',
+        isLastWordOfLine && !belowLineIsLonger ? 'rounded-br-sm' : ''
+      )
+    }
+    return 'inline bg-black bg-opacity-50 py-0.5'
+  }
+
   const visibleIngredients = useMemo(
     () =>
       showAllIngredients
@@ -77,28 +176,62 @@ export const RecipeCard = ({
       <Tooltip>
         <TooltipTrigger asChild>
           <Link href={`/recipe/${recipe.id}`} className="flex grow flex-col">
-            <CardHeader className="pb-2">
-              <CardTitle>
-                <Typography className="long-dashed-border border-b text-xl">
-                  {recipe.title}
-                </Typography>
-              </CardTitle>
-              {recipe.titleImage && (
+            {recipe.titleImage ? (
+              <div className="relative mb-2">
                 <AspectRatio ratio={16 / 9}>
                   <Image
                     src={recipe.titleImage.url}
                     alt={recipe.title}
                     fill
-                    className="rounded-md object-cover"
+                    className="rounded-t-md object-cover"
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   />
                 </AspectRatio>
-              )}
+
+                <CardHeader className="absolute bottom-0 left-0 m-0 p-0 pb-4 pl-6 pr-2">
+                  <div className="flex w-full flex-row items-center">
+                    {recipe.isPrivate && <Lock className="mr-2 h-4 w-4" />}
+                    <CardTitle className="grow">
+                      <div
+                        ref={titleRef}
+                        className="text-xl font-bold leading-[1.53rem] text-white"
+                      >
+                        {recipe.title.split(' ').map((word, index) => (
+                          <span
+                            key={index}
+                            className={getWordClasses(
+                              index,
+                              recipe.title.split(' ').length
+                            )}
+                          >
+                            {word}{' '}
+                          </span>
+                        ))}
+                      </div>
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+              </div>
+            ) : (
+              <CardHeader className="pb-2 pt-2">
+                <div className="flex w-full flex-row items-center">
+                  {recipe.isPrivate && <Lock className="mr-2 h-4 w-4" />}
+                  <CardTitle className="grow">
+                    <Typography
+                      className={cn('long-dashed-border pb-1 text-xl', {
+                        'pt-2': !recipe.titleImage,
+                      })}
+                    >
+                      {recipe.title}
+                    </Typography>
+                  </CardTitle>
+                </div>
+              </CardHeader>
+            )}
+            <CardContent className="flex grow flex-col justify-between gap-2">
               <CardDescription className="line-clamp-3">
                 {recipe.description}
               </CardDescription>
-            </CardHeader>
-            <CardContent className="flex grow flex-col justify-between gap-2">
               <div className="flex flex-col gap-1">
                 <div className="flex flex-row gap-1">
                   <GraduationCap className="h-4 w-4" />

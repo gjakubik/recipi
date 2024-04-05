@@ -16,6 +16,7 @@ interface ServingsRangeFilterProps {
   maxServingsState: number
   setMinServingsState: (value: number) => void
   setMaxServingsState: (value: number) => void
+  largestServings: number
   label: string
 }
 
@@ -24,6 +25,7 @@ export const ServingsRangeFilter = ({
   maxServingsState,
   setMinServingsState,
   setMaxServingsState,
+  largestServings,
   label,
 }: ServingsRangeFilterProps) => {
   const [manualOpen, setManualOpen] = useState(false)
@@ -65,7 +67,7 @@ export const ServingsRangeFilter = ({
               setMaxServingsState(value[1])
             }}
             min={0}
-            max={25}
+            max={largestServings}
             step={1}
           />
         </div>
@@ -90,7 +92,7 @@ export const ServingsRangeFilter = ({
             value={maxServingsState}
             onChange={(e) => setMaxServingsState(parseInt(e.target.value))}
             min={minServingsState}
-            max={25}
+            max={largestServings}
           />
         </div>
       </CollapsibleContent>

@@ -11,7 +11,12 @@ import _ from 'lodash'
 import { parseAsStarRating } from '@/utils/urlParsing'
 import { Recipe } from '@/types'
 import { DEFAULT_PARAM_NAMES } from '@/lib/constants'
-import { recipeSortByCookTime, recipeSortByPrepTime } from '@/utils/sorting'
+import {
+  recipeSortByCookTime,
+  recipeSortByPrepTime,
+  recipeSortByServings,
+} from '@/utils/sorting'
+import { parseServings } from '@/utils/servings'
 
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -57,6 +62,14 @@ export const RecipeFilters = ({
     [recipes]
   )
 
+  const largestServings = useMemo(
+    () =>
+      parseServings(
+        recipes.sort(recipeSortByServings('desc'))[0]?.servings
+      )[1] || 25,
+    [recipes]
+  )
+
   const { numEasy, numMedium, numHard } = useMemo(() => {
     const difficulties = recipes.reduce(
       (acc, recipe) => {
@@ -73,9 +86,6 @@ export const RecipeFilters = ({
     )
     return difficulties
   }, [recipes])
-
-  // TODO: get largest servings from recipes to replace magic number 25
-  // need to handle null servings and range servings
 
   // Derive state from query params, create setters
   const [maxPrepTime, setMaxPrepTimeQuery] = useQueryState(
@@ -95,7 +105,7 @@ export const RecipeFilters = ({
   )
   const [maxServings, setMaxServingsQuery] = useQueryState(
     paramNames?.maxServings || DEFAULT_PARAM_NAMES.maxServings,
-    parseAsInteger.withDefault(25)
+    parseAsInteger.withDefault(largestServings)
   )
   const [difficultyLevel, setDifficultyLevelQuery] = useQueryState(
     paramNames?.difficultyLevel || DEFAULT_PARAM_NAMES.difficultyLevel,
@@ -146,7 +156,7 @@ export const RecipeFilters = ({
 
   const setMaxServings = useCallback(() => {
     setMaxServingsQuery(
-      maxServingsState !== maxServings && maxServingsState !== 25
+      maxServingsState !== maxServings && maxServingsState !== largestServings
         ? maxServingsState
         : null
     )
@@ -187,6 +197,15 @@ export const RecipeFilters = ({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       triggerChildren={children}
+      onClose={() => {
+        console.log('closing')
+        // Reset local state to query state
+        setMaxPrepTimeState(maxPrepTime)
+        setMaxCookTimeState(maxCookTime)
+        setMinServingsState(minServings)
+        setMaxServingsState(maxServings)
+        setDifficultyLevelState(difficultyLevel)
+      }}
     >
       <div className="mt-4 flex flex-col-reverse gap-4 sm:flex-row">
         <div className="flex flex-grow flex-col gap-4">
@@ -195,6 +214,7 @@ export const RecipeFilters = ({
             maxServingsState={maxServingsState}
             setMinServingsState={setMinServingsState}
             setMaxServingsState={setMaxServingsState}
+            largestServings={largestServings}
             label="Servings"
           />
           <MaxTimeFilter
@@ -261,7 +281,7 @@ export const RecipeFilters = ({
             setMaxPrepTimeState(largestPrepTime)
             setMaxCookTimeState(largestCookTime)
             setMinServingsState(0)
-            setMaxServingsState(25)
+            setMaxServingsState(largestServings)
             setDifficultyLevelState(defaultDifficulties)
             setRating(null)
           }}

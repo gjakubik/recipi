@@ -1,4 +1,5 @@
 import { RecipeQuery, MenuQuery } from '@/types'
+import { Clock, Users, Calendar, GraduationCap } from 'lucide-react'
 
 export const FEATURE_FLAG_OPTIONS = [
   'canSeeGroceryList',
@@ -21,6 +22,39 @@ export const DEFAULT_PARAM_NAMES = {
   difficultyLevel: 'difficultyLevel',
   rating: 'rating',
 }
+
+export const RECIPE_ORDER_BY_OPTIONS_LIST = [
+  {
+    Icon: Clock,
+    value: 'preparationTime',
+    label: 'Prep Time',
+  },
+  {
+    Icon: Clock,
+    value: 'cookingTime',
+    label: 'Cook Time',
+  },
+  {
+    Icon: Users,
+    value: 'servings',
+    label: 'Servings',
+  },
+  {
+    Icon: GraduationCap,
+    value: 'difficultyLevel',
+    label: 'Difficulty',
+  },
+  {
+    Icon: Calendar,
+    value: 'updatedAt',
+    label: 'Updated At',
+  },
+  {
+    Icon: Calendar,
+    value: 'creationDate',
+    label: 'Creation Date',
+  },
+]
 
 export const RECIPE_QUERY: RecipeQuery = {
   limit: 6,

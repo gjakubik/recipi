@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { PropsWithChildren, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import {
@@ -11,18 +11,34 @@ import {
   parseAsArrayOf,
 } from 'nuqs'
 import { GetMenusResult, Recipe } from '@/types'
-import { DEFAULT_PARAM_NAMES, RECIPE_QUERY } from '@/lib/constants'
+import {
+  DEFAULT_PARAM_NAMES,
+  RECIPE_QUERY,
+  RECIPE_ORDER_BY_OPTIONS_LIST,
+} from '@/lib/constants'
 import {
   recipeSortByUpdatedAt,
   recipeSortByCreationDate,
+  recipeSortByPrepTime,
+  recipeSortByCookTime,
+  recipeSortByDifficultyLevel,
+  recipeSortByServings,
 } from '@/utils/sorting'
 import {
   recipeFilterUnderMaxPrepTime,
   recipeFilterUnderMaxCookTime,
   recipeFilterDifficultyLevel,
   recipeSearchFilter,
+  recipeFilterServings,
 } from '@/utils/filtering'
 
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+  SelectContent,
+} from '@/components/ui/select'
 import { Typography } from '@/components/ui/typography'
 import { Button } from '@/components/ui/button'
 import { UrlPagination } from '@/components/UrlPagination'
@@ -30,15 +46,9 @@ import { RecipeCard } from '@/components/recipe/RecipeCard'
 import { RecipeFilters } from '@/components/recipe/RecipeFilters'
 import { UrlSearch } from '@/components/UrlSearch'
 import { MixerHorizontalIcon } from '@radix-ui/react-icons'
-import {
-  ChevronDownIcon,
-  ChevronUp,
-  ChevronUpIcon,
-  Filter,
-  SlidersHorizontal,
-} from 'lucide-react'
+import { ArrowDownNarrowWide, ArrowDownWideNarrow } from 'lucide-react'
 
-interface FullClientRecipeListProps {
+interface FullClientRecipeListProps extends PropsWithChildren {
   recipes: Recipe[]
   paramNames?: {
     page?: string
@@ -129,11 +139,29 @@ export const FullClientRecipeList = ({
   )
 
   const [sortFunction, orderLabel] = useMemo(() => {
-    if (orderBy === 'creationDate') {
-      return [
-        recipeSortByCreationDate(order),
-        order === 'asc' ? 'Oldest' : 'Newest',
-      ]
+    switch (orderBy) {
+      case 'updatedAt':
+        return [
+          recipeSortByCreationDate(order),
+          order === 'asc' ? 'Oldest' : 'Newest',
+        ]
+      case 'preparationTime':
+        return [
+          recipeSortByPrepTime(order),
+          order === 'asc' ? 'Shortest' : 'Longest',
+        ]
+      case 'cookingTime':
+        return [
+          recipeSortByCookTime(order),
+          order === 'asc' ? 'Shortest' : 'Longest',
+        ]
+      case 'difficultyLevel':
+        return [
+          recipeSortByDifficultyLevel(order),
+          order === 'asc' ? 'Easiest' : 'Hardest',
+        ]
+      case 'servings':
+        return [recipeSortByServings(order), order === 'asc' ? 'Least' : 'Most']
     }
 
     // default to updatedAt descending
@@ -146,12 +174,15 @@ export const FullClientRecipeList = ({
         .filter(recipeFilterUnderMaxPrepTime(maxPrepTime))
         .filter(recipeFilterUnderMaxCookTime(maxCookTime))
         .filter(recipeFilterDifficultyLevel(difficultyLevel))
+        .filter(recipeFilterServings(minServings, maxServings))
         .sort(sortFunction),
     [
       searchFilteredRecipes,
       maxPrepTime,
       maxCookTime,
       difficultyLevel,
+      minServings,
+      maxServings,
       sortFunction,
     ]
   )
@@ -187,6 +218,40 @@ export const FullClientRecipeList = ({
             )}
           </Button>
         </RecipeFilters>
+        <Select
+          value={orderBy}
+          onValueChange={(val) => {
+            console.log(val)
+            setPage(null)
+            switch (val) {
+              case 'updatedAt':
+              case 'creationDate':
+                setOrder('desc')
+                break
+              case 'preparationTime':
+              case 'cookingTime':
+              case 'difficultyLevel':
+              case 'servings':
+                setOrder('asc')
+                break
+            }
+            setOrderBy(val)
+          }}
+        >
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Order by" />
+            <SelectContent>
+              {RECIPE_ORDER_BY_OPTIONS_LIST.map(({ Icon, value, label }) => (
+                <SelectItem key={value} value={value}>
+                  <Typography className="flex flex-row items-center">
+                    {!!Icon && <Icon className="mr-2 h-4 w-4" />}
+                    {label}
+                  </Typography>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </SelectTrigger>
+        </Select>
         <Button
           variant="ghost"
           onClick={() => {
@@ -196,9 +261,9 @@ export const FullClientRecipeList = ({
         >
           {orderLabel}{' '}
           {order == 'asc' ? (
-            <ChevronUpIcon className="ml-1 h-3 w-3" />
+            <ArrowDownNarrowWide className="ml-1 h-4 w-4" />
           ) : (
-            <ChevronDownIcon className="ml-1 h-3 w-3" />
+            <ArrowDownWideNarrow className="ml-1 h-4 w-4" />
           )}
         </Button>
       </div>
