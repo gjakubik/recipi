@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import _ from 'lodash'
 import Link from 'next/link'
 import {
   getRecipe,
@@ -17,10 +18,10 @@ import { InstructionsList } from '@/components/recipe/InstructionsList'
 import { AddRecipeToMenusModal } from '@/components/modals/AddRecipeToMenusModal'
 import { RecipeActionsDropdown } from './RecipeActionsDropdown'
 import { RecipePrivacyButton } from './RecipePrivacyButton'
-import { Clock, Users } from 'lucide-react'
 import { SaveUnsaveButton } from './SaveUnsaveButton'
 import { AddReview } from '@/components/reviews/AddReview'
 import { ReviewList } from '@/components/reviews/ReviewList'
+import { Clock, Users, GraduationCap } from 'lucide-react'
 
 interface RecipePageProps {
   params: { recipeID: string }
@@ -40,7 +41,8 @@ export default async function RecipePage({ params }: RecipePageProps) {
   if (!recipe) {
     redirect('/')
   }
-
+  // simulate 2 seconds of loading
+  await new Promise((resolve) => setTimeout(resolve, 2000))
   return (
     <>
       <div className="flex w-full flex-col justify-between justify-items-center gap-2 sm:flex-row">
@@ -86,6 +88,13 @@ export default async function RecipePage({ params }: RecipePageProps) {
         </div>
       </div>
       <div className="flex flex-col gap-0">
+        <div className="flex flex-row items-center gap-2">
+          <GraduationCap className="h-4 w-4" />
+          <Typography variant="bold">Difficulty</Typography>
+          <Typography variant="pn" className="pt-px">
+            {_.capitalize(recipe.difficultyLevel)}
+          </Typography>
+        </div>
         {!isZero(recipe.preparationTime) && (
           <div className="flex flex-row items-center gap-2">
             <Clock className="h-4 w-4" />

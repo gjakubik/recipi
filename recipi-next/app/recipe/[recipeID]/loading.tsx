@@ -19,23 +19,12 @@ export default function LoadingRecipePage() {
         </div>
       </div>
 
-      {/* Prep and serving info */}
+      {/* Difficulty, Prep and serving info */}
       <div className="flex flex-col gap-2">
-        <div className="flex flex-row items-center gap-2">
-          <Clock className="h-4 w-4" />
-          <Skeleton className="h-5 w-10" />
-          <Skeleton className="h-4 w-20" />
-        </div>
-        <div className="flex flex-row items-center gap-2">
-          <Clock className="h-4 w-4" />
-          <Skeleton className="h-5 w-10" />
-          <Skeleton className="h-4 w-20" />
-        </div>
-        <div className="flex flex-row items-center gap-2">
-          <Users className="h-4 w-4" />
-          <Skeleton className="h-5 w-16" />
-          <Skeleton className="h-4 w-9" />
-        </div>
+        <Skeleton className="h-5 w-36" />
+        <Skeleton className="h-5 w-40" />
+        <Skeleton className="h-5 w-40" />
+        <Skeleton className="h-5 w-28" />
       </div>
 
       {/* Description */}

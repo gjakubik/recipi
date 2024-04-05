@@ -1,5 +1,6 @@
 import { Recipe } from '@/types'
 import { timeInSeconds } from '@/lib/utils'
+import { parseServings } from '@/utils/servings'
 
 export function recipeSortByUpdatedAt(order: 'asc' | 'desc') {
   return (a: Recipe, b: Recipe) => {
@@ -44,6 +45,38 @@ export function recipeSortByCookTime(order: 'asc' | 'desc') {
       return compareTimes(a.cookingTime, b.cookingTime)
     } else {
       return compareTimes(b.cookingTime, a.cookingTime)
+    }
+  }
+}
+
+// order ['easy', 'medium', 'hard'] ascending
+// order ['hard', 'medium', 'easy'] descending
+export function recipeSortByDifficultyLevel(order: 'asc' | 'desc') {
+  return (a: Recipe, b: Recipe) => {
+    const difficultyOrder = ['easy', 'medium', 'hard']
+    const aIndex = difficultyOrder.indexOf(a.difficultyLevel)
+    const bIndex = difficultyOrder.indexOf(b.difficultyLevel)
+
+    if (order === 'asc') {
+      return aIndex - bIndex
+    } else {
+      return bIndex - aIndex
+    }
+  }
+}
+
+export function recipeSortByServings(order: 'asc' | 'desc') {
+  return (a: Recipe, b: Recipe) => {
+    const [aMin, aMax] = parseServings(a.servings)
+    const [bMin, bMax] = parseServings(b.servings)
+
+    const aAvg = (aMin + aMax) / 2
+    const bAvg = (bMin + bMax) / 2
+
+    if (order === 'asc') {
+      return aAvg - bAvg
+    } else {
+      return bAvg - aAvg
     }
   }
 }

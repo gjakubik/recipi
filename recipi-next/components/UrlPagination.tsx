@@ -70,6 +70,7 @@ export const UrlPagination = ({
   const isSinglePage = totalPages === 1
 
   const isServer = mode === 'server'
+  const isClient = mode === 'client'
 
   return (
     <div className="mt-4 flex w-full flex-col-reverse justify-between gap-4 sm:flex-row">
@@ -116,6 +117,7 @@ export const UrlPagination = ({
                 disabled={page === 0}
                 onClick={async () => {
                   await setPageState(page - 1)
+                  isClient && window && window.scrollTo(0, 0)
                   isServer && router.refresh()
                 }}
               />
@@ -125,16 +127,18 @@ export const UrlPagination = ({
               <ClientPaginationButton
                 onClick={async () => {
                   await setPageState(0)
+                  isClient && window && window.scrollTo(0, 0)
                   isServer && router.refresh()
                 }}
               >
-                0
+                1 {/* Adding one to true page */}
               </ClientPaginationButton>
             )}
 
             {showPreviousEllipsis && <PaginationEllipsis />}
 
-            <ClientPaginationButton isActive>{page}</ClientPaginationButton>
+            {/* Adding one to true page */}
+            <ClientPaginationButton isActive>{page + 1}</ClientPaginationButton>
 
             {showNextEllipsis && <PaginationEllipsis />}
 
@@ -142,10 +146,11 @@ export const UrlPagination = ({
               <ClientPaginationButton
                 onClick={async () => {
                   await setPageState(totalPages - 1)
+                  isClient && window && window.scrollTo(0, 0)
                   isServer && router.refresh()
                 }}
               >
-                {totalPages - 1}
+                {totalPages} {/* Adding one to true page */}
               </ClientPaginationButton>
             )}
 
@@ -154,6 +159,7 @@ export const UrlPagination = ({
                 disabled={!showNext}
                 onClick={async () => {
                   await setPageState(page + 1)
+                  isClient && window && window.scrollTo(0, 0)
                   isServer && router.refresh()
                 }}
               />

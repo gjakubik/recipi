@@ -33,7 +33,7 @@ export const IngredientsList = ({
             </div>
             <Typography
               variant="light"
-              className=" w-max overflow-hidden text-ellipsis whitespace-nowrap"
+              className="w-fit overflow-hidden text-ellipsis whitespace-nowrap pr-1"
             >
               {ingredient.amount}{' '}
               {_.capitalize(abbToUnit(ingredient.unit || ''))}

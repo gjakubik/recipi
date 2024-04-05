@@ -76,6 +76,18 @@
         1;
     }
 
+    .long-dashed-overline {
+      border-top: 1px dashed;
+      border-image: repeating-linear-gradient(
+          to right,
+          white 0,
+          white 20px,
+          transparent 20px,
+          transparent 30px
+        )
+        1;
+    }
+
     .dashed-border-hover::before {
       background: repeating-linear-gradient(
         to right,
@@ -99,6 +111,18 @@
 
 .long-dashed-border {
   border-bottom: 1px dashed;
+  border-image: repeating-linear-gradient(
+      to right,
+      black 0,
+      black 20px,
+      transparent 20px,
+      transparent 30px
+    )
+    1;
+}
+
+.long-dashed-overline {
+  border-top: 1px dashed;
   border-image: repeating-linear-gradient(
       to right,
       black 0,
