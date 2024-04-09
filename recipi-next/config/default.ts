@@ -10,7 +10,7 @@ export const defaultNavConfig: NavConfig = {
     },
     {
       title: 'My Stuff',
-      href: '/my-stuff',
+      href: '/my-recipes',
       minWidth: 'medium',
       authenticated: true,
       items: [
@@ -25,7 +25,7 @@ export const defaultNavConfig: NavConfig = {
           authenticated: true,
         },
         {
-          title: 'Menus',
+          title: 'My Menus',
           href: '/my-menus',
           authenticated: true,
         },

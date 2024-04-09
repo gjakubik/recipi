@@ -3,15 +3,21 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { User } from 'next-auth'
-import { Recipe, GetMenusResult } from '@/types'
+import { parseAsInteger, useQueryState } from 'nuqs'
+import {
+  Recipe,
+  GetMenusResult,
+  MenuWithRecipes,
+  MenuQueryParams,
+} from '@/types'
 import { getMenu, updateMenu } from '@/lib/db/api'
 import useMenuParams from '@/app/store/useMenuParams'
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { MENU_QUERY } from '@/lib/constants'
+import { DEFAULT_PARAM_NAMES, MENU_QUERY } from '@/lib/constants'
 
 import { useToast } from '@/components/ui/use-toast'
 import { Button } from '@/components/ui/button'
-import { SelectingClientMenuList } from '@/components/menu/ClientMenuList'
+import { FullClientMenuList } from '@/components/menu/FullClientMenuList'
 import { UpsertMenuModal } from '@/components/modals/UpsertMenuModal'
 import {
   DrawerOrDialog,
@@ -20,26 +26,28 @@ import {
 
 interface AddRecipeToMenusModalProps extends PropsWithChildren {
   recipe: Recipe
-  initialMenus: GetMenusResult
+  menus: MenuWithRecipes[]
   user: User
+  paramNames?: MenuQueryParams
   ctlIsOpen?: boolean
   setCtlIsOpen?: (value: boolean) => void
 }
 
 export const AddRecipeToMenusModal = ({
   recipe,
-  initialMenus,
+  menus,
   user,
+  paramNames,
   ctlIsOpen,
   setCtlIsOpen,
   children,
 }: AddRecipeToMenusModalProps) => {
   const router = useRouter()
   const { toast } = useToast()
-  const [menuParams, setMenuParams] = useState({
-    ...MENU_QUERY,
-    authorId: user.id,
-  })
+  const [pageSize, setPageSize] = useQueryState(
+    paramNames?.limit || DEFAULT_PARAM_NAMES.limit,
+    parseAsInteger.withDefault(MENU_QUERY.limit)
+  )
   const [selectedMenuIds, setSelectedMenuIds] = useState<number[] | undefined>()
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -50,9 +58,9 @@ export const AddRecipeToMenusModal = ({
 
   useEffect(() => {
     if (isSmallScreen) {
-      setMenuParams({ ...menuParams, limit: 3 })
+      setPageSize(3)
     } else {
-      setMenuParams({ ...menuParams, limit: 6 })
+      setPageSize(6)
     }
   }, [isSmallScreen])
 
@@ -103,19 +111,11 @@ export const AddRecipeToMenusModal = ({
       setIsOpen={isParentControlled ? setCtlIsOpen : setIsOpen}
       triggerChildren={children}
     >
-      <SelectingClientMenuList
+      <FullClientMenuList
         className="w-full px-6 py-4 md:px-12"
-        initialData={initialMenus}
+        menus={menus}
         recipe={recipe}
-        params={{
-          authorId: menuParams.authorId,
-          limit: menuParams.limit,
-          page: menuParams.page,
-          sort: menuParams.sort,
-          sortBy: menuParams.sortBy,
-          setPage: (value) => setMenuParams({ ...menuParams, page: value }),
-          setLimit: (value) => setMenuParams({ ...menuParams, limit: value }),
-        }}
+        paramNames={paramNames}
         selectedMenuIds={selectedMenuIds}
         setSelectedMenuIds={setSelectedMenuIds}
       />

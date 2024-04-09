@@ -1,10 +1,12 @@
-import { Recipe } from '@/types'
+import { Recipe, MenuWithRecipes } from '@/types'
 import { timeInSeconds } from '@/lib/utils'
 import { parseServings } from '@/utils/servings'
 
+/* Recipes */
 export function recipeSearchFilter(search: string | null) {
-  return (recipe: Recipe) => {
+  return (recipe: Recipe | undefined) => {
     if (!search) return true
+    if (!recipe) return false
 
     const searchLower = search.toLowerCase()
     const inTitle = recipe.title.toLowerCase().includes(searchLower)
@@ -63,5 +65,23 @@ export function recipeFilterServings(minServings: number, maxServings: number) {
       (max >= minServings && max <= maxServings) ||
       (min <= minServings && max >= maxServings)
     )
+  }
+}
+
+/* Menus */
+export function menuSearchFilter(search: string | null) {
+  return (menu: MenuWithRecipes) => {
+    if (!search) return true
+
+    const searchLower = search.toLowerCase()
+    const inTitle = menu.title.toLowerCase().includes(searchLower)
+    const inDescription = menu.description?.toLowerCase().includes(searchLower)
+    const inAuthor = menu.author.name?.toLowerCase().includes(searchLower)
+    const searchRecipesLength = menu.recipeInfo?.filter(
+      recipeSearchFilter(search)
+    ).length
+    const inRecipes = searchRecipesLength ? searchRecipesLength > 0 : false
+
+    return inTitle || inDescription || inAuthor || inRecipes
   }
 }

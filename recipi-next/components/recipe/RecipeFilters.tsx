@@ -198,7 +198,6 @@ export const RecipeFilters = ({
       setIsOpen={setIsOpen}
       triggerChildren={children}
       onClose={() => {
-        console.log('closing')
         // Reset local state to query state
         setMaxPrepTimeState(maxPrepTime)
         setMaxCookTimeState(maxCookTime)

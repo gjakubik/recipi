@@ -23,6 +23,7 @@ export { default as getSavedRecipes } from './savedRecipe/getSavedRecipes'
 export { default as createMenu } from './menu/createMenu'
 export { default as getMenu } from './menu/getMenu'
 export { default as getMenus } from './menu/getMenus'
+export { default as getUserMenus } from './menu/getUserMenus'
 export { default as updateMenu } from './menu/updateMenu'
 export { default as deleteMenu } from './menu/deleteMenu'
 
