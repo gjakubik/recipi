@@ -99,11 +99,12 @@ export const MainNav = ({ config, children }: HeaderProps) => {
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="flex grow items-center justify-start gap-1 px-4 py-4 hover:cursor-pointer sm:pl-6 md:hidden"
         >
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center">
             {isDropdownOpen ? (
-              <Cross1Icon className="h-6 w-6" />
+              <Cross1Icon className="mr-6 h-6 w-6" />
             ) : (
-              <ActivityLogIcon className="h-6 w-6" />
+              // <ActivityLogIcon className="h-6 w-6" />
+              <Icons.recipiLogo className="mr-2 h-10 w-10" />
             )}
             <Typography variant="h3">Menu</Typography>
           </div>
