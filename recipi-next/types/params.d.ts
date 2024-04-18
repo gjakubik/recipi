@@ -25,3 +25,24 @@ export type ListQueryParams = {
   sort?: string
   sortBy?: string
 }
+
+export type RecipeQueryParams = {
+  page?: string
+  limit?: string
+  order?: string
+  orderBy?: string
+  search?: string
+  maxPrepTime?: string
+  maxCookTime?: string
+  minServings?: string
+  maxServings?: string
+  difficultyLevel?: string
+}
+
+export type MenuQueryParams = {
+  page?: string
+  limit?: string
+  order?: string
+  orderBy?: string
+  search?: string
+}

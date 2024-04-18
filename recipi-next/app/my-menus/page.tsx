@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { UpsertMenuModal } from '@/components/modals/UpsertMenuModal'
 import { ServerMenuListLoader } from '@/components/menu/ServerMenuListLoader'
 import { Plus } from 'lucide-react'
+import { FullClientMenuList } from '@/components/menu/FullClientMenuList'
+import { getUserMenus } from '@/lib/db/api'
 
 interface MyMenuPageProps {
   searchParams: { [key: string]: string | string[] | undefined }
@@ -18,6 +20,8 @@ const MyMenusPage = async ({ searchParams }: MyMenuPageProps) => {
   if (!user) {
     redirect('/')
   }
+
+  const menus = await getUserMenus(user.id)
 
   return (
     <>
@@ -31,13 +35,14 @@ const MyMenusPage = async ({ searchParams }: MyMenuPageProps) => {
           </Button>
         </UpsertMenuModal>
       </div>
-      <div className="flex flex-col gap-4">
+      <FullClientMenuList menus={menus} authorId={user.id} />
+      {/* <div className="flex flex-col gap-4">
         <ServerMenuListLoader
           pagePath="/my-menus"
           searchParams={searchParams}
           user={user}
         />
-      </div>
+      </div> */}
     </>
   )
 }

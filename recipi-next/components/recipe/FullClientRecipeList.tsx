@@ -10,7 +10,12 @@ import {
   parseAsStringLiteral,
   parseAsArrayOf,
 } from 'nuqs'
-import { GetMenusResult, Recipe } from '@/types'
+import {
+  GetMenusResult,
+  MenuWithRecipes,
+  Recipe,
+  RecipeQueryParams,
+} from '@/types'
 import {
   DEFAULT_PARAM_NAMES,
   RECIPE_QUERY,
@@ -50,19 +55,8 @@ import { ArrowDownNarrowWide, ArrowDownWideNarrow } from 'lucide-react'
 
 interface FullClientRecipeListProps extends PropsWithChildren {
   recipes: Recipe[]
-  paramNames?: {
-    page?: string
-    limit?: string
-    order?: string
-    orderBy?: string
-    search?: string
-    maxPrepTime?: string
-    maxCookTime?: string
-    minServings?: string
-    maxServings?: string
-    difficultyLevel?: string
-  }
-  initialMenus?: GetMenusResult
+  paramNames?: RecipeQueryParams
+  menus?: MenuWithRecipes[]
   gridClassName?: string
   title?: string
 }
@@ -72,7 +66,7 @@ const sortOptions = ['asc', 'desc'] as const
 export const FullClientRecipeList = ({
   recipes,
   paramNames,
-  initialMenus,
+  menus,
   gridClassName,
   title = 'Recipes',
 }: FullClientRecipeListProps) => {
@@ -188,7 +182,7 @@ export const FullClientRecipeList = ({
   )
 
   const shownRecipes = useMemo(() => {
-    return filteredRecipes.slice(page * pageSize, page * pageSize + pageSize)
+    return filteredRecipes.slice(page * pageSize, (page + 1) * pageSize)
   }, [filteredRecipes, page, pageSize])
 
   return (
@@ -290,7 +284,7 @@ export const FullClientRecipeList = ({
             <RecipeCard
               cardKey={recipe.id}
               recipe={recipe}
-              initialMenus={initialMenus}
+              menus={menus}
               forceUpdate={forceUpdate}
               setForceUpdate={setForceUpdate}
             />

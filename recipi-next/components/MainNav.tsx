@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { User } from 'next-auth'
 import { usePathname, useRouter } from 'next/navigation'
 import { signIn, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
@@ -30,7 +29,6 @@ import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
 import { MobileNav } from '@/components/MobileNav'
 import { Icons } from '@/components/CustomIcons'
 import {
-  ActivityLogIcon,
   HamburgerMenuIcon,
   ChevronRightIcon,
   ChevronDownIcon,
@@ -86,11 +84,10 @@ export const MainNav = ({ config, children }: HeaderProps) => {
 
   return (
     <header>
-      <div className=" flex h-[90px] w-full flex-row items-center justify-between gap-4 sm:mr-4">
+      <div className=" flex h-[70px] w-full flex-row items-center justify-between gap-4 sm:mr-4">
         <Link href="/">
           <div className="hidden items-center justify-center gap-4 px-4 py-4 sm:pl-12 md:flex">
-            <ActivityLogIcon className="h-6 w-6" />
-            {/* <Icons.logo className="mb-1 h-8 w-8" /> */}
+            <Icons.recipiLogo2 className="h-12 w-12" />
             <Typography variant="h3">Recipi</Typography>
           </div>
         </Link>
@@ -99,11 +96,11 @@ export const MainNav = ({ config, children }: HeaderProps) => {
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="flex grow items-center justify-start gap-1 px-4 py-4 hover:cursor-pointer sm:pl-6 md:hidden"
         >
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center">
             {isDropdownOpen ? (
-              <Cross1Icon className="h-6 w-6" />
+              <Cross1Icon className="mr-6 h-6 w-6" />
             ) : (
-              <ActivityLogIcon className="h-6 w-6" />
+              <Icons.recipiLogo2 className="mr-2 h-10 w-10" />
             )}
             <Typography variant="h3">Menu</Typography>
           </div>

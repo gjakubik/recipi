@@ -1,12 +1,11 @@
 'use client'
 
-import { useState, useMemo, useLayoutEffect, useRef } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import _ from 'lodash'
 import Link from 'next/link'
 import Image from 'next/image'
-import { GetMenusResult, Recipe } from '@/types'
+import { MenuWithRecipes, Recipe } from '@/types'
 import { useResizableRef } from '@/hooks/use-resizable-observer'
-import useSearch from '@/app/store/useSearch'
 import { cn, isZero, removeServings, timeValueToLabel } from '@/lib/utils'
 import { useCurrentUser } from '@/hooks/use-current-user'
 
@@ -34,7 +33,7 @@ import { Clock, Users, GraduationCap, Lock } from 'lucide-react'
 
 interface RecipeCardProps {
   recipe: Recipe
-  initialMenus?: GetMenusResult
+  menus?: MenuWithRecipes[]
   cardKey: string | number
   onClick?: () => void
   forceUpdate: number
@@ -43,14 +42,13 @@ interface RecipeCardProps {
 
 export const RecipeCard = ({
   recipe,
-  initialMenus,
+  menus,
   cardKey,
   onClick,
   forceUpdate,
   setForceUpdate,
 }: RecipeCardProps) => {
   const user = useCurrentUser()
-  const { search } = useSearch()
   const [showAllIngredients, setShowAllIngredients] = useState(false)
 
   const { targetRef, dimensions } = useResizableRef()
@@ -58,102 +56,112 @@ export const RecipeCard = ({
   const titleRef = useRef<HTMLParagraphElement>(null)
 
   // If performance becomes an issue, consider refactoring this to be a bit more efficient
-  const getWordClasses = (index: number, wordsLength: number) => {
-    if (titleRef.current) {
-      const words = titleRef.current.getElementsByTagName('span')
-      const threshold = 10
-      const word = words[index]
-      const prevWord = index > 0 ? words[index - 1] : null
-      const nextWord = index < wordsLength - 1 ? words[index + 1] : null
+  const wordClasses = useMemo(
+    () =>
+      recipe.title.split(' ').map((_, index) => {
+        if (titleRef.current) {
+          const words = titleRef.current.getElementsByTagName('span')
+          const wordsLength = words.length
+          const threshold = 10
+          const word = words[index]
+          const prevWord = index > 0 ? words[index - 1] : null
+          const nextWord = index < wordsLength - 1 ? words[index + 1] : null
 
-      const isFirstWord = index === 0
-      const isLastWord = index === wordsLength - 1
-      const isFirstWordOfLine =
-        !prevWord ||
-        Math.abs(
-          word.getBoundingClientRect().top -
-            prevWord.getBoundingClientRect().top
-        ) > threshold
-      const isLastWordOfLine =
-        !nextWord ||
-        Math.abs(
-          word.getBoundingClientRect().top -
-            nextWord.getBoundingClientRect().top
-        ) > threshold
-
-      let aboveLineExists = false
-      let belowLineExists = false
-      let aboveLineIsLonger = false
-      let belowLineIsLonger = false
-
-      for (let findAboveIdx = index - 1; findAboveIdx >= 0; findAboveIdx--) {
-        const aboveWord = words[findAboveIdx]
-        if (
-          Math.abs(
-            aboveWord.getBoundingClientRect().top -
-              word.getBoundingClientRect().top
-          ) > threshold
-        ) {
-          aboveLineExists = true
-          aboveLineIsLonger =
-            aboveWord.getBoundingClientRect().x +
-              aboveWord.getBoundingClientRect().width >
-            word.getBoundingClientRect().x + word.getBoundingClientRect().width
-          break
-        }
-      }
-
-      for (
-        let findBelowIdx = index + 1;
-        findBelowIdx < wordsLength;
-        findBelowIdx++
-      ) {
-        const belowWord = words[findBelowIdx]
-        if (
-          Math.abs(
-            belowWord.getBoundingClientRect().top -
-              word.getBoundingClientRect().top
-          ) > threshold
-        ) {
-          belowLineExists = true
-          if (
+          const isFirstWord = index === 0
+          const isLastWord = index === wordsLength - 1
+          const isFirstWordOfLine =
+            !prevWord ||
             Math.abs(
-              words[findBelowIdx + 1]?.getBoundingClientRect().top -
-                belowWord.getBoundingClientRect().top
+              word.getBoundingClientRect().top -
+                prevWord.getBoundingClientRect().top
             ) > threshold
+          const isLastWordOfLine =
+            !nextWord ||
+            Math.abs(
+              word.getBoundingClientRect().top -
+                nextWord.getBoundingClientRect().top
+            ) > threshold
+
+          let aboveLineExists = false
+          let belowLineExists = false
+          let aboveLineIsLonger = false
+          let belowLineIsLonger = false
+
+          for (
+            let findAboveIdx = index - 1;
+            findAboveIdx >= 0;
+            findAboveIdx--
           ) {
-            belowLineIsLonger =
-              belowWord.getBoundingClientRect().x +
-                belowWord.getBoundingClientRect().width >
-              word.getBoundingClientRect().x +
-                word.getBoundingClientRect().width
-            break
+            const aboveWord = words[findAboveIdx]
+            if (
+              Math.abs(
+                aboveWord.getBoundingClientRect().top -
+                  word.getBoundingClientRect().top
+              ) > threshold
+            ) {
+              aboveLineExists = true
+              aboveLineIsLonger =
+                aboveWord.getBoundingClientRect().x +
+                  aboveWord.getBoundingClientRect().width >
+                word.getBoundingClientRect().x +
+                  word.getBoundingClientRect().width
+              break
+            }
           }
+
+          for (
+            let findBelowIdx = index + 1;
+            findBelowIdx < wordsLength;
+            findBelowIdx++
+          ) {
+            const belowWord = words[findBelowIdx]
+            if (
+              Math.abs(
+                belowWord.getBoundingClientRect().top -
+                  word.getBoundingClientRect().top
+              ) > threshold
+            ) {
+              belowLineExists = true
+              if (
+                Math.abs(
+                  words[findBelowIdx + 1]?.getBoundingClientRect().top -
+                    belowWord.getBoundingClientRect().top
+                ) > threshold
+              ) {
+                belowLineIsLonger =
+                  belowWord.getBoundingClientRect().x +
+                    belowWord.getBoundingClientRect().width >
+                  word.getBoundingClientRect().x +
+                    word.getBoundingClientRect().width
+                break
+              }
+            }
+          }
+
+          const isWordOnLastLine =
+            Math.abs(
+              word.getBoundingClientRect().top -
+                words[wordsLength - 1].getBoundingClientRect().top
+            ) < threshold
+          const isFirstWordOfLastLine = isWordOnLastLine && isFirstWordOfLine
+
+          return cn(
+            'inline bg-black pt-0.5 pb-1',
+            aboveLineExists ? 'pt-0' : '',
+            // belowLineExists ? 'pb-0' : '',
+            isFirstWord || isFirstWordOfLine ? 'pl-2' : '',
+            isLastWord || isLastWordOfLine ? 'pr-2' : '',
+            isFirstWord ? 'rounded-tl-sm' : '',
+            isLastWord ? 'rounded-br-sm' : '',
+            isFirstWordOfLastLine ? 'rounded-bl-sm' : '',
+            isLastWordOfLine && !aboveLineIsLonger ? 'rounded-tr-sm' : '',
+            isLastWordOfLine && !belowLineIsLonger ? 'rounded-br-sm' : ''
+          )
         }
-      }
-
-      const isWordOnLastLine =
-        Math.abs(
-          word.getBoundingClientRect().top -
-            words[wordsLength - 1].getBoundingClientRect().top
-        ) < threshold
-      const isFirstWordOfLastLine = isWordOnLastLine && isFirstWordOfLine
-
-      return cn(
-        'inline bg-black bg-opacity-50 pt-0.5 pb-1',
-        aboveLineExists ? 'pt-0' : '',
-        belowLineExists ? 'pb-0' : '',
-        isFirstWord || isFirstWordOfLine ? 'pl-2' : '',
-        isLastWord || isLastWordOfLine ? 'pr-2' : '',
-        isFirstWord ? 'rounded-tl-sm' : '',
-        isLastWord ? 'rounded-br-sm' : '',
-        isFirstWordOfLastLine ? 'rounded-bl-sm' : '',
-        isLastWordOfLine && !aboveLineIsLonger ? 'rounded-tr-sm' : '',
-        isLastWordOfLine && !belowLineIsLonger ? 'rounded-br-sm' : ''
-      )
-    }
-    return 'inline bg-black bg-opacity-50 py-0.5'
-  }
+        return 'inline bg-black bg-opacity-50 py-0.5'
+      }),
+    [dimensions.height, dimensions.width, forceUpdate]
+  )
 
   const visibleIngredients = useMemo(
     () =>
@@ -194,16 +202,10 @@ export const RecipeCard = ({
                     <CardTitle className="grow">
                       <div
                         ref={titleRef}
-                        className="text-xl font-bold leading-[1.53rem] text-white"
+                        className="text-xl font-bold leading-[23.5px] text-white"
                       >
                         {recipe.title.split(' ').map((word, index) => (
-                          <span
-                            key={index}
-                            className={getWordClasses(
-                              index,
-                              recipe.title.split(' ').length
-                            )}
-                          >
+                          <span key={index} className={wordClasses[index]}>
                             {word}{' '}
                           </span>
                         ))}
@@ -324,11 +326,16 @@ export const RecipeCard = ({
             <Link href={`/recipe/${recipe.id}/edit`}>Edit Recipe</Link>
           </Button>
         )}
-        {loggedIn && initialMenus && (
+        {loggedIn && menus && (
           <AddRecipeToMenusModal
             user={user}
             recipe={recipe}
-            initialMenus={initialMenus}
+            menus={menus}
+            paramNames={{
+              page: 'menuPage',
+              limit: 'menuLimit',
+              search: 'menuSearch',
+            }}
           >
             <Button size="sm">Add to Menu</Button>
           </AddRecipeToMenusModal>

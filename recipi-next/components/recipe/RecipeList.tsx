@@ -1,17 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { Recipe, GetMenusResult } from '@/types'
+import { Recipe, GetMenusResult, MenuWithRecipes } from '@/types'
 import useSearch from '@/app/store/useSearch'
 
 import { RecipeCard } from '@/components/recipe/RecipeCard'
 
 interface RecipeListProps {
   recipes: Recipe[]
-  initialMenus: GetMenusResult
+  menus: MenuWithRecipes[]
 }
 
-export function RecipeList({ initialMenus, recipes }: RecipeListProps) {
+export function RecipeList({ menus, recipes }: RecipeListProps) {
   const { search } = useSearch()
   const [forceUpdate, setForceUpdate] = useState(0)
 
@@ -34,7 +34,7 @@ export function RecipeList({ initialMenus, recipes }: RecipeListProps) {
           key={recipe.id}
           cardKey={recipe.id}
           recipe={recipe}
-          initialMenus={initialMenus}
+          menus={menus}
           forceUpdate={forceUpdate}
           setForceUpdate={setForceUpdate}
         />

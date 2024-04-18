@@ -77,7 +77,8 @@ export const UrlPagination = ({
       {withPageInfo ? (
         <div className="flex flex-row items-center gap-4">
           <Typography variant="pn">
-            {page * limit}-{Math.min(page * limit + limit, count)} of {count}
+            {page * limit + 1}-{Math.min(page * limit + limit, count)} of{' '}
+            {count}
           </Typography>
           {count > 6 && <Separator orientation="vertical" />}
           {count > 6 && (

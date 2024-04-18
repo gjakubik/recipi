@@ -6,6 +6,7 @@ import {
   getMenus,
   isSavedRecipe,
   getRecipeReviews,
+  getUserMenus,
 } from '@/lib/db/api'
 import { getCurrentUser } from '@/lib/session'
 import { timeValueToLabel, isZero } from '@/lib/utils'
@@ -31,7 +32,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
   const user = await getCurrentUser()
   const recipe = await getRecipe(parseInt(params.recipeID))
   const reviews = await getRecipeReviews(params.recipeID)
-  const initialMenus = await getMenus({ authorId: user?.id, ...MENU_QUERY })
+  const menus = await getUserMenus(user?.id)
   const isSaved = user
     ? await isSavedRecipe({ recipeId: parseInt(params.recipeID) })
     : false
@@ -41,8 +42,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
   if (!recipe) {
     redirect('/')
   }
-  // simulate 2 seconds of loading
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+
   return (
     <>
       <div className="flex w-full flex-col justify-between justify-items-center gap-2 sm:flex-row">
@@ -71,7 +71,12 @@ export default async function RecipePage({ params }: RecipePageProps) {
             <AddRecipeToMenusModal
               user={user}
               recipe={recipe}
-              initialMenus={initialMenus}
+              menus={menus}
+              paramNames={{
+                page: 'menuPage',
+                limit: 'menuLimit',
+                search: 'menuSearch',
+              }}
             >
               <Button className="min-w-[121px]">Add To Menu</Button>
             </AddRecipeToMenusModal>

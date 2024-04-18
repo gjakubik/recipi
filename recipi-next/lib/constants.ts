@@ -1,5 +1,11 @@
 import { RecipeQuery, MenuQuery } from '@/types'
-import { Clock, Users, Calendar, GraduationCap } from 'lucide-react'
+import {
+  Clock,
+  Users,
+  Calendar,
+  GraduationCap,
+  CaseSensitive,
+} from 'lucide-react'
 
 export const FEATURE_FLAG_OPTIONS = [
   'canSeeGroceryList',
@@ -53,6 +59,24 @@ export const RECIPE_ORDER_BY_OPTIONS_LIST = [
     Icon: Calendar,
     value: 'creationDate',
     label: 'Creation Date',
+  },
+]
+
+export const MENU_ORDER_BY_OPTIONS_LIST = [
+  {
+    Icon: Calendar,
+    value: 'updatedAt',
+    label: 'Updated At',
+  },
+  {
+    Icon: Calendar,
+    value: 'creationDate',
+    label: 'Creation Date',
+  },
+  {
+    Icon: CaseSensitive,
+    value: 'title',
+    label: 'Title',
   },
 ]
 

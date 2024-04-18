@@ -1,7 +1,10 @@
 'use client'
 
+import { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { saveRecipe, unsaveRecipe } from '@/lib/db/api'
+import { useToast } from '@/components/ui/use-toast'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -10,6 +13,7 @@ import {
   TooltipContent,
 } from '@/components/ui/tooltip'
 import { Bookmark, BookmarkCheck } from 'lucide-react'
+import { Typography } from '@/components/ui/typography'
 
 interface SaveUnsaveButtonProps {
   isSaved: boolean
@@ -21,13 +25,50 @@ export const SaveUnsaveButton = ({
   recipeId,
 }: SaveUnsaveButtonProps) => {
   const router = useRouter()
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
+
   const handleSave = async () => {
-    await saveRecipe({ recipeId })
+    if (loading) return
+    setLoading(true)
+    try {
+      await saveRecipe({ recipeId })
+      toast({
+        title: 'Recipe saved',
+        description: (
+          <Typography variant="light">
+            Find it in your <Link href="/saved-recipes">Saved Recipes</Link>
+          </Typography>
+        ),
+      })
+    } catch (error) {
+      console.error(error)
+      toast({
+        title: 'Error saving recipe',
+        description: 'Please try again later',
+      })
+    }
+    setLoading(false)
     router.refresh()
   }
 
   const handleUnsave = async () => {
-    await unsaveRecipe({ recipeId })
+    if (loading) return
+    setLoading(true)
+    try {
+      await unsaveRecipe({ recipeId })
+      toast({
+        title: 'Recipe unsaved',
+        description: 'You can always save it again later',
+      })
+    } catch (error) {
+      console.error(error)
+      toast({
+        title: 'Error unsaving recipe',
+        description: 'Please try again later',
+      })
+    }
+    setLoading(false)
     router.refresh()
   }
 
