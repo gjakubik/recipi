@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { User } from 'next-auth'
 import { usePathname, useRouter } from 'next/navigation'
 import { signIn, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
@@ -30,7 +29,6 @@ import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
 import { MobileNav } from '@/components/MobileNav'
 import { Icons } from '@/components/CustomIcons'
 import {
-  ActivityLogIcon,
   HamburgerMenuIcon,
   ChevronRightIcon,
   ChevronDownIcon,
@@ -90,7 +88,6 @@ export const MainNav = ({ config, children }: HeaderProps) => {
         <Link href="/">
           <div className="hidden items-center justify-center gap-4 px-4 py-4 sm:pl-12 md:flex">
             <Icons.recipiLogo className="h-12 w-12" />
-            {/* <Icons.logo className="mb-1 h-8 w-8" /> */}
             <Typography variant="h3">Recipi</Typography>
           </div>
         </Link>
@@ -103,7 +100,6 @@ export const MainNav = ({ config, children }: HeaderProps) => {
             {isDropdownOpen ? (
               <Cross1Icon className="mr-6 h-6 w-6" />
             ) : (
-              // <ActivityLogIcon className="h-6 w-6" />
               <Icons.recipiLogo className="mr-2 h-10 w-10" />
             )}
             <Typography variant="h3">Menu</Typography>
