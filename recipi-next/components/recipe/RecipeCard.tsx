@@ -1,12 +1,11 @@
 'use client'
 
-import { useState, useMemo, useLayoutEffect, useRef } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import _ from 'lodash'
 import Link from 'next/link'
 import Image from 'next/image'
-import { GetMenusResult, MenuWithRecipes, Recipe } from '@/types'
+import { MenuWithRecipes, Recipe } from '@/types'
 import { useResizableRef } from '@/hooks/use-resizable-observer'
-import useSearch from '@/app/store/useSearch'
 import { cn, isZero, removeServings, timeValueToLabel } from '@/lib/utils'
 import { useCurrentUser } from '@/hooks/use-current-user'
 
@@ -34,7 +33,7 @@ import { Clock, Users, GraduationCap, Lock } from 'lucide-react'
 
 interface RecipeCardProps {
   recipe: Recipe
-  menus: MenuWithRecipes[]
+  menus?: MenuWithRecipes[]
   cardKey: string | number
   onClick?: () => void
   forceUpdate: number
@@ -50,7 +49,6 @@ export const RecipeCard = ({
   setForceUpdate,
 }: RecipeCardProps) => {
   const user = useCurrentUser()
-  const { search } = useSearch()
   const [showAllIngredients, setShowAllIngredients] = useState(false)
 
   const { targetRef, dimensions } = useResizableRef()

@@ -56,7 +56,7 @@ import { ArrowDownNarrowWide, ArrowDownWideNarrow } from 'lucide-react'
 interface FullClientRecipeListProps extends PropsWithChildren {
   recipes: Recipe[]
   paramNames?: RecipeQueryParams
-  menus: MenuWithRecipes[]
+  menus?: MenuWithRecipes[]
   gridClassName?: string
   title?: string
 }

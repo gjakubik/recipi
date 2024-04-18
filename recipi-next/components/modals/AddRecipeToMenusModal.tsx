@@ -57,10 +57,11 @@ export const AddRecipeToMenusModal = ({
   const isParentControlled = setCtlIsOpen !== undefined
 
   useEffect(() => {
+    console.log('pageSize', pageSize)
     if (isSmallScreen) {
-      setPageSize(3)
+      pageSize !== 3 && setPageSize(3)
     } else {
-      setPageSize(6)
+      pageSize !== MENU_QUERY.limit && setPageSize(MENU_QUERY.limit)
     }
   }, [isSmallScreen])
 

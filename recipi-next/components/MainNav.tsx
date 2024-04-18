@@ -87,7 +87,7 @@ export const MainNav = ({ config, children }: HeaderProps) => {
       <div className=" flex h-[70px] w-full flex-row items-center justify-between gap-4 sm:mr-4">
         <Link href="/">
           <div className="hidden items-center justify-center gap-4 px-4 py-4 sm:pl-12 md:flex">
-            <Icons.recipiLogo className="h-12 w-12" />
+            <Icons.recipiLogo2 className="h-12 w-12" />
             <Typography variant="h3">Recipi</Typography>
           </div>
         </Link>
@@ -100,7 +100,7 @@ export const MainNav = ({ config, children }: HeaderProps) => {
             {isDropdownOpen ? (
               <Cross1Icon className="mr-6 h-6 w-6" />
             ) : (
-              <Icons.recipiLogo className="mr-2 h-10 w-10" />
+              <Icons.recipiLogo2 className="mr-2 h-10 w-10" />
             )}
             <Typography variant="h3">Menu</Typography>
           </div>
