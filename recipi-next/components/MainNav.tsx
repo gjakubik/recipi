@@ -86,10 +86,10 @@ export const MainNav = ({ config, children }: HeaderProps) => {
 
   return (
     <header>
-      <div className=" flex h-[90px] w-full flex-row items-center justify-between gap-4 sm:mr-4">
+      <div className=" flex h-[70px] w-full flex-row items-center justify-between gap-4 sm:mr-4">
         <Link href="/">
           <div className="hidden items-center justify-center gap-4 px-4 py-4 sm:pl-12 md:flex">
-            <ActivityLogIcon className="h-6 w-6" />
+            <Icons.recipiLogo className="h-12 w-12" />
             {/* <Icons.logo className="mb-1 h-8 w-8" /> */}
             <Typography variant="h3">Recipi</Typography>
           </div>
