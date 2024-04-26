@@ -2,6 +2,7 @@ import { getCurrentUser } from '@/lib/session'
 import { redirect } from 'next/navigation'
 
 import { MainNav } from '@/components/MainNav'
+import Footer from '@/components/Footer'
 import { adminNavConfig } from '@/config/admin'
 
 export default async function CreateLayout({
@@ -17,6 +18,7 @@ export default async function CreateLayout({
       <div className="container mx-auto flex flex-col space-y-4 py-12 lg:max-w-[1200px]">
         {children}
       </div>
+      <Footer />
     </div>
   )
 }

@@ -1,19 +1,19 @@
-import { MainNav } from '@/components/MainNav'
 import Footer from '@/components/Footer'
+import { MainNav } from '@/components/MainNav'
 import { defaultNavConfig } from '@/config/default'
 
-export default async function CreateLayout({
+export default async function PrivacyPolicyLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <div className="flex h-screen flex-col">
+    <>
       <MainNav config={defaultNavConfig} />
-      <div className="container mx-auto py-12 lg:max-w-[1200px]">
+      <div className="container mx-auto flex flex-col space-y-4 py-12 md:w-5/6 lg:w-2/3">
         {children}
       </div>
       <Footer />
-    </div>
+    </>
   )
 }
