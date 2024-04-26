@@ -17,9 +17,6 @@ const MyRecipesServerPage = async () => {
 
   return (
     <>
-      <Typography variant="h2" className="mb-4">
-        My Recipes
-      </Typography>
       <FullClientRecipeList
         recipes={recipes}
         menus={menus}
