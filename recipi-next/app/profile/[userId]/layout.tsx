@@ -13,6 +13,7 @@ import { TabLink } from '@/components/TabLink'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { EditProfileImage } from '../EditProfileImage'
 import { Mail, Calendar, Camera, User } from 'lucide-react'
+import Footer from '@/components/Footer'
 
 interface ProfilePageProps extends PropsWithChildren {
   params: {
@@ -94,6 +95,7 @@ export default async function ProfilePageLayout({
           <Typography variant="h3">No Profile Found</Typography>
         </div>
       )}
+      <Footer />
     </div>
   )
 }
