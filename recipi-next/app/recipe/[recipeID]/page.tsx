@@ -23,6 +23,8 @@ import { SaveUnsaveButton } from './SaveUnsaveButton'
 import { AddReview } from '@/components/reviews/AddReview'
 import { ReviewList } from '@/components/reviews/ReviewList'
 import { Clock, Users, GraduationCap } from 'lucide-react'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
+import Image from 'next/image'
 
 interface RecipePageProps {
   params: { recipeID: string }
@@ -66,6 +68,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
             </Typography>
           )}
         </div>
+
         <div className="flex flex-row gap-4">
           {!!user && (
             <AddRecipeToMenusModal
@@ -92,39 +95,48 @@ export default async function RecipePage({ params }: RecipePageProps) {
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-0">
-        <div className="flex flex-row items-center gap-2">
-          <GraduationCap className="h-4 w-4" />
-          <Typography variant="bold">Difficulty</Typography>
-          <Typography variant="pn" className="pt-px">
-            {_.capitalize(recipe.difficultyLevel)}
-          </Typography>
-        </div>
-        {!isZero(recipe.preparationTime) && (
+      <div className="flex flex-row gap-4">
+        {recipe.titleImage?.url && (
+          <img
+            src={recipe.titleImage.url}
+            alt={recipe.title}
+            className="fill h-28 w-28 rounded-md object-cover"
+          />
+        )}
+        <div className="flex flex-col gap-0">
           <div className="flex flex-row items-center gap-2">
-            <Clock className="h-4 w-4" />
-            <Typography variant="bold">Prep</Typography>
+            <GraduationCap className="h-4 w-4" />
+            <Typography variant="bold">Difficulty</Typography>
             <Typography variant="pn" className="pt-px">
-              {timeValueToLabel(recipe.preparationTime) ||
-                recipe.preparationTime}
+              {_.capitalize(recipe.difficultyLevel)}
             </Typography>
           </div>
-        )}
-        {!isZero(recipe.cookingTime) && (
+          {!isZero(recipe.preparationTime) && (
+            <div className="flex flex-row items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <Typography variant="bold">Prep</Typography>
+              <Typography variant="pn" className="pt-px">
+                {timeValueToLabel(recipe.preparationTime) ||
+                  recipe.preparationTime}
+              </Typography>
+            </div>
+          )}
+          {!isZero(recipe.cookingTime) && (
+            <div className="flex flex-row items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <Typography variant="bold">Cook</Typography>
+              <Typography variant="pn" className="pt-px">
+                {timeValueToLabel(recipe.cookingTime) || recipe.cookingTime}
+              </Typography>
+            </div>
+          )}
           <div className="flex flex-row items-center gap-2">
-            <Clock className="h-4 w-4" />
-            <Typography variant="bold">Cook</Typography>
+            <Users className="h-4 w-4" />
+            <Typography variant="bold">Servings</Typography>
             <Typography variant="pn" className="pt-px">
-              {timeValueToLabel(recipe.cookingTime) || recipe.cookingTime}
+              {recipe.servings}
             </Typography>
           </div>
-        )}
-        <div className="flex flex-row items-center gap-2">
-          <Users className="h-4 w-4" />
-          <Typography variant="bold">Servings</Typography>
-          <Typography variant="pn" className="pt-px">
-            {recipe.servings}
-          </Typography>
         </div>
       </div>
       <Typography>{recipe.description}</Typography>
@@ -134,7 +146,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
       <InstructionsList className="pl-2" instructions={recipe.instructions} />
       {user && !hasReviewed && <AddReview recipeId={params.recipeID} />}
       {reviews.length > 0 && <Typography variant="h4">Reviews</Typography>}
-      <ReviewList reviews={reviews} />
+      <ReviewList user={user} reviews={reviews} />
     </>
   )
 }
