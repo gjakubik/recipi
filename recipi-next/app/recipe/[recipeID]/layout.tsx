@@ -1,7 +1,36 @@
+import { ResolvingMetadata, Metadata } from 'next'
+import { getRecipe } from '@/lib/db/api'
 import { Container } from '@/components/ui/container'
 import { MainNav } from '@/components/MainNav'
 import { defaultNavConfig } from '@/config/default'
 import Footer from '@/components/Footer'
+
+export async function generateMetadata(
+  { params }: { params: { recipeID: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const id = parseInt(params.recipeID)
+
+  // fetch data
+  const recipe = await getRecipe(id)
+
+  // optionally access and extend (rather than replace) parent metadata
+  const parentMetadata = await parent
+  const previousImages = parentMetadata.openGraph?.images || []
+
+  return {
+    title: recipe?.title || parentMetadata.title,
+    description: recipe?.description || parentMetadata.description,
+    openGraph: {
+      title: recipe?.title || parentMetadata.openGraph?.title,
+      description: recipe?.description || parentMetadata.openGraph?.description,
+      images: recipe?.titleImage?.url
+        ? [recipe?.titleImage?.url, ...previousImages]
+        : previousImages,
+    },
+  }
+}
 
 export default async function RecipePageLayout({
   children,
