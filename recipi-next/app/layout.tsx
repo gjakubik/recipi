@@ -17,10 +17,10 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Recipi',
   description: 'The fastet way to save and share recipes',
+  authors: [{ name: 'Gavin Jakubik', url: 'https://gavinjakubik.me' }],
   openGraph: {
-    title: 'Recipi',
+    title: 'Recipi (All your recipes in one place made easy)',
     description: 'The fastet way to save and share recipes',
-    images: [{ url: '/RecipiLogo.jpg' }],
   },
 }
 

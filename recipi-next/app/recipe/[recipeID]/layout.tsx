@@ -18,11 +18,12 @@ export async function generateMetadata(
   return {
     title: recipe?.title || parentMetadata.title,
     description: recipe?.description || parentMetadata.description,
+    authors: parentMetadata.authors,
     openGraph: {
       title: recipe?.title || parentMetadata.openGraph?.title,
       description: recipe?.description || parentMetadata.openGraph?.description,
       images: recipe?.titleImage?.url
-        ? [recipe?.titleImage?.url, ...previousImages]
+        ? [recipe?.titleImage?.url] //TODO: Add helper images if they ever exist
         : previousImages,
     },
   }
