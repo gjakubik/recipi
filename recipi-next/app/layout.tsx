@@ -16,7 +16,12 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Recipi',
-  description: 'Simple recipe database',
+  description: 'The fastet way to save and share recipes',
+  openGraph: {
+    title: 'Recipi',
+    description: 'The fastet way to save and share recipes',
+    images: [{ url: '/RecipiLogo.jpg' }],
+  },
 }
 
 export default async function RootLayout({

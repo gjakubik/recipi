@@ -9,13 +9,9 @@ export async function generateMetadata(
   { params }: { params: { recipeID: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // read route params
   const id = parseInt(params.recipeID)
-
-  // fetch data
   const recipe = await getRecipe(id)
 
-  // optionally access and extend (rather than replace) parent metadata
   const parentMetadata = await parent
   const previousImages = parentMetadata.openGraph?.images || []
 
