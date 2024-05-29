@@ -1,7 +1,6 @@
-import { PropsWithChildren } from 'react'
 import Link from 'next/link'
 
-interface SettingsPageProps extends PropsWithChildren {
+interface SettingsPageProps {
   params: {
     userId: string
   }
