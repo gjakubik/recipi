@@ -36,7 +36,11 @@ export default async function RootLayout({
 
   return (
     // <html lang="en" className="h-screen">
-    <html lang="en" suppressHydrationWarning className="w-full">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="w-full touch-manipulation"
+    >
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

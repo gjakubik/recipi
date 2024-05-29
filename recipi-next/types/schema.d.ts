@@ -12,8 +12,17 @@ import {
   menus,
   featureFlags,
   savedRecipes,
+  plans,
+  webhookEvents,
+  subscriptions,
 } from '../lib/db/schema-pg'
 import { FEATURE_FLAG_OPTIONS } from '../lib/constants'
+
+export type NewWebhookEvent = InferModel<typeof webhookEvents, 'insert'>
+
+export type NewSubscription = InferModel<typeof subscriptions, 'insert'>
+
+export type NewPlan = InferModel<typeof plans, 'insert'>
 
 export type FeatureFlagOtions = (typeof FEATURE_FLAG_OPTIONS)[number]
 

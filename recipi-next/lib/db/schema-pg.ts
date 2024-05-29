@@ -10,11 +10,9 @@ import {
   boolean,
   doublePrecision,
   json,
-  interval,
+  jsonb,
 } from 'drizzle-orm/pg-core'
 import { RecipeIngredient, StoredFile, IngredientPortion } from '@/types'
-
-import { sql } from 'drizzle-orm'
 
 export const accounts = pgTable(
   'account',
@@ -275,3 +273,47 @@ export const verificationTokens = pgTable(
     }
   }
 )
+
+export const plans = pgTable('plan', {
+  id: serial('id').primaryKey(),
+  productId: integer('productId').notNull(),
+  productName: text('productName'),
+  variantId: integer('variantId').notNull().unique(),
+  name: text('name').notNull(),
+  description: text('description'),
+  price: text('price').notNull(),
+  isUsageBased: boolean('isUsageBased').default(false),
+  interval: text('interval'),
+  intervalCount: integer('intervalCount'),
+  trialInterval: text('trialInterval'),
+  trialIntervalCount: integer('trialIntervalCount'),
+  sort: integer('sort'),
+})
+
+export const webhookEvents = pgTable('webhookEvent', {
+  id: integer('id').primaryKey(),
+  createdAt: timestamp('createdAt', { mode: 'date' }).notNull().defaultNow(),
+  eventName: text('eventName').notNull(),
+  processed: boolean('processed').default(false),
+  body: jsonb('body').notNull(),
+  processingError: text('processingError'),
+})
+
+export const subscriptions = pgTable('subscription', {
+  id: serial('id').primaryKey(),
+  lemonSqueezyId: text('lemonSqueezyId').unique().notNull(),
+  orderId: integer('orderId').notNull(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  status: text('status').notNull(),
+  statusFormatted: text('statusFormatted').notNull(),
+  renewsAt: text('renewsAt'),
+  endsAt: text('endsAt'),
+  trialEndsAt: text('trialEndsAt'),
+  price: text('price').notNull(),
+  isUsageBased: boolean('isUsageBased').default(false),
+  isPaused: boolean('isPaused').default(false),
+  subscriptionItemId: serial('subscriptionItemId'),
+  userId: text('userId').notNull(),
+  planId: integer('planId').notNull(),
+})

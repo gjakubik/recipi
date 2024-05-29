@@ -11,7 +11,7 @@ module.exports = withUt({
     './src/**/*.{ts,tsx}',
     './mdx-components.tsx',
   ],
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
   theme: {
     screens: {
       xs: '475px',
@@ -91,5 +91,4 @@ module.exports = withUt({
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
 })
