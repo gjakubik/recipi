@@ -12,6 +12,12 @@ import { SubscriptionDate } from './SubscriptionDate'
 import { SubscriptionPrice } from './SubscriptionPrice'
 import { SubscriptionStatus } from './SubscriptionStatus'
 
+const SUBSCRIPTION_STATUSES = {
+  active: 'active',
+  paused: 'paused',
+  cancelled: 'cancelled',
+} as const
+
 export async function Subscriptions() {
   const userSubscriptions = await getUserSubscriptions()
   const allPlans = await db.select().from(plans)
@@ -27,11 +33,17 @@ export async function Subscriptions() {
 
   // Show active subscriptions first, then paused, then canceled
   const sortedSubscriptions = userSubscriptions.sort((a, b) => {
-    if (a.status === 'active' && b.status !== 'active') {
+    if (
+      a.status === SUBSCRIPTION_STATUSES.active &&
+      b.status !== SUBSCRIPTION_STATUSES.active
+    ) {
       return -1
     }
 
-    if (a.status === 'paused' && b.status === 'cancelled') {
+    if (
+      a.status === SUBSCRIPTION_STATUSES.paused &&
+      b.status === SUBSCRIPTION_STATUSES.cancelled
+    ) {
       return -1
     }
 

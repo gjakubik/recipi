@@ -76,12 +76,14 @@ export default async function ProfilePageLayout({
                       <User className="h-5 w-5" /> {name}
                     </Typography>
                   )}
-                  <Typography
-                    variant="pn"
-                    className="flex flex-row items-center gap-2"
-                  >
-                    <Mail className="h-5 w-5" /> {email}
-                  </Typography>
+                  {isMyProfile && (
+                    <Typography
+                      variant="pn"
+                      className="flex flex-row items-center gap-2"
+                    >
+                      <Mail className="h-5 w-5" /> {email}
+                    </Typography>
+                  )}
                   <Typography
                     variant="pn"
                     className="flex flex-row items-center gap-2"
