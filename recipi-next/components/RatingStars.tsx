@@ -1,5 +1,6 @@
 'use client'
 
+import { useCallback } from 'react'
 import { useTheme } from 'next-themes'
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
 
@@ -23,19 +24,27 @@ export const RatingStars = ({ width = 160, setRating }: RatingStarsProps) => {
 
   const rating = useStateMachineInput(rive, 'State Machine 1', 'rating', 0)
 
+  const handleInteraction = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      const rect = (e.target as HTMLElement).getBoundingClientRect()
+      console.log(e)
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+      const offsetX = clientX - rect.left
+      const widthPerStar = width / 5
+      const clickedStar = Math.ceil(offsetX / widthPerStar)
+
+      if (!rating) return
+      setRating && setRating(clickedStar)
+      rating.value = clickedStar
+    },
+    [width, setRating, rating]
+  )
+
   return (
     <RiveComponent
       style={{ width, height: width / ASPECT_RATIO }}
-      onClick={(e) => {
-        // Use offsetX to get the click position relative to the canvas
-        const clickX = e.nativeEvent.offsetX
-        const widthPerStar = width / 5
-        const clickedStar = Math.ceil(clickX / widthPerStar)
-
-        if (!rating) return
-        setRating && setRating(clickedStar)
-        rating.value = clickedStar
-      }}
+      onTouchStart={handleInteraction}
+      onClick={handleInteraction}
     />
   )
 }

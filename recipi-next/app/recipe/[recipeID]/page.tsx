@@ -24,7 +24,6 @@ import { AddReview } from '@/components/reviews/AddReview'
 import { ReviewList } from '@/components/reviews/ReviewList'
 import { Clock, Users, GraduationCap } from 'lucide-react'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
-import Image from 'next/image'
 
 interface RecipePageProps {
   params: { recipeID: string }
@@ -47,7 +46,16 @@ export default async function RecipePage({ params }: RecipePageProps) {
 
   return (
     <>
-      <div className="flex w-full flex-col justify-between justify-items-center gap-2 sm:flex-row">
+      {recipe.titleImage?.url && (
+        <div className="relative mb-6 w-full" style={{ paddingTop: '56.25%' }}>
+          <img
+            src={recipe.titleImage.url}
+            alt={recipe.title}
+            className="absolute left-0 top-0 h-full w-full rounded-lg object-cover"
+          />
+        </div>
+      )}
+      <div className="flex w-full flex-col justify-between justify-items-center gap-4 sm:flex-row">
         <div className="flex flex-col">
           <Typography variant="extralight" className="">
             {recipe.isPrivate ? 'Secret' : 'Public'}
@@ -95,14 +103,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
           )}
         </div>
       </div>
-      <div className="flex flex-row gap-4">
-        {recipe.titleImage?.url && (
-          <img
-            src={recipe.titleImage.url}
-            alt={recipe.title}
-            className="fill h-28 w-28 rounded-md object-cover"
-          />
-        )}
+      <div className="mt-4 flex flex-row gap-4">
         <div className="flex flex-col gap-0">
           <div className="flex flex-row items-center gap-2">
             <GraduationCap className="h-4 w-4" />
