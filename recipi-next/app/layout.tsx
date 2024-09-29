@@ -16,7 +16,12 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Recipi',
-  description: 'Simple recipe database',
+  description: 'The fastet way to save and share recipes',
+  authors: [{ name: 'Gavin Jakubik', url: 'https://gavinjakubik.me' }],
+  openGraph: {
+    title: 'Recipi (All your recipes in one place made easy)',
+    description: 'The fastet way to save and share recipes',
+  },
 }
 
 export default async function RootLayout({
@@ -31,7 +36,11 @@ export default async function RootLayout({
 
   return (
     // <html lang="en" className="h-screen">
-    <html lang="en" suppressHydrationWarning className="w-full">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="w-full touch-manipulation"
+    >
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

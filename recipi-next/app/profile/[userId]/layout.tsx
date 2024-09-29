@@ -1,4 +1,6 @@
 import { PropsWithChildren } from 'react'
+import Link from 'next/link'
+import Script from 'next/script'
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/lib/session'
 import { defaultNavConfig } from '@/config/default'
@@ -12,7 +14,7 @@ import { MainNav } from '@/components/MainNav'
 import { TabLink } from '@/components/TabLink'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { EditProfileImage } from '../EditProfileImage'
-import { Mail, Calendar, Camera, User } from 'lucide-react'
+import { Mail, Calendar, Camera, User, Settings } from 'lucide-react'
 import Footer from '@/components/Footer'
 
 interface ProfilePageProps extends PropsWithChildren {
@@ -37,65 +39,82 @@ export default async function ProfilePageLayout({
   const { name, email, createdAt, image } = profile
 
   return (
-    <div className="h-min-screen flex flex-col">
-      <MainNav config={defaultNavConfig} />
-      {profile ? (
-        <Container className="flex-col space-y-4 pb-8 md:w-5/6 lg:w-2/3">
-          <div className="flex flex-row items-center justify-start gap-6">
-            {userId === user?.id ? (
-              <EditProfileImage image={image} name={name} />
-            ) : (
-              <Avatar className="h-20 w-20">
-                <AvatarImage
-                  src={image || undefined}
-                  alt={name || "User Name's profile image"}
-                  className=""
-                />
-                <AvatarFallback>
-                  {name ? getInitials(name) : 'ME'}
-                </AvatarFallback>
-              </Avatar>
-            )}
-            <div>
-              <Typography variant="h3">
-                {isMyProfile ? 'My Profile' : name}
-              </Typography>
+    <>
+      <Script
+        src="https://app.lemonsqueezy.com/js/lemon.js"
+        strategy="beforeInteractive"
+      />
+      <div className="h-min-screen flex flex-col">
+        <MainNav config={defaultNavConfig} />
+        {profile ? (
+          <Container className="flex-col space-y-4 pb-8 md:w-5/6 lg:w-2/3">
+            <div className="flex w-full flex-row justify-between">
+              <div className="flex flex-row items-center justify-start gap-6">
+                {userId === user?.id ? (
+                  <EditProfileImage image={image} name={name} />
+                ) : (
+                  <Avatar className="h-20 w-20">
+                    <AvatarImage
+                      src={image || undefined}
+                      alt={name || "User Name's profile image"}
+                      className=""
+                    />
+                    <AvatarFallback>
+                      {name ? getInitials(name) : 'ME'}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+                <div>
+                  <Typography variant="h3">
+                    {isMyProfile ? 'My Profile' : name}
+                  </Typography>
+                  {isMyProfile && (
+                    <Typography
+                      variant="pn"
+                      className="flex flex-row items-center gap-2"
+                    >
+                      <User className="h-5 w-5" /> {name}
+                    </Typography>
+                  )}
+                  {isMyProfile && (
+                    <Typography
+                      variant="pn"
+                      className="flex flex-row items-center gap-2"
+                    >
+                      <Mail className="h-5 w-5" /> {email}
+                    </Typography>
+                  )}
+                  <Typography
+                    variant="pn"
+                    className="flex flex-row items-center gap-2"
+                  >
+                    <Calendar className="h-5 w-5" />
+                    Joined {createdAt?.toLocaleDateString()}
+                  </Typography>
+                </div>
+              </div>
               {isMyProfile && (
-                <Typography
-                  variant="pn"
-                  className="flex flex-row items-center gap-2"
-                >
-                  <User className="h-5 w-5" /> {name}
-                </Typography>
+                <Button asChild variant="ghost" size="icon">
+                  <Link href={`/profile/${userId}/settings`}>
+                    <Settings className="h-5 w-5" />
+                  </Link>
+                </Button>
               )}
-              <Typography
-                variant="pn"
-                className="flex flex-row items-center gap-2"
-              >
-                <Mail className="h-5 w-5" /> {email}
-              </Typography>
-              <Typography
-                variant="pn"
-                className="flex flex-row items-center gap-2"
-              >
-                <Calendar className="h-5 w-5" />
-                Joined {createdAt?.toLocaleDateString()}
-              </Typography>
             </div>
-          </div>
 
-          <div className="flex flex-row items-center gap-2">
-            <TabLink tabId="recipes">Recipes</TabLink>
-            <TabLink tabId="menus">Menus</TabLink>
+            <div className="flex flex-row items-center gap-2">
+              <TabLink tabId="recipes">Recipes</TabLink>
+              <TabLink tabId="menus">Menus</TabLink>
+            </div>
+            {children}
+          </Container>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <Typography variant="h3">No Profile Found</Typography>
           </div>
-          {children}
-        </Container>
-      ) : (
-        <div className="flex h-full w-full items-center justify-center">
-          <Typography variant="h3">No Profile Found</Typography>
-        </div>
-      )}
-      <Footer />
-    </div>
+        )}
+        <Footer />
+      </div>
+    </>
   )
 }

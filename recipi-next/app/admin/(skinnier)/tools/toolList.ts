@@ -1,5 +1,10 @@
 export const TOOL_LIST = [
   {
+    name: 'Sync Plans',
+    description: 'Sync plans',
+    href: '/admin/tools/sync-plans',
+  },
+  {
     name: 'Ingredient Upload',
     description: 'Upload ingredient',
     href: '/admin/tools/ingredient-upload',
